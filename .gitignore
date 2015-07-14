@@ -1,0 +1,6 @@
+/vendor
+/node_modules
+.env
+
+tests/_output/*
+project_managment.txt

@@ -1,0 +1,35 @@
+fieldset{
+	display: table-cell;
+}
+
+.action-buttons{
+	font-size: 12px;
+	margin-left: 10px;
+	vertical-align: middle;
+}
+
+.text-bold{ font-weight: bold; }
+
+.cursor-pointer{ cursor: pointer; }
+
+.display-inline{ display: inline; }
+.display-inline-block{ display: inline-block; }
+
+.link-black{ color: inherit; }
+
+.margin-bottom-0{ margin-bottom: 0px; }
+.margin-bottom-5{ margin-bottom: 5px; }
+.margin-bottom-10{ margin-bottom: 10px; }
+.margin-bottom-15{ margin-bottom: 15px; }
+.margin-bottom-20{ margin-bottom: 20px; }
+
+.margin-top-5{ margin-top: 5px; }
+.margin-top-10{ margin-top: 10px; }
+.margin-top-15{ margin-top: 15px; }
+.margin-top-20{ margin-top: 20px; }
+
+.modal.fade.in { background-color: rgba(0,0,0,0.7); }
+
+.row-table-selected{ background-color: rgba(245, 245, 245, 1); }
+
+.table-vertical-align-middle td, .vertical-align-middle{ vertical-align: middle !important; }

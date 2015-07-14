@@ -1,0 +1,5 @@
+suites:
+    main:
+        namespace: sanoha
+        psr4_prefix: sanoha
+        src_path: app
