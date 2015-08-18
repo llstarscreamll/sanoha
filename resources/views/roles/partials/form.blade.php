@@ -72,10 +72,10 @@
                                                         
                                                         <div class="">
                                                             <div class="">
-                                                                <div class="col-xs-4 col-sm-3 margin-top-5">
+                                                                <div class="col-xs-8 col-sm-5 margin-top-5">
                                                                     {!! Form::label($permission['name'], $permission['display_name']) !!}
                                                                 </div>
-                                                                <div class="col-xs-8 col-sm-9 margin-bottom-10">
+                                                                <div class="col-xs-4 col-sm-7 margin-bottom-10">
                                                                     {!! Form::checkbox(
                                                                         'permissions[]',
                                                                         $permission['name'],

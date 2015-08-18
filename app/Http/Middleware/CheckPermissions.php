@@ -14,9 +14,8 @@ class CheckPermissions {
 	 */
 	public function handle($request, Closure $next)
 	{
-		
 		$action = $request->route()->getName();
-		
+
 		if(! \Auth::getUser()->can($action)){
 			
 			if ($request->ajax())

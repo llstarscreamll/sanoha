@@ -16,6 +16,7 @@ class CreateNoveltiesTable extends Migration {
 		{
 			$table->increments('id');
 			$table->string('name');
+			$table->string('short_name');
 			$table->timestamps();
 			$table->softDeletes();
 		});

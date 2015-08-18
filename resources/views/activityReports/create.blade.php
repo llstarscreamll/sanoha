@@ -10,7 +10,7 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h1>
-					Registrar Labor Minera
+					Registrar Labor Minera <small>{{$parameters['costCenter_name']}}</small>
 				</h1>
 				
 			</div>
@@ -19,191 +19,21 @@
 				
 				@include ('layout.notifications')
 				
-                {!! Form::open(['route' => (empty($employee) ? 'activityReport.create' : 'activityReport.store'), 'method' => empty($employee) ? 'GET' : 'POST']) !!}
-
+                {!! Form::open(['route' => (is_null($parameters['employee_id']) ? 'activityReport.create' : 'activityReport.store'), 'method' => is_null($parameters['employee_id']) ? 'GET' : 'POST']) !!}
+                    
                     <fieldset>
                         <legend>
                             Detalles de Labor
+                            <span data-toggle="tooltip" data-placement="top" title="Fecha de Reporte" class="small-date">
+                                {{ isset($activity) ? $activity->reported_at->format('l j \\of F Y') : \Carbon\Carbon::now()->format('l j \\of F Y') }}
+                            </span>
                         </legend>
                         
-                        <div class="col-md-6 col-md-offset-3">
-                            <div class="form-group">
-                                {!! Form::label('employee_id', 'Trabajador') !!}
-                                {!! Form::select('employee_id', ['' => 'Selecciona un trabajador']+$employees, $parameters['employee_id'], ['id' => 'employee_id', 'class' => 'form-control selectpicker show-tick', 'title' => 'Elige al trabajador']) !!}
-                                
-                                @if ($errors->has('employee_id'))
-                                <div class="text-danger">
-                                    {!! $errors->first('employee_id') !!}
-                                </div>
-                                @endif
-                            </div>
-                        </div>
-                        
-                        @if(!empty($employee))
-                        
-                            <div class="col-md-6 col-md-offset-3">
-                                <div class="form-group">
-                                    {!! Form::label('mining_activity_id', 'Labor Minera') !!}
-                                    <select name="mining_activity_id" id="mining_activity_id" class="form-control selectpicker show-tick">
-                                        
-                                        <option value="" data-maximum="" {{ isset($input['mining_activity_id']) ? '' : 'selected' }}>Selecciona una actividad</option>
-                                        
-                                        @foreach($miningActivities as $activity)
-                                            
-                                            <option value="{{$activity->id}}" data-maximum="{{$activity->maximum}}" {{ (isset($input['mining_activity_id']) && $input['mining_activity_id'] === $activity->id) ? 'selected' : '' }}>
-                                                {{$activity->nameAndAbbreviation}}
-                                            </option>
-                                        
-                                        @endforeach
-                                        
-                                    </select>
-                                    
-                                    @if ($errors->has('mining_activity_id'))
-                                    <div class="text-danger">
-                                        {!! $errors->first('mining_activity_id') !!}
-                                    </div>
-                                    @endif
-                                </div>
-                                
-                            </div>
-                            
-                            <div class="col-md-3 col-md-offset-3">
-                                <div class="form-group">
-                                    {!! Form::label('quantity', 'Cantidad') !!}
-                                    {!! Form::number('quantity', null, ['class' => 'form-control', 'id' => 'quantity', 'min' => '1']) !!}
-                                    @if ($errors->has('quantity'))
-                                    <div class="text-danger">
-                                        {!! $errors->first('quantity') !!}
-                                    </div>
-                                    @endif
-                                </div>
-                            </div>
-
-                            @if(\Auth::getUser()->can('activityReport.assignCosts'))
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    {!! Form::label('price', 'Precio') !!}
-                                    {!! Form::number('price', null, ['class' => 'form-control', 'step' => '100']) !!}
-                                    
-                                    @if ($errors->has('price'))
-                                    <div class="text-danger">
-                                        {!! $errors->first('price') !!}
-                                    </div>
-                                    @endif
-                                </div>
-                            </div>
-                            @endif
-                            
-                            <div class="col-md-6 col-md-offset-3">
-                                <div class="form-group">
-                                    {!! Form::label('comment', 'Comentario') !!}
-                                    {!! Form::textarea('comment', null, ['class' => 'form-control', 'rows' => '3']) !!}
-                                    
-                                    @if ($errors->has('comment'))
-                                    <div class="text-danger">
-                                        {!! $errors->first('comment') !!}
-                                    </div>
-                                    @endif
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6 col-md-offset-3">
-                                <button type="submit" class="btn btn-primary">
-                                    <span class="glyphicon glyphicon-floppy-disk"></span>
-                                    Registrar
-                                </button>
-                            </div>
-                        
-                        @endif
-                        
-                    
-                    </fieldset>
-                    
-                    {{-- ***************************************
-                        Vista previa se los cambios realizados
-                    ********************************************--}}
-                    
-                    <fieldset class="margin-top-20">
-                        
-                        <legend>
-                            Vista Previa de Actividades
-                        </legend>
-                        
-                        @if(!empty($employee))
-                        
-                        <div class="table-responsive">
-
-                            <table class="table table-hover table-bordered table-vertical-align-middle">
-                                
-                                <thead>
-                                    
-                                    <tr>
-                                        <th>Nombre</th>
-                                        
-                                        @foreach($miningActivities as $activity)
-                                        
-                                            <th>
-                                                <span title="{{$activity->name}}" data-toggle="tooltip">
-                                                    {{$activity->short_name}}
-                                                </span>
-                                            </th>
-                                        
-                                        @endforeach
-                                        
-                                    </tr>
-                                    
-                                </thead>
-                                
-                                <tbody>
-                                    
-                                    {{-- No print the reported_by data --}}
-                                    
-                                    @if(!empty($employee_activities))
-                                    
-                            			@foreach($employee_activities as $key => $activity)
-                            
-                            				@if($key !== 'reported_by')
-                            				<tr class="{{ $key === 'totals' ? 'text-bold' : '' }}">
-                            					@foreach($activity as $k => $v)
-                            						<td class="{{ $k !== 'employee_fullname' ? 'text-center' : '' }} ">
-                            							{{ $v }}
-                            						</td>
-                            					@endforeach
-                            				</tr>
-                            				@endif
-                            
-                            			@endforeach
-                        			
-                        			@else
-                        			
-                            			<tr>
-                            			    <td>{{$employee->fullname}}</td>
-                            			    <td colspan={{count($miningActivities)}}>
-                            			        
-                            			        <div class="alert alert-warning margin-bottom-0">
-                            			            No hay actividades registradas...
-                            			        </div>
-                            			        
-                            			    </td>
-                            			</tr>
-                            			
-                        			@endif
-                                    
-                                </tbody>
-                                
-                            </table>
-                        
-                        </div>
-                        @else
-                            
-                            <div class="alert alert-warning">
-                                Selecciona un trabajador...
-                            </div>
-                            
-                        @endif
-                        
+                        @include('activityReports.partials.form-create', ['btn_options' => ['class' => 'btn btn-primary', 'caption' => 'Registrar', 'icon' => 'glyphicon glyphicon-floppy-disk']])
                         
                     </fieldset>
+                    
+                    @include('activityReports.partials.form-create-preview')
                 
                 {!! Form::close() !!}
                     
@@ -214,6 +44,11 @@
 @endsection
 
 @section('script')
+    
+    {{-- Include Date Range Picker --}}
+	<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/2.9.0/moment.min.js"></script>
+	<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker.js"></script>
+	<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker-bs3.css" />
 
     <script type="text/javascript">
         
@@ -225,7 +60,7 @@
         });
         
         $("#employee_id").change(function(){
-            $(this).closest('form').attr('action', '{{route('activityReport.create')}}');
+            $(this).closest('form').attr('action', '{{route("activityReport.create")}}');
             $(this).closest('form').attr('method', 'GET');
             $(this).closest('form').submit();
         });
@@ -239,6 +74,52 @@
         {{-- Initialize all tooltips --}}
         $('[data-toggle="tooltip"]').tooltip();
         
-    </script>
+    
+         $(".bootstrap_switch").bootstrapSwitch();
+    
+    {{-- *************************************** --}}
+    
+	
+$(function() {
+    
+        $('#calendar-trigger').daterangepicker({
+            "singleDatePicker": true,
+            "timePickerIncrement": 1,
+            "autoApply": true,
+
+
+            separator: ' hasta ',
+            locale: {
+                daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi','Sa'],
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                firstDay: 1
+            },
+            "startDate": "{{Carbon\Carbon::now()->format('m/d/Y')}}",
+            "endDate": "{{Carbon\Carbon::now()->format('m/d/Y')}}",
+            "minDate": "{{Carbon\Carbon::now()->subDays(1)->format('m/d/Y')}}",
+            "maxDate": "{{Carbon\Carbon::now()->format('m/d/Y')}}",
+            "opens": "left",
+            "drops": "down",
+            "buttonClasses": "btn btn-sm",
+            "applyClass": "btn-success",
+            "cancelClass": "btn-default"
+        }, function(start, end, label) {
+            $('#reported_at').attr('value', start.format('YYYY-MM-DD'));
+        });
+    
+    });
+    
+    $('input[name="attended"]').on('switchChange.bootstrapSwitch', function(event, state) {
+        
+        var employee_id = $('#employee_id').val();
+        var url = "{{route('noveltyReport.create')}}";
+        
+        url += employee_id ? '?employee_id='+employee_id : '' ;
+        
+        if(state === false)
+            window.location.replace(url);
+    });
+    
+</script>
 
 @endsection

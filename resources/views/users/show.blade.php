@@ -64,7 +64,7 @@
                         <div class="col-md-5">
                             <div class="form-group">
                                 {!! Form::label('costCenter_id', 'Centros de Costo', '') !!}
-                                {!! Form::input('text', 'costCenter_id', $user->getCostCenters(), ['class' => 'form-control', 'disabled', 'readonly']) !!}
+                                {!! Form::input('text', 'costCenter_id', $user->getSubCostCenters(), ['class' => 'form-control', 'disabled', 'readonly']) !!}
                             </div>
                         </div>
                         
@@ -118,17 +118,5 @@
 @endsection
 
 @section('scripts')
-
-    <script type="text/javascript">
-        
-        $(document).ready(function(){
-            
-            $('.btn-danger').click(function(){
-                confirm('Estas seguro?')
-            });
-            
-        });
-        
-    </script>
 
 @stop()

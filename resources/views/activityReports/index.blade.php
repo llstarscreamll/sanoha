@@ -31,7 +31,12 @@
 				
 				@include ('layout.notifications')
 				
-				@include ('activityReports.partials.searchForm')
+				<div class="row hidden-print">
+				    @include ('activityReports.partials.views-links')
+				    
+				    @include ('activityReports.partials.searchForm', ['search_target' => 'activityReport.index'])
+				</div>
+				
 				
 				@if(count($orderedActivities) > 0)
 				
@@ -92,50 +97,50 @@
     
     
     <script type="text/javascript">
-$(function() {
-
-    $('#reportrange').daterangepicker({
-        format: 'MM/DD/YYYY',
-        startDate: moment('{{$parameters["from"]}}', 'YYYY-MM-DD'),
-        endDate: moment('{{ $parameters["to"] }}', 'YYYY-MM-DD'),
-        minDate: '01/01/2012',
-        maxDate: '12/31/2015',
-        dateLimit: { days: 60 },
-        showDropdowns: true,
-        showWeekNumbers: true,
-        timePicker: false,
-        timePickerIncrement: 1,
-        timePicker12Hour: true,
-        ranges: {
-           'Hoy': [moment(), moment()],
-           'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-           'Últimos 7 Dias': [moment().subtract(6, 'days'), moment()],
-           'Últimos 30 Dias': [moment().subtract(29, 'days'), moment()],
-           'Este Mes': [moment().startOf('month'), moment().endOf('month')],
-           'Mes Pasado': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-        },
-        opens: 'left',
-        drops: 'down',
-        buttonClasses: ['btn', 'btn-sm'],
-        applyClass: 'btn-primary',
-        cancelClass: 'btn-danger',
-        separator: ' hasta ',
-        locale: {
-            applyLabel: 'Aplicar',
-            cancelLabel: 'Cancelar',
-            fromLabel: 'Desde',
-            toLabel: 'Hasta',
-            customRangeLabel: 'Personalizado',
-            daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi','Sa'],
-            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-            firstDay: 1
-        }
-    }, function(start, end, label) {
-        $('#from').attr('value', start.format('YYYY-MM-DD'));
-        $('#to').attr('value', end.format('YYYY-MM-DD'));
-    });
- 
-});
+        $(function() {
+        
+        $('#reportrange').daterangepicker({
+            format: 'MM/DD/YYYY',
+            startDate: moment('{{$parameters["from"]}}', 'YYYY-MM-DD'),
+            endDate: moment('{{ $parameters["to"] }}', 'YYYY-MM-DD'),
+            //minDate: '01/01/2012',
+            maxDate: moment().format('L'),
+            //dateLimit: { days: 60 },
+            showDropdowns: true,
+            showWeekNumbers: true,
+            timePicker: false,
+            timePickerIncrement: 1,
+            timePicker12Hour: true,
+            ranges: {
+               'Hoy': [moment(), moment()],
+               'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+               'Últimos 7 Dias': [moment().subtract(6, 'days'), moment()],
+               'Últimos 30 Dias': [moment().subtract(29, 'days'), moment()],
+               'Este Mes': [moment().startOf('month'), moment().endOf('month')],
+               'Mes Pasado': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            },
+            opens: 'left',
+            drops: 'down',
+            buttonClasses: ['btn', 'btn-sm'],
+            applyClass: 'btn-primary',
+            cancelClass: 'btn-danger',
+            separator: ' hasta ',
+            locale: {
+                applyLabel: 'Aplicar',
+                cancelLabel: 'Cancelar',
+                fromLabel: 'Desde',
+                toLabel: 'Hasta',
+                customRangeLabel: 'Personalizado',
+                daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi','Sa'],
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                firstDay: 1
+            }
+        }, function(start, end, label) {
+            $('#from').attr('value', start.format('YYYY-MM-DD'));
+            $('#to').attr('value', end.format('YYYY-MM-DD'));
+        });
+        
+        });
 </script>
 
 @stop()

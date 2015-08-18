@@ -32,4 +32,9 @@ fieldset{
 
 .row-table-selected{ background-color: rgba(245, 245, 245, 1); }
 
+.small-date{
+	font-size: 14px;
+	color: gray;
+}
+
 .table-vertical-align-middle td, .vertical-align-middle{ vertical-align: middle !important; }

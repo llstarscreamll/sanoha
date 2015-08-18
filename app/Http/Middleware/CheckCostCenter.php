@@ -14,7 +14,15 @@ class CheckCostCenter {
 	 */
 	public function handle($request, Closure $next)
 	{
-		$cost_center = \Session::get('currentCostCenterActivities');
+		$cost_center = \Session::get('current_cost_center_id', null);
+		$route_response = 'home';
+		$action = '.selectCostCenter';
+		
+		if (strpos($request->route()->getName(), 'noveltyReport') !== false)
+			$route_response = 'noveltyReport'.$action;
+			
+		if (strpos($request->route()->getName(), 'activityReport') !== false)
+			$route_response = 'activityReport'.$action;
 		
 		// si no se ha seteado el centro de costo, es decir, si no se ha seleecionado
 		if(is_null($cost_center)){
@@ -25,11 +33,12 @@ class CheckCostCenter {
 			}
 			else
 			{
-				return redirect()->route('activityReport.selectCostCenter');
+				return redirect()->route($route_response);
 			}
 			
 		}
 		
+		// extraigo el centro de costo de la base de datos
 		$cost_center = \sanoha\Models\CostCenter::find($cost_center);
 		
 		// si el centro de costo no existe

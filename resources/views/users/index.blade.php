@@ -13,7 +13,7 @@
 					<a href="{{ url(route('users.index'))}}" class="link-black">
 						Usuarios
 					</a>
-					<small class="action-buttons">
+					<small class="action-buttons btn-group">
 						
 						{{-- Action Buttons --}}
 						
@@ -24,11 +24,12 @@
 							</button>
 						</div>
 						
-						<a id="create-user-link" class="btn btn-default btn-sm" href="{!! route('users.create') !!}" role="button"  data-toggle="tooltip" data-placement="top" title="Crear Usuario">
-							<span class="glyphicon glyphicon-plus"></span>
-							<span class="sr-only">Crear Usuario</span>
-						</a>
-						
+						<div class="display-inline-block"  role="button"  data-toggle="tooltip" data-placement="top" title="Crear Usuario">
+							<a id="create-user-link" class="btn btn-default btn-sm" href="{!! route('users.create') !!}">
+								<span class="glyphicon glyphicon-plus"></span>
+								<span class="sr-only">Crear Usuario</span>
+							</a>
+						</div>
 					</small>
 				</h1>
 				

@@ -6,7 +6,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Sanoha Web System | @yield('title')</title>
 
-	<link href="{{ asset('/css/app.css') }}" rel="stylesheet">
+	{{--<link href="{{ asset('/css/app.css') }}" rel="stylesheet">--}}
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 	<link href="{{ asset('/css/bootstrap-switch.min.css') }}" rel="stylesheet">
 	<link href="{{ asset('/css/style.css') }}" rel="stylesheet">
 	
@@ -20,11 +22,14 @@
 		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
+	
+	@yield('style')
+	
 	<style type="text/css">
 		@media print 
 		{
-			body {width:1200px;}
-			div[class|=col-]{float:left;}
+			body {width:1200px; font-size: 94%;}
+			/*div[class|=col-]{float:left;}*/
 			.col-sm-6{width:50%}
 		}
 		
@@ -35,61 +40,18 @@
 		  a[href]:after {
 		  	content: "";
 		  }
+		  
+		  .table-responsive
+			{
+			    overflow-x: auto;
+			}
 		}
 	</style>
 </head>
 <body>
-	<nav class="navbar navbar-default">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-					<span class="sr-only">Toggle Navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="{{ ! Auth::guest() ? url('home') : url('/') }}">Sanoha</a>
-			</div>
-
-			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-				<ul class="nav navbar-nav">
-					@if (! Auth::guest())
-						<li><a href="{{ url('/users') }}">Usarios</a></li>
-						<li><a href="{{ url('/roles') }}">Roles</a></li>
-						<li>
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Reporte de Actividades <span class="caret"></span></a>
-							<ul class="dropdown-menu" role="menu">
-								@if(count(Auth::getUser()->costCenter) > 0)
-									
-									@foreach(Auth::getUser()->costCenter as $center)
-										<li><a href="{{ url(route('activityReport.activitiesFromCostCenter', [ $center->id ])) }}">{{ $center->name }}</a></li>
-									@endforeach
-								
-								@else
-									<li><a href="#">No tienes proyectos asignados</a></li>
-								@endif
-							</ul>
-						</li>
-					@endif
-				</ul>
-
-				<ul class="nav navbar-nav navbar-right">
-					@if (Auth::guest())
-						<li><a href="{{ url('/auth/login') }}">Iniciar Sesión</a></li>
-						<li><a href="{{ url('/auth/register') }}">Regístrate</a></li>
-					@else
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
-							<ul class="dropdown-menu" role="menu">
-								<li><a href="{{ url('/auth/logout') }}">Salir</a></li>
-							</ul>
-						</li>
-					@endif
-				</ul>
-			</div>
-		</div>
-	</nav>
-
+	
+	@include('layout.nav-bar')
+	
 	<div class="container">
 	<div class="row">
 		@yield('content')

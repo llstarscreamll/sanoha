@@ -22,15 +22,18 @@ class DatabaseSeeder extends Seeder
         $this->call('RoleTableSeeder');
         $this->call('CostCenterTableSeeder');
         $this->call('PositionsTableSeeder');
+        $this->call('SubCostCenterTableSeeder');
         $this->call('MiningActivitiesTableSeeder');
+        $this->call('NoveltiesTableSeeder');
         
         /**
          * Test data
-         */ 
+         */
         $this->call('EmployeesTableSeeder');
         $this->call('UserTableSeeder');
         
         $this->call('ActivityReportsTableSeeder');
+        $this->call('NoveltyReportsTableSeeder');
         
     }
 

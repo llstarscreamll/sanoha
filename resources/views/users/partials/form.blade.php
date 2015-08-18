@@ -61,7 +61,53 @@
     <div class="col-md-5">
         <div class="form-group">
             {!! Form::label('costCenter_id', 'Centro de Costo') !!}
-            {!! Form::select('costCenter_id[]', $costCenters, isset($user) ? $user->getCostCentersId() : null, ['id' => 'costCenter_id', 'multiple' => true, 'class' => 'form-control selectpicker', 'title' => 'Elige Centro de Costos']) !!}
+            
+            {{--
+            
+            {!! Form::select(
+                'costCenter_id[]',
+                $subCostCenters,
+                isset($user) ? $user->getSubCostCentersId() : null,
+                [
+                    'id' => 'costCenter_id',
+                    'multiple' => true,
+                    'class' => 'form-control selectpicker',
+                    'title' => 'Elige Centro de Costos'
+                ]
+            ) !!}
+            --}}
+            
+            <select name="subCostCenter_id[]" id="subCostCenter_id" multiple class="form-control selectpicker"  title="Elige Centro de Costos">
+
+                @foreach($costCenters as $costCenter)
+                
+                    <optgroup label="{{ $costCenter->name }}">
+                        
+                        @foreach($costCenter->subCostCenter as $subCostCenter)
+                        
+                            <option
+                                value="{{$subCostCenter->id}}"
+                                    {{ isset($userSubCostCenters)
+                                        ? (in_array($subCostCenter->id, $userSubCostCenters)
+                                            ? 'selected'
+                                            : ''
+                                        )
+                                        : ''
+                                    }}
+                            >
+                                    
+                                {{$subCostCenter->name}}
+                                    
+                            </option>
+                            
+                        @endforeach
+                            
+                    </optgroup>
+                
+                @endforeach
+                
+            </select>
+            
             @if ($errors->has('costCenter_id'))
                 <div class="text-danger">
                     {!! $errors->first('costCenter_id') !!}

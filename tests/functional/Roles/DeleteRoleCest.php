@@ -1,9 +1,15 @@
 <?php namespace Roles;
 
 use \FunctionalTester;
-use \Users\_common\UserCommons;
-use \sanoha\Models\Role;
-use \sanoha\Models\Permission;
+
+use \sanoha\Models\User         as UserModel;
+use \sanoha\Models\Role         as RoleModel;
+use \sanoha\Models\Permission   as PermissionModel;
+
+use \common\User                as UserCommons;
+use \common\Permissions         as PermissionsCommons;
+use \common\Roles               as RolesCommons;
+
 use \sanoha\Http\Requests\RoleFormRequest;
 
 class DeleteRoleCest
@@ -33,9 +39,18 @@ class DeleteRoleCest
      */
     public function _before(FunctionalTester $I)
     {
+        // creo los permisos para el módulo de roles
+        $this->permissionsCommons = new PermissionsCommons;
+        $this->permissionsCommons->createRolesModulePermissions();
+        
+        // creo los roles de usuario y añado todos los permisos al rol de administrador
+        $this->rolesCommons = new RolesCommons;
+        $this->rolesCommons->createBasicRoles();
+        
+        // creo el usuairo administrador
         $this->userCommons = new UserCommons;
         $this->userCommons->createAdminUser();
-        
+
         $I->amLoggedAs($this->userCommons->adminUser);
     }
 
@@ -56,7 +71,7 @@ class DeleteRoleCest
         $I->seeAuthentication();
         
         // create the test role
-        $role = Role::create($this->role);
+        $role = RoleModel::create($this->role);
         // attach some permissions to role
         $role->perms()->sync([1,2,3]); // have 6 permissions, only attach 3
         
@@ -86,10 +101,10 @@ class DeleteRoleCest
         $I->seeAuthentication();
         
         // create the test role
-        $role = Role::create($this->role);
+        $role = RoleModel::create($this->role);
         // attach some permissions to role
         $role->perms()->sync([1,2,3]); // have 6 permissions, only attach 3
-        $roles = Role::get();
+        $roles = RoleModel::get();
         
         $I->amOnPage('/roles');
         

@@ -1,6 +1,7 @@
 <?php namespace sanoha\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Novelty extends Model {
     
@@ -20,14 +21,14 @@ class Novelty extends Model {
      *
      * @var array
      */
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'short_name'];
     
     /**
      * 
      */ 
     public function noveltyReport()
     {
-        return $this->hasMany('\sanoha\Models\NoveltyReport');
+        return $this->hasMany('sanoha\Models\NoveltyReport');
     }
 
 }

@@ -5,6 +5,7 @@
 
 tests/_output/*
 project_managment.txt
+public/resources/*
 =======
 /bootstrap/compiled.php
 .env.*.php

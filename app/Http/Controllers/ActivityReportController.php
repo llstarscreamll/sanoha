@@ -7,14 +7,17 @@ use sanoha\Http\Requests\ActivityReportFormRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
+use sanoha\Models\ActivityReport;
+use sanoha\Models\MiningActivity;
+
 class ActivityReportController extends Controller {
 	
-	/**
+	/** 
 	 * El centro de costos con el que se está trabajando
 	 * 
 	 * @var	string
-	 */ 
-	private $costCenter_id;
+	 */
+	private $costCenterId;
 	
 	/**
 	 * 
@@ -23,17 +26,17 @@ class ActivityReportController extends Controller {
 	{
 		// me aseguro que se haya elejido un centro de costos y que el usuario tenga acceso
 		// a ese centro
-		$this->middleware('checkCostCenter', ['except' => ['selectCostCenterView', 'costCenterActivities']]);
+		$this->middleware('checkCostCenter', ['except' => ['selectCostCenterView', 'setCostCenter']]);
 		
 		// control de acceso a los métodos de esta clase
-		$this->middleware('checkPermmisions', ['except' => ['store','update','selectCostCenterView','costCenterActivities']]);
+		$this->middleware('checkPermmisions', ['except' => ['store','update','selectCostCenterView','setCostCenter']]);
 		
-		$this->costCenter_id = \Session::get('currentCostCenterActivities');
+		$this->costCenter_id = \Session::get('current_cost_center_id');
 	}
 
 	/**
 	 * Vista para elegir el centro de costo con el que se quiere trabajar en caso
-	 * de que la variable de session "currentCostCenterActivities" no esté seteada
+	 * de que la variable de session "current_cost_center_id" no esté seteada
 	 * por algún motivo.
 	 * 
 	 * @return \Illuminate\Http\Response
@@ -51,9 +54,8 @@ class ActivityReportController extends Controller {
 	 * @param	string		El id del centro de costos de la DB
 	 * @return	redirect	Redirecciona al vista index de reporte de actividades
 	 */ 
-	public function costCenterActivities($costCenter)
-	{
-		\Session::put('currentCostCenterActivities', $costCenter);
+	public function setCostCenter($cost_center){
+		\Session::put('current_cost_center_id', $cost_center);
 		return redirect()->route('activityReport.index');
 	}
 
@@ -63,37 +65,64 @@ class ActivityReportController extends Controller {
 	 * reporte predeterminado muestra las actividades registradas del dia
 	 * anterior.
 	 * 
-	 * @param	sanoha\Http\Requests\ActivityReportFormRequest	$requests
+	 * @param	sanoha\Http\RequestsActivityReportFormRequest	$requests
 	 * @return	\Illuminate\Http\Response	
 	 */
 	public function index(ActivityReportFormRequest $request)
 	{
 		$search_input = $request->all();
         
-        $start = Carbon::createFromFormat('Y-m-d', date('Y-m-d'));
-        $end = Carbon::createFromFormat('Y-m-d', date('Y-m-d'));
+        $start = Carbon::createFromFormat('Y-m-d', $request->has('from') ? $request->get('from') : date('Y-m-d'))->startOfDay();
+        $end = Carbon::createFromFormat('Y-m-d', $request->has('to') ? $request->get('to') : date('Y-m-d'))->endOfDay();
         
-        $start->subDays(1);
-        $end->subDays(1);
+        if(!$request->has('from')){
+        	$start->subDays(1);
+        	$end->subDays(1);
+        }
         
-        $parameters['employee'] = !empty($request->get('find')) ? $request->get('find') : null;
-        
-		$parameters['from'] = !empty($request->get('from')) ? $request->get('from')  : $start->toDateString();
-		$parameters['from'] .= ' 00:00:00';
-		
-		$parameters['to'] = !empty($request->get('to')) ? $request->get('to') : $end->toDateString();
-		$parameters['to'] .= ' 23:59:59';
-		
-		$parameters['costCenter_id'] = $this->costCenter_id;
-		$parameters['costCenter_name'] = \sanoha\Models\CostCenter::findOrFail($this->costCenter_id)->name;
+        $parameters['employee'] 		= !empty($request->get('find')) ? $request->get('find') : null;
+		$parameters['from'] 			= $start;
+		$parameters['to'] 				= $end;
+		$parameters['costCenter_id'] 	= $this->costCenter_id;
+		$parameters['costCenter_name'] 	= \sanoha\Models\CostCenter::findOrFail($this->costCenter_id)->name;
 
-		$activities = \sanoha\Models\ActivityReport::getActivities($parameters);
-			
-		$orderedActivities = \sanoha\Models\ActivityReport::sortActivities($activities);
+		$activities = ActivityReport::getActivities($parameters);
 		
-		$miningActivities = \sanoha\Models\MiningActivity::orderBy('name', 'ASC')->get();
+		$orderedActivities = ActivityReport::sortActivities($activities);
+		
+		$miningActivities = MiningActivity::orderBy('short_name')->get();
 
 		return view('activityReports.index', compact('orderedActivities', 'miningActivities', 'parameters', 'search_input'));
+	}
+	
+	/**
+	 * La vista calendario de las actividades mineras registradas
+	 * 
+	 * @return \Illuminate\Http\Response
+	 */
+	public function calendar(ActivityReportFormRequest $request)
+	{
+		$search_input = $request->all();
+		
+		$start = Carbon::createFromFormat('Y-m-d', $request->has('from') ? $request->get('from') : date('Y-m-d'))->startOfDay();
+        $end = Carbon::createFromFormat('Y-m-d', $request->has('to') ? $request->get('to') : date('Y-m-d'))->endOfDay();
+        
+        if(!$request->has('from')){
+        	$start->startOfMonth();
+        	$end->endOfMonth();
+        }
+        
+        $parameters['employee'] 		= $request->get('find', null);
+		$parameters['from'] 			= $start;
+		$parameters['to'] 				= $end;
+		$parameters['costCenter_id'] 	= $this->costCenter_id;
+		$parameters['costCenter_name'] 	= \sanoha\Models\CostCenter::findOrFail($this->costCenter_id)->name;
+		
+		$activities = ActivityReport::getCalendarActivities($parameters);
+		
+		$activities = json_encode($activities);
+		
+		return view('activityReports.calendar', compact('search_input', 'parameters', 'activities'));
 	}
 
 	/**
@@ -103,44 +132,43 @@ class ActivityReportController extends Controller {
 	 */
 	public function create(Request $request)
 	{
-		// parametros de búsqueda de activiades del empleado
-		
-        $start = Carbon::createFromFormat('Y-m-d', date('Y-m-d')); // busqueda desde el día de hoy
-        $end = Carbon::createFromFormat('Y-m-d', date('Y-m-d')); // hasta el día de hoy
+        $start = Carbon::createFromFormat('Y-m-d', date('Y-m-d'))->startOfDay();
+        $end = Carbon::createFromFormat('Y-m-d', date('Y-m-d'))->endOfDay();
         
-        $parameters = [];
-        
-        $parameters['employee_id'] = $request->has('employee_id') ? $request->get('employee_id') : null;
+        // parametros de búsqueda de activiades del empleado
+        $parameters 					= [];
+        $parameters['employee_id'] 		= $request->get('employee_id', null);
+		$parameters['from'] 			= $start;
+		$parameters['to'] 				= $end;
+		$parameters['costCenter_id'] 	= $this->costCenter_id;
+		$parameters['costCenter_name'] 	= \sanoha\Models\CostCenter::findOrFail($this->costCenter_id)->name;
 		
-		$employee = empty($parameters['employee_id']) ? null : \sanoha\Models\Employee::find($parameters['employee_id']);
-        
-		$parameters['from'] = !empty($request->get('from')) ? $request->get('from')  : $start->toDateString();
-		$parameters['from'] .= ' 00:00:00';
+		$employee = empty($parameters['employee_id']) ? null : \sanoha\Models\Employee::findOrFail($parameters['employee_id']);
+	
+		$subCostCenterEmployees = \sanoha\Models\SubCostCenter::where('cost_center_id', $this->costCenter_id)->with('employees')->get();
 		
-		$parameters['to'] = !empty($request->get('to')) ? $request->get('to') : $end->toDateString();
-		$parameters['to'] .= ' 23:59:59';
+		$employees = [];
 		
-		$parameters['costCenter_id'] = $this->costCenter_id;
-		$parameters['costCenter_name'] = \sanoha\Models\CostCenter::findOrFail($this->costCenter_id)->name;
-		
-		// lista de todos los empleados del proyecto
-		$employees = \sanoha\Models\Employee::where('cost_center_id', '=', $this->costCenter_id)
-			->orderBy('name')
-			->get()
-			->lists('fullname', 'id');
-		
-		// las posibles actividades a registrar
-		$miningActivities = \sanoha\Models\MiningActivity::orderBy('name')
-			->get();
-		
-		// las actividades del empleado
-		$employee_activities = \sanoha\Models\ActivityReport::getActivities($parameters);
+		foreach ($subCostCenterEmployees as $key => $subCostCenter) {
+			//$employees[$subCostCenter->name] = [];
+			$employees[$subCostCenter->name] = array();
+			foreach ($subCostCenter->employees as $key_employee => $employee) {
+				$employees[$subCostCenter->name][$employee->id] = $employee->fullname;
+			}
 			
-		//dd($employee_activities);
-		$employee_activities = \sanoha\Models\ActivityReport::sortActivities($employee_activities);
+		}
+
+		// actividades mineras
+		$miningActivities = MiningActivity::orderBy('short_name')->get();
+		
+		// actividades registradas del empleado
+		$employee_activities = ActivityReport::getActivities($parameters);
+		
+		// actividades registradas del empleado ordenadas
+		$employee_activities = ActivityReport::sortActivities($employee_activities);
 		
 		$input = $request->all();
-		
+
 		return view('activityReports.create', compact('employees', 'miningActivities', 'employee', 'employee_activities', 'parameters', 'input'));
 	}
 
@@ -152,8 +180,11 @@ class ActivityReportController extends Controller {
 	public function store(ActivityReportFormRequest $request)
 	{
 		$data = $request->all();
-
-		$activity 						=	new \sanoha\Models\ActivityReport;
+		
+		$employee = \sanoha\Models\Employee::findOrFail($data['employee_id']);
+		
+		$activity 						=	new ActivityReport;
+		$activity->sub_cost_center_id	=	$employee->sub_cost_center_id;
 		$activity->employee_id 			=	$data['employee_id'];
 		$activity->mining_activity_id	=	$data['mining_activity_id'];
 		$activity->quantity 			=	$data['quantity'];
@@ -168,11 +199,12 @@ class ActivityReportController extends Controller {
 		$activity->price 				=	isset($data['price']) ? $data['price'] : '';
 		$activity->comment 				=	$data['comment'];
 		$activity->reported_by 			=	\Auth::getUser()->id;
+		$activity->reported_at 			=	$data['reported_at'];
 		
 		$activity->save()
 			? \Session::flash('success', 'Actividad Registrada Correctamente.')
 			: \Session::flash('error', 'Error registrando la actividad.');
-
+		
 		return redirect()->back()->withInput($request->only('employee_id'));
 	}
 
@@ -184,7 +216,20 @@ class ActivityReportController extends Controller {
 	 */
 	public function show($id)
 	{
-		//
+		$activity = ActivityReport::findOrFail($id);
+		
+		$start = Carbon::createFromFormat('Y-m-d', date('Y-m-d'))->startOfDay();
+        $end = Carbon::createFromFormat('Y-m-d', date('Y-m-d'))->endOfDay();
+        
+        // parametros de búsqueda de activiades del empleado
+        $parameters 					= [];
+        $parameters['employee_id'] 		= $activity->employee_id;
+		$parameters['from'] 			= $activity->created_at->startOfDay();
+		$parameters['to'] 				= $activity->created_at->endOfDay();
+		$parameters['costCenter_id'] 	= $this->costCenter_id;
+		$parameters['costCenter_name'] 	= \sanoha\Models\CostCenter::findOrFail($this->costCenter_id)->name;
+		
+		return view('activityReports.show', compact('activity', 'subCostCenterEmployees', 'parameters'));
 	}
 
 	/**
@@ -193,9 +238,50 @@ class ActivityReportController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function edit($id)
+	public function edit($id, Request $request)
 	{
-		//
+		$activity = ActivityReport::findOrFail($id);
+		
+		$start = $activity->reported_at->startOfDay();
+        $end = $activity->reported_at->endOfDay();
+        
+        // parametros de búsqueda de activiades del empleado
+        $parameters 					= [];
+        $parameters['employee_id'] 		= $activity->employee_id;
+		$parameters['from'] 			= $start;
+		$parameters['to'] 				= $end;
+		$parameters['costCenter_id'] 	= $this->costCenter_id;
+		$parameters['costCenter_name'] 	= \sanoha\Models\CostCenter::findOrFail($this->costCenter_id)->name;
+		
+		$subCostCenterEmployees = \sanoha\Models\SubCostCenter::where('cost_center_id', $this->costCenter_id)->with('employees')->get();
+		
+		$employees = [];
+		
+		foreach ($subCostCenterEmployees as $key => $subCostCenter) {
+			//$employees[$subCostCenter->name] = [];
+			$employees[$subCostCenter->name] = array();
+			foreach ($subCostCenter->employees as $key_employee => $employee) {
+				$employees[$subCostCenter->name][$employee->id] = $employee->fullname;
+			}
+			
+		}
+
+		if (array_key_exists($activity->employee_id, $employees) !== true){
+			$employees = [$activity->employee->id => $activity->employee->fullname]+$employees;
+		}
+		// actividades mineras
+		$miningActivities = MiningActivity::orderBy('short_name')->get();
+		
+		// actividades registradas del empleado
+		$employee_activities = ActivityReport::getActivities($parameters);
+		
+		// actividades registradas del empleado ordenadas
+		$employee_activities = ActivityReport::sortActivities($employee_activities);
+		
+		//dd($employee_activities);
+		$input = $request->all();
+		
+		return view('activityReports.edit', compact('activity', 'employees', 'miningActivities', 'employee_activities', 'parameters', 'input'));
 	}
 
 	/**
@@ -204,9 +290,17 @@ class ActivityReportController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
-	{
-		//
+	public function update($id, ActivityReportFormRequest $request)
+	{	
+		$activity						= ActivityReport::findOrFail($id);
+		$activity->employee_id			= $request->get('employee_id');
+		$activity->mining_activity_id 	= $request->get('mining_activity_id');
+		$activity->quantity 			= $request->get('quantity');
+		$activity->price 				= $request->has('price') ? $request->get('price') : 0;
+		$activity->comment				= $request->get('comment');
+		$activity->save() ? \Session::flash('success', 'Actualización de Actividad Minera exitosa.') : \Session::flash('error', 'Ocurrió un error actualizando la actividad.') ;
+	
+		return redirect()->route('activityReport.show', $id);
 	}
 
 	/**

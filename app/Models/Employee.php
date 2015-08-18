@@ -21,14 +21,14 @@ class Employee extends Model
      *
      * @var array
      */
-    protected $fillable = ['position_id', 'cost_center_id', 'name', 'lastname', 'identification_number'];
+    protected $fillable = ['position_id', 'name', 'lastname', 'identification_number'];
 
     /**
      * 
-     */ 
-    public function costCenter()
+     */
+    public function subCostCenter()
     {
-        return $this->belongsTo('sanoha\Models\CostCenter');
+        return $this->belongsTo('sanoha\Models\SubCostCenter');
     }
     
     /**

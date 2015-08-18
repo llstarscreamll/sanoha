@@ -9,6 +9,7 @@ use sanoha\Http\Requests\UserFormRequest;
 use sanoha\Models\Role;
 use sanoha\Models\User;
 use sanoha\Models\CostCenter;
+use sanoha\Models\SubCostCenter;
 
 class UserController extends Controller
 {
@@ -49,10 +50,11 @@ class UserController extends Controller
      *
      * @return Response
      */
-    public function create(Role $role, CostCenter $costCenter)
+    public function create(Role $role, CostCenter $costCenters)
     {
         $roles = $role->lists('display_name', 'id');
-        $costCenters = $costCenter->lists('name', 'id');
+        $costCenters = $costCenters->with('subCostCenter')->get();
+        
         return view('users.create', compact('roles', 'costCenters'));
     }
 
@@ -63,7 +65,7 @@ class UserController extends Controller
      */
     public function store(UserFormRequest $request, Role $role)
     {
-        $user = $this->user->newInstance($request->except('role_id', 'costCenter_id'));
+        $user = $this->user->newInstance($request->except('role_id', 'subCostCenter_id'));
 
         // get the roles ids and names
         $role_keys = $role->find($request->only('role_id')['role_id'])->lists('id');
@@ -81,9 +83,9 @@ class UserController extends Controller
         ($user->hasRole($role_names)) ? $success[] = 'Se ha añadido el rol al usuario correctamente.' : $error[] = 'Ocurrió un error añadiendo el rol al usuario.';
 
         // attach cost centers
-        $costCenter = $request->input('costCenter_id');
-        //dd($costCenter);
-        ( $user->costCenter()->sync($costCenter) ) ? $success[] = 'Asignación de centro de costos exitosa.' : $error[] = 'Error asignando centro de costos.' ;
+        $subCostCenters = $request->input('subCostCenter_id');
+        //dd($subCostCenter);
+        ( $user->subCostCenters()->sync($subCostCenters) ) ? $success[] = 'Asignación de centro de costos exitosa.' : $error[] = 'Error asignando centro de costos.' ;
 
         // flash notification messages
         \Session::flash('success', $success);
@@ -111,13 +113,14 @@ class UserController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function edit($id, Role $role, CostCenter $costCenter)
+    public function edit($id, Role $role, CostCenter $costCenters)
     {
         $user = $this->user->findOrFail($id);
         $roles = $role->lists('display_name', 'id');
-        $costCenters = $costCenter->lists('name', 'id');
+        $costCenters = $costCenters->with('subCostCenter')->get();
+        $userSubCostCenters = $user->getSubCostCentersId();
 
-        return view('users.edit', compact('user', 'roles', 'costCenters'));
+        return view('users.edit', compact('user', 'roles', 'costCenters', 'userSubCostCenters'));
     }
 
     /**
@@ -131,7 +134,7 @@ class UserController extends Controller
         $user = $this->user->findOrFail($id);
         
         $data = $request->except('role_id', empty($request->only('password')['password']) ? 'password' : null);
-        $costCenters = empty($request->only('costCenter_id')['costCenter_id']) ? [] : $request->only('costCenter_id')['costCenter_id'];
+        $subCostCenters = empty($request->only('subCostCenter_id')['subCostCenter_id']) ? [] : $request->only('subCostCenter_id')['subCostCenter_id'];
         
         $data['activated'] = $request->has('activated') ? true : false;
         
@@ -155,8 +158,8 @@ class UserController extends Controller
         $user->roles()->sync($role_keys);
         
         // attach cos centers
-        //dd($costCenters);
-        $user->costCenter()->sync($costCenters) ? $success[] = 'Actualización de centro de costos exitosa.' : $error[] = 'Error actualizando centro de costos.' ;
+        //dd($subCostCenters);
+        $user->subCostCenters()->sync($subCostCenters) ? $success[] = 'Actualización de centro de costos exitosa.' : $error[] = 'Error actualizando centro de costos.' ;
         
         if(!empty($role_names))
             ($user->hasRole($role_names)) ? $success[] = 'Se ha actualizado el rol del usuario correctamente.' : $error[] = 'Ocurrió un error actualizando el rol al usuario.';

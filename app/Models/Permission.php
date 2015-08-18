@@ -12,7 +12,8 @@ class Permission extends EntrustPermission
     public $categories = [
         'role'              =>  'Roles',
         'user'              =>  'Usuarios',
-        'activityReport'    =>  'Reporte de Labores Mineras'
+        'noveltyReport'     =>  'Reporte de Novedades',
+        'activityReport'    =>  'Reporte de Labores Mineras',
         ];
     
     /**

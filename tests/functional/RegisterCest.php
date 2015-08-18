@@ -1,7 +1,8 @@
 <?php
 use \FunctionalTester;
 
-use \Users\_common\UserCommons as UserCommons;
+use \common\User    as UserCommons;
+use \common\Roles   as RolesCommons;
 
 class RegisterCest
 {
@@ -13,8 +14,8 @@ class RegisterCest
     public function _before(FunctionalTester $I)
     {
 
-        $this->userCommons = new UserCommons;
-        $this->userCommons->haveUserRoles();
+        $this->userCommons = new RolesCommons;
+        $this->userCommons->createBasicRoles();
 
         $this->valid_form = [
             'name'      =>      'Travis',

@@ -16,7 +16,7 @@ class CreateEmployeesTable extends Migration {
 		{
 			$table->increments('id');
 			$table->integer('position_id')->unsigned(); // foreign key
-			$table->integer('cost_center_id')->unsigned(); // foreign key
+			$table->integer('sub_cost_center_id')->unsigned(); // foreign key
 			$table->string('name');
 			$table->string('lastname');
 			$table->string('identification_number')->nullable();
@@ -24,7 +24,7 @@ class CreateEmployeesTable extends Migration {
 			$table->softDeletes();
 			
 			$table->foreign('position_id')->references('id')->on('positions');
-			$table->foreign('cost_center_id')->references('id')->on('cost_centers');
+			$table->foreign('sub_cost_center_id')->references('id')->on('sub_cost_centers');
 		});
 	}
 

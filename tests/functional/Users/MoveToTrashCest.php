@@ -1,23 +1,28 @@
-<?php
-namespace Users;
+<?php namespace Users;
 
 use \FunctionalTester;
 
-use \Users\_common\UserCommons;
-use \sanoha\Models\User;
+use \sanoha\Models\User     as UserModel;
+
+use \common\User           as UserCommons;
+use \common\Permissions    as PermissionsCommons;
+use \common\Roles          as RolesCommons;
 
 class MoveToTrashCest
 {
-    private $userCommons;
-    private $testUser;
-
     public function _before(FunctionalTester $I)
     {
+        // creo los permisos para el módulo de usuarios
+        $this->permissionsCommons = new PermissionsCommons;
+        $this->permissionsCommons->createUsersModulePermissions();
+        // creo los roles de usuario y añado todos los permisos al rol de administrador
+        $this->rolesCommons = new RolesCommons;
+        $this->rolesCommons->createBasicRoles();
+        
+        // creo el usuairo administrador
         $this->userCommons = new UserCommons;
         $this->userCommons->createAdminUser();
-        
-        $this->testUser = $this->userCommons->testUser;
-        
+
         $I->amLoggedAs($this->userCommons->adminUser);
     }
 
@@ -35,14 +40,14 @@ class MoveToTrashCest
 
         $I->seeAuthentication();
 
-        $user = User::create($this->testUser);
+        $user = UserModel::create($this->userCommons->testUser);
 
         $I->amOnPage($this->userCommons->usersIndexUrl);
         $I->see('Usuarios', 'h1');
 
-        $I->see($this->testUser['name'], 'tr:first-child td:nth-child(2)');
-        $I->see($this->testUser['email'], 'tr:first-child td:nth-child(4)');
-        $I->click($this->testUser['name'], 'td a');
+        $I->see($this->userCommons->testUser['name'], 'tr:first-child td:nth-child(2)');
+        $I->see($this->userCommons->testUser['email'], 'tr:first-child td:nth-child(4)');
+        $I->click($this->userCommons->testUser['name'], 'td a');
         
         $I->seeCurrentUrlEquals('/users/'. $user->id);
         $I->see('Detalles de Usuario', 'h1');

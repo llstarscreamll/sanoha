@@ -3,7 +3,6 @@
 use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
 use Carbon\Carbon;
-use sanoha\Models\CostCenter;
 
 class CostCenterTableSeeder extends Seeder
 {
@@ -63,7 +62,6 @@ class CostCenterTableSeeder extends Seeder
         'updated_at'    =>  $date->toDateTimeString()
         ];
         
-        DB::table('cost_centers')->delete();
         DB::table('cost_centers')->insert($data);
     }
 }

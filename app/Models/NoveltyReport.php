@@ -1,12 +1,13 @@
 <?php namespace sanoha\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class NoveltyReport extends Model
 {
 	use SoftDeletes;
 
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = ['reported_at', 'created_at', 'updated_at', 'deleted_at'];
 
     /**
      * The database table used by the model.
@@ -20,7 +21,15 @@ class NoveltyReport extends Model
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = ['sub_cost_center_id', 'employee_id', 'novelty_id', 'comment', 'reported_at'];
+    
+    /**
+     * 
+     */ 
+    public function subCostCenter()
+    {
+        return $this->belongsTo('\sanoha\Models\SubCostCenter');
+    }
     
     /**
      * 

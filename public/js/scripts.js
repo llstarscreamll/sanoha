@@ -1,22 +1,4 @@
 /**
- * Check or uncheck all cehckboxes
- * 
- * @param {bool} check_all
- * @return {void}
- */
-function toggleCheckboxes()
-{
-    $('#check_all').change(function(){
-        var checkboxes = $(this).closest('form').find(':checkbox');
-        if($(this).is(':checked')) {
-            checkboxes.prop('checked', true);
-        } else {
-            checkboxes.prop('checked', false);
-        }
-    });
-}
-
-/**
  * Enable or disable the action buttons
  * 
  * @param {bool} enable
@@ -30,6 +12,31 @@ function toggleEnableActionButtons(enable)
     }else{
         $('#btn-trash').attr('disabled', 'disabled');
     }
+}
+
+/**
+ * Check or uncheck all cehckboxes
+ * 
+ * @param {bool} check_all
+ * @return {void}
+ */
+function toggleCheckboxes()
+{
+    $('#check_all').change(function(){
+        var checkboxes = $(this).closest('form').find(':checkbox');
+        var checked = false;
+        
+        if($(this).is(':checked')) {
+            checkboxes.prop('checked', true);
+            checked = true;
+        } else {
+            checkboxes.prop('checked', false);
+            checked = false;
+        }
+        
+        toggleEnableActionButtons(checked);
+    });
+    
 }
 
 /**

@@ -1,34 +1,44 @@
-<?php
-namespace Users;
-
-use Users\_common\UserCommons;
-use \Permissions\_common\PermissionCommons;
+<?php namespace Users;
 
 use \FunctionalTester;
-use \sanoha\Models\User;
+
+use \sanoha\Models\User     as UserModel;
+
+use \common\User           as UserCommons;
+use \common\Permissions    as PermissionsCommons;
+use \common\Roles          as RolesCommons;
 
 class UsersIndexCest
 {
     /**
      * The user commons actions
      *
-     * @var \Users\_common\UserCommons
+     * @var \Users\_common\User
      */
-    private $userCommons;
+    private $User;
 
     /**
-     * First instanciate the UserCommons to:
+     * First instanciate the User to:
      * - Create user roles
-     * And then login with the $userCommons->adminUser data
+     * And then login with the $User->adminUser data
      *
      * @param \FunctionalTester $I
      * @return void
      */
     public function _before(FunctionalTester $I)
     {
+        // creo los permisos para el módulo de usuarios
+        $this->permissionsCommons = new PermissionsCommons;
+        $this->permissionsCommons->createUsersModulePermissions();
+        
+        // creo los roles de usuario y añado todos los permisos al rol de administrador
+        $this->rolesCommons = new RolesCommons;
+        $this->rolesCommons->createBasicRoles();
+        
+        // creo el usuairo administrador
         $this->userCommons = new UserCommons;
         $this->userCommons->createAdminUser();
-        
+
         $I->amLoggedAs($this->userCommons->adminUser);
     }
 
@@ -46,8 +56,8 @@ class UsersIndexCest
 
         $I->seeAuthentication();
 
-        $this->userCommons->haveUsers(35);
-        $users = User::orderBy('updated_at', 'DES')
+        $this->userCommons->createUsers(35);
+        $users = UserModel::orderBy('updated_at', 'DES')
             ->where('email', '!=', $this->userCommons->adminUser['email'])
             ->paginate(15);
 

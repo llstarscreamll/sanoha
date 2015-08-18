@@ -13,7 +13,7 @@
                     <a href="{{ url(route('roles.index'))}}" class="link-black">
                         Roles
                     </a>
-                    <small class="action-buttons">
+                    <small class="action-buttons btn-group">
                         
                         <div class="display-inline-block" data-toggle="tooltip" data-placement="top" title="Mover a Papelera">
                             <button type="submit" class="btn btn-default btn-sm" id="btn-trash" disabled="disabled">
@@ -22,11 +22,12 @@
                             </button>
                         </div>
                         
-                        <a class="btn btn-default btn-sm" href="{!! route('roles.create') !!}" role="button" data-toggle="tooltip" data-placement="top" title="Crear Rol">
-                            <span class="glyphicon glyphicon-plus"></span>
-                            <span class="sr-only">Crear Rol</span>
-                        </a>
-                        
+                        <div class="display-inline-block" role="button" data-toggle="tooltip" data-placement="top" title="Crear Rol">
+                            <a class="btn btn-default btn-sm" href="{!! route('roles.create') !!}">
+                                <span class="glyphicon glyphicon-plus"></span>
+                                <span class="sr-only">Crear Rol</span>
+                            </a>
+                        </div>
                     </small>
                 </h1>
             </div>

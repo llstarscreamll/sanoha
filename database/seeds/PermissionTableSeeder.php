@@ -104,7 +104,7 @@ class PermissionTableSeeder extends Seeder
         // -----------------------------------------------------
         $data[] = [
             'name'           => 'activityReport.index',
-            'display_name'   => 'Ver Reportes de Actividades Reportadas',
+            'display_name'   => 'Ver reporte en tabla de actividades mineras registradas',
             'description'    => 'Ver todos los reportes de las actividades o labores mineras registradas',
             'created_at'    =>  $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
             'updated_at'    =>  $date->toDateTimeString()
@@ -112,7 +112,7 @@ class PermissionTableSeeder extends Seeder
         
         $data[] = [
             'name'           => 'activityReport.create',
-            'display_name'   => 'Crear reporte de actividades mineras',
+            'display_name'   => 'Reportar actividades mineras',
             'description'    => 'Registrar una labor minera para luego ser mostrada en los reportes',
             'created_at'    =>  $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
             'updated_at'    =>  $date->toDateTimeString()
@@ -120,7 +120,7 @@ class PermissionTableSeeder extends Seeder
         
         $data[] = [
             'name'           => 'activityReport.show',
-            'display_name'   => 'Ver detalles de actividad',
+            'display_name'   => 'Ver detalles de actividad minera registrada',
             'description'    => 'Ver los detalles de una actividad reportada en modo lectura.',
             'created_at'    =>  $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
             'updated_at'    =>  $date->toDateTimeString()
@@ -128,7 +128,7 @@ class PermissionTableSeeder extends Seeder
         
         $data[] = [
             'name'           => 'activityReport.edit',
-            'display_name'   => 'Editar la información de una actividad',
+            'display_name'   => 'Editar la información de una actividad minera ya registrada',
             'description'    => 'Editar la información registrada de una actividad minera reportada',
             'created_at'    =>  $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
             'updated_at'    =>  $date->toDateTimeString()
@@ -136,7 +136,7 @@ class PermissionTableSeeder extends Seeder
         
         $data[] = [
             'name'           => 'activityReport.destroy',
-            'display_name'   => 'Borrar Actividades',
+            'display_name'   => 'Borrar Actividades Mineras',
             'description'    => 'Borrar actividades registradas en el sistema',
             'created_at'    =>  $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
             'updated_at'    =>  $date->toDateTimeString()
@@ -144,13 +144,63 @@ class PermissionTableSeeder extends Seeder
         
         $data[] = [
             'name'           => 'activityReport.assignCosts',
-            'display_name'   => 'Asiganr Costos de Actividades',
-            'description'    => 'Asiganr los precios de las actividades mineras registradas en el sistema',
+            'display_name'   => 'Asignar Costos de Actividades Mineras',
+            'description'    => 'Asignar los precios de las actividades mineras registradas en el sistema',
             'created_at'    =>  $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
             'updated_at'    =>  $date->toDateTimeString()
         ];
         
-        DB::table('permissions')->delete();
+        $data[] = [
+            'name'           => 'activityReport.calendar',
+            'display_name'   => 'Reporte en Calendario de Actividades Mineras Registradas',
+            'description'    => 'La vista calendario mucho mas detallada de las actividades mineras registradas en el sistema',
+            'created_at'    =>  $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'    =>  $date->toDateTimeString()
+        ];
+        
+        // -----------------------------------------------------
+        // Permisos para el módulo de reporte de Novedades
+        // -----------------------------------------------------
+        $data[] = [
+            'name'           => 'noveltyReport.index',
+            'display_name'   => 'Ver reporte en tabla de actividades mineras registradas',
+            'description'    => 'Ver todos los reportes de las actividades o labores mineras registradas',
+            'created_at'    =>  $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'    =>  $date->toDateTimeString()
+        ];
+        
+        $data[] = [
+            'name'           => 'noveltyReport.create',
+            'display_name'   => 'Reportar actividades mineras',
+            'description'    => 'Registrar una labor minera para luego ser mostrada en los reportes',
+            'created_at'    =>  $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'    =>  $date->toDateTimeString()
+        ];
+        
+        $data[] = [
+            'name'           => 'noveltyReport.show',
+            'display_name'   => 'Ver detalles de actividad minera registrada',
+            'description'    => 'Ver los detalles de una actividad reportada en modo lectura.',
+            'created_at'    =>  $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'    =>  $date->toDateTimeString()
+        ];
+        
+        $data[] = [
+            'name'           => 'noveltyReport.edit',
+            'display_name'   => 'Editar la información de una actividad minera ya registrada',
+            'description'    => 'Editar la información registrada de una actividad minera reportada',
+            'created_at'    =>  $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'    =>  $date->toDateTimeString()
+        ];
+        
+        $data[] = [
+            'name'           => 'noveltyReport.destroy',
+            'display_name'   => 'Borrar Actividades Mineras',
+            'description'    => 'Borrar actividades registradas en el sistema',
+            'created_at'    =>  $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'    =>  $date->toDateTimeString()
+        ];
+        
         DB::table('permissions')->insert($data);
     }
 }

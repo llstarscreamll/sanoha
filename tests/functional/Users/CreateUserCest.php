@@ -1,8 +1,12 @@
 <?php namespace Users;
 
-use Users\_common\UserCommons;
 use \FunctionalTester;
-use \sanoha\Models\User;
+
+use \sanoha\Models\User     as UserModel;
+
+use \common\User            as UserCommons;
+use \common\Permissions     as PermissionsCommons;
+use \common\Roles           as RolesCommons;
 
 class CreateUserCest
 {
@@ -12,9 +16,20 @@ class CreateUserCest
      * @var string
      */ 
     private $create_url = '/users/create';
+    
+    private $rolesCommons;
 
     public function _before(FunctionalTester $I)
     {
+        // creo los permisos para el módulo de usuarios
+        $this->permissionsCommons = new PermissionsCommons;
+        $this->permissionsCommons->createUsersModulePermissions();
+        
+        // creo los roles de usuario y añado todos los permisos al rol de administrador
+        $this->rolesCommons = new RolesCommons;
+        $this->rolesCommons->createBasicRoles();
+        
+        // creo el usuairo administrador
         $this->userCommons = new UserCommons;
         $this->userCommons->createAdminUser();
 
@@ -26,10 +41,9 @@ class CreateUserCest
     }
 
     /**
-     * Try to create a user with invalid data
-     * @group user
+     * Pruebo los mensajes de error al crea un nuevo usuario
      */
-    public function tryToCreateUserWithInvalidaData(FunctionalTester $I)
+    public function TestFormErrors(FunctionalTester $I)
     {
         $I->am('admin user loged in');
         $I->wantTo('create user with invalid data to check errors');
@@ -43,7 +57,7 @@ class CreateUserCest
             'name'              => '',
             'lastname'          => '',
             'email'             => '',
-            'role_id'           => '',
+            'role_id'           => [],
             'activated'         => true,
             'password'          => '',
             'password_confirmation'   => ''
@@ -134,7 +148,7 @@ class CreateUserCest
             'email'             => 'edy.ramon@example.com',
             'role_id'           => 1,
             'activated'         => 1,
-            'costCenter_id'     => [1,2],
+            'subCostCenter_id'     => [1,2],
             'password'          => 'edy.ramon',
             'password_confirmation'   => 'edy.ramon'
         ];
@@ -152,18 +166,18 @@ class CreateUserCest
             'activated'         => $newUser['activated']
         ]);
         
-        $userRecord = User::where('email', '=', $newUser['email'])->get()->first();
+        $userRecord = UserModel::where('email', '=', $newUser['email'])->get()->first();
         
         //dd($userRecord->id);
         
-        $I->seeRecord('cost_center_owner', [
+        $I->seeRecord('sub_cost_center_owner', [
             'user_id'           =>  $userRecord->id,
-            'cost_center_id'    =>  1
+            'sub_cost_center_id'    =>  1
         ]);
         
-        $I->seeRecord('cost_center_owner', [
+        $I->seeRecord('sub_cost_center_owner', [
             'user_id'           =>  $userRecord->id,
-            'cost_center_id'    =>  2
+            'sub_cost_center_id'    =>  2
         ]);
 
         $I->seeCurrentUrlEquals('/users');

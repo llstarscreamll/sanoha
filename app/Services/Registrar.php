@@ -38,7 +38,7 @@ class Registrar implements RegistrarContract
     {
         return Validator::make($data, [
             'name'      => 'required|max:50|min:3|alpha_spaces',
-            'lastname'  => 'max:50|min:3|alpha_spaces',
+            'lastname'  => 'required|max:50|min:3|alpha_spaces',
             'email'     => 'required|email|max:100|unique:users,email',
             'password'  => 'required|confirmed|min:6',
         ], $this->messages);

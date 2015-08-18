@@ -24,7 +24,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     protected $table = 'users';
 
-    /**
+    /*
      * The attributes that are mass assignable.
      *
      * @var array
@@ -41,20 +41,51 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     /**
      * 
      */
-    public function costCenter()
+    public function subCostCenters()
     {
-        return $this->belongsToMany('sanoha\Models\CostCenter', 'cost_center_owner');
+        return $this->belongsToMany('sanoha\Models\SubCostCenter', 'sub_cost_center_owner');
     }
+    
+    /**
+     * 
+     */
+    public function getCostCenters()
+    {
+        $costCenters = [];
+        //dd($this->subCostCenters()->with('costCenter')->get());
+        foreach($this->subCostCenters()->with('CostCenter')->get() as $subCostCenter){
+            $costCenters[$subCostCenter->CostCenter->id]['id'] = $subCostCenter->CostCenter->id;
+            $costCenters[$subCostCenter->CostCenter->id]['name'] = $subCostCenter->CostCenter->name;
+        }
+        
+        return $costCenters;
+    }
+    
     /**
      * Comprueba si el usuario tiene asignado el centro de costo dado
      * 
      * @param   string  $costCenterId
      */
+    public function hasSubCostCenter($subCostCenterId){
+        
+        foreach ($this->subCostCenters as $key => $subCostCenter) {
+            
+            if($subCostCenter->id === $subCostCenterId)
+                return true;
+                
+        }
+        
+        return false;
+    }
+    
+    /**
+     * 
+     */
     public function hasCostCenter($costCenterId){
         
-        foreach ($this->costCenter as $key => $costCenter) {
+        foreach ($this->getCostCenters() as $key => $costCenter) {
             
-            if($costCenter->id === $costCenterId)
+            if($costCenter['id'] === $costCenterId)
                 return true;
                 
         }
@@ -103,29 +134,29 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
     
     /**
-     * Get the user cost centers name attribute
+     * Get the user sub cost centers name attribute
      * 
      * @return {string}
      */
-    public function getCostCenters()
+    public function getSubCostCenters()
     {
-        $costCenters = '';
+        $subCostCenters = '';
         
-        foreach ($this->costCenter as $center) {
-            $costCenters .= $center->name.' ';
+        foreach ($this->subCostCenters as $center) {
+            $subCostCenters .= $center->name.' ';
         }
-        return $costCenters;
+        return $subCostCenters;
     }
     
     /**
-     * Get the user cost centers id
+     * Get the user sub cost centers id
      * 
      * @return {array}
      */
-    public function getCostCentersId()
+    public function getSubCostCentersId()
     {
         $costCenters = [];
-        foreach ($this->costCenter as $center) {
+        foreach ($this->subCostCenters as $center) {
             $costCenters[] = $center->id;
         }
         return $costCenters;

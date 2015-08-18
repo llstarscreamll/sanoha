@@ -21,22 +21,22 @@ class CostCenter extends Model
      *
      * @var array
      */
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'short_name'];
     
     /**
      * 
-     */ 
-    public function employee()
+     */
+    public function subCostCenter()
     {
-        return $this->hasMany('sanoha\Models\Employee');
+        return $this->hasMany('sanoha\Models\SubCostCenter');
     }
     
     /**
      * 
      */
-    public function user()
+    public function employee()
     {
-        return $this->belongsToMany('sanoha\Models\User', 'cost_center_owner');
+        return $this->hasManyThrough('sanoha\Models\Employee', 'sanoha\Models\SubCostCenter');
     }
 
 }

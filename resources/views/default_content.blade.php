@@ -18,7 +18,9 @@
 			</div>
 
 			<div class="panel-body">
-
+				
+				@include ('layout.notifications')
+				
 				{{-- Here content!! --}}
 
 			</div>

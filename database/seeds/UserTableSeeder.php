@@ -46,5 +46,7 @@ class UserTableSeeder extends Seeder
         DB::table('users')->delete();
         DB::table('users')->insert($data);
         User::where('email', '=', 'llstarscreamll@hotmail.com')->first()->attachRole(2); // administrador
+        $subCostCenters = \sanoha\Models\SubCostCenter::all()->lists('id');
+        User::where('email', '=', 'llstarscreamll@hotmail.com')->first()->subCostCenters()->sync($subCostCenters); // añado todos los centros de costo
     }
 }

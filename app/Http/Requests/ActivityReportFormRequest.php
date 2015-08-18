@@ -21,16 +21,21 @@ class ActivityReportFormRequest extends Request {
 	 */
 	public function rules()
 	{
-		$costCenter 		= \Session::get('currentCostCenterActivities');
+		$costCenter 		= \Session::get('current_cost_center_id');
 		$mining_activity 	= \sanoha\Models\MiningActivity::where('id', '=', $this->input('mining_activity_id'))->get()->first();
+		
+		$date_after = \Carbon\Carbon::now()->subDays(2)->toDateString();
+		$date_before = \Carbon\Carbon::now()->addDays(1)->toDateString();
+		
 		$rules 				= [];
 		
 		if($this->route()->getName() == 'activityReport.store'){
 			
 			$rules = [
-				'employee_id'				=>		'required|numeric|exists:employees,id,cost_center_id,' . $costCenter,
+				'employee_id'				=>		'required|numeric|exists:employees,id',//,cost_center_id,' . $costCenter,
 				'mining_activity_id'		=>		'required|numeric|exists:mining_activities,id',
 				'quantity' 					=>		'required|numeric',
+				'reported_at'				=>		'required|date|after:'.$date_after.'|before:'.$date_before,
 				'comment'					=>		'alpha_spaces'
 			];
 

@@ -2,21 +2,59 @@
 
 use \FunctionalTester;
 use \Carbon\Carbon;
-use \Users\_common\UserCommons;
-use \ActivityReports\_common\ActivityReportsCommons;
+
+use \sanoha\Models\User         as UserModel;
+
+use \common\ActivityReports     as ActivityReportsCommons;
+use \common\SubCostCenters      as SubCostCentersCommons;
+use \common\CostCenters         as CostCentersCommons;
+use \common\Employees           as EmployeesCommons;
+use \common\MiningActivities    as MiningActivitiesCommons;
+use \common\User                as UserCommons;
+use \common\Permissions         as PermissionsCommons;
+use \common\Roles               as RolesCommons;
 
 class ReportMiningActivityCest
 {
     public function _before(FunctionalTester $I)
     {
-        $this->userCommons = new UserCommons;
-        $this->userCommons->createAdminUser();
-        $this->userCommons->haveUsers(10); // creo 10 usuarios
-        $this->userCommons->haveEmployees(10); // crea 10 empleados + 2 por defecto
-        $this->userCommons->haveMiningActivities();
+        //creo centros de costo
+        $this->costCentersCommons = new CostCentersCommons;
+        $this->costCentersCommons->createCostCenters();
         
+        // creo subcentros de costo
+        $this->subCostCentersCommons = new SubCostCentersCommons;
+        $this->subCostCentersCommons->createSubCostCenters();
+        
+        // creo los empleados
+        $this->employeeCommons = new EmployeesCommons;
+        $this->employeeCommons->createMiningEmployees();
+        
+        // creo actividades mineras
+        $this->miningActivities = new MiningActivitiesCommons;
+        $this->miningActivities->createMiningActivities();
+
+        // creo los permisos para el módulo de reporte de actividades mineras
+        $this->permissionsCommons = new PermissionsCommons;
+        $this->permissionsCommons->createActivityReportsModulePermissions();
+        
+        // creo los roles de usuario y añado todos los permisos al rol de administrador
+        $this->rolesCommons = new RolesCommons;
+        $this->rolesCommons->createBasicRoles();
+        
+        // creo el usuairo administrador
+        $this->userCommons = new UserCommons;
+        $this->user = $this->userCommons->createAdminUser();
+        $this->userCommons->createUsers();
+        
+        // le asigno los centros de costo al usuario administrador
+        $this->user->subCostCenters()->sync([1,2,3,4]); // estos son los id's de los subcentros de los primeros dos proyectos o centros de costo
+        
+        // creo algunos reportes de actividades mineras
+        $this->activityReportsCommons = new ActivityReportsCommons;
+        //$this->activityReportsCommons->createActivityReports(3);
+
         $I->amLoggedAs($this->userCommons->adminUser);
-        $I->seeAuthentication();
     }
 
     public function _after(FunctionalTester $I)
@@ -27,7 +65,7 @@ class ReportMiningActivityCest
      *  Pruebo el formulario de reporte de actividad o labor minera
      * 
      * @param
-     */ 
+     */
     public function reportMiningActivity(FunctionalTester $I)
     {
         // id del projecto con el que voy a trabajar
@@ -38,12 +76,6 @@ class ReportMiningActivityCest
         $admin_role = \sanoha\Models\Role::where('name', '=', 'admin')->first();
         $admin_role->perms()->sync($permissions);
         
-        // necesito los datos del proyecto
-        $project = \sanoha\Models\CostCenter::find($project_id);
-        
-        // necesito la lista de trabajadores asociados a ese proyecto
-        $employees = \sanoha\Models\Employee::where('cost_center_id', '=', $project_id)->get();
-        
         // necesito la lista de labores mineras que puedo registrar
         $labors = \sanoha\Models\MiningActivity::all();
         
@@ -51,14 +83,14 @@ class ReportMiningActivityCest
         // --- Empieza el test ---
         // -----------------------
         
-        $I->am('soy un supervisor del '. $project->name); // Projecto Beteitiva
+        $I->am('soy un supervisor del Proyecto Beteitiva');
         $I->wantTo('registrar la actividad minera de un trabajador de mi proyecto');
         
         // estoy en el home del sistema
         $I->amOnPage('/home');
         
         // hago clic en el proyecto que quiero trabajar
-        $I->click($project->name, 'a');
+        $I->click('Proyecto Beteitiva', 'a');
         
         // doy clic al botón de registrar una actividad minera
         $I->click('Registrar Labor Minera', 'a');
@@ -77,30 +109,17 @@ class ReportMiningActivityCest
         
         // veo que hay un select con los nombres de los trabajadores del centro
         // de costos que seleccioné
-        foreach ($employees as $employee) {
-            $I->see($employee->name, 'select option');
-        }
+        $I->see('Trabajador 1 B1', 'select optgroup option');
+        $I->see('Trabajador 2 B2', 'select optgroup option');
         
         // veo que NO hay un select con las actividades mineras posibles a reportar,
         // debo elejir primero al trabajador
+        $I->dontSeeElement('input', ['type' => 'checkbox', 'checked' => 'checked']); // por defecto está marcado
         $I->dontSeeElement('select', ['name' => 'mining_activity_id']);
-        
-        // veo que NO hay un campo donde digitar la cantidad o medida de la
-        // actividad a reportar, debo elejir primero al trabajador
         $I->dontSeeElement('input', ['name' => 'quantity']);
-        
-        // veo que NO está el campo para asignar el precio negociado de la actividad,
-        // pues el precio lo asigna el ingenero del área técnica a cargo de dicho proyecto
         $I->dontSeeElement('input', ['name' => 'price']);
-        
-        // veo que NO hay un textarea para digitar los comentarios u observaciones
-        // de la actividad minera a registrar, debo elejir primero al trabajador
+        $I->dontSeeElement('input', ['name' => 'reported_at']);
         $I->dontSeeElement('textarea', ['name' => 'comment']);
-
-        
-        // NO veo el botón de registrar la actividad para enviar el formulario,
-        // el formulario será enviado cuando se seleccione el trabajador de la lista
-        // automáticamente
         $I->dontSeeElement('button', ['type' => 'submit']);
         
         // veo que en la vista preliminar tengo un mensaje que dice "Selecciona un trabajador"
@@ -113,24 +132,22 @@ class ReportMiningActivityCest
         // del empleado
         $I->seeElement('form', ['method'    =>  'GET']); /* url por verificar */
         
-        // selecciono un trabajador de la lista
-        $I->selectOption('employee_id', $employees->first()->name . ' ' .$employees->first()->lastname);
-        
         // selecciono un trabajador de la lista y hago la simulación de envío del formulario
         // aunque no tengo botón, esto se hará con javascript en el onChange del select
-        $I->submitForm('form', ['employee_id' => $employees->first()->id]);
+        $I->submitForm('form', ['employee_id' => 1]);
         
         // la página se recarga al elejir al trabajador, veo que estoy de nuevo en
         // la misma página pero con el parámetro del trabajador seleccionado
-        $I->seeCurrentUrlEquals('/activityReport/create?employee_id='.$employees->first()->id);
+        $I->seeCurrentUrlEquals('/activityReport/create?employee_id=1');
         
-        // veo que tengo seleccionado el empleado que elejú antes
-        $I->seeOptionIsSelected('form select[name=employee_id]', $employees->first()->fullname);
+        // veo que el select tiene ya cargado el empleado seleccionado anteriormente
+        $I->seeOptionIsSelected('#employee_id', 'Trabajador 1 B1');
         
         // ahora si veo los campos faltantes del formulario para poder registrar la actividad
+        $I->seeElement('input', ['type' => 'checkbox', 'name' =>  'attended', 'checked' => 'checked']);
         $I->seeElement('select', ['name' => 'mining_activity_id']); // el select con las labores mineras
-        // nuevo requerimento, 08/07/2015, los precios se deben asiganr cada 100 en vez de cada 500
         $I->seeElement('input', ['name' =>  'quantity']); // el input para digitar la cantidad
+        $I->seeElement('input', ['name' =>  'reported_at']); // el input para digitar la fecha en que se hizo la actividad
         
         // ------------------------------------------------------------------------------------------
         // Nuevo Requerimiento...
@@ -151,45 +168,50 @@ class ReportMiningActivityCest
             $I->seeElement('th span', ['title' => $activity->name, 'data-toggle' => 'tooltip']);
         }
         
-        // veo el nombre del trabajador en la tabla
-        $I->see($employees->first()->fullname, 'tbody tr:first-child td:first-child');
+        // el nombre del trabajador no debe aparecer en la tabla, pues no reporta actividades
+        $I->dontSee('Trabajador 1 B1', 'tbody tr:first-child td:first-child');
         
         // veo que hay un mensaje de alerta que me dice que nada se le ha cargado al trabajador
         $I->see('No hay actividades registradas...', 'div.alert-warning');
         
         // lleno y envío el fomulario registrando una nueva actividad del trabajador
         $activityToReport = [
-            'employee_id'           =>  $employees->first()->id,
-            'mining_activity_id'    =>  1, // por ejemplo
+            'employee_id'           =>  1,
+            'mining_activity_id'    =>  2,
             'quantity'              =>  2,
-            'price'                 =>  0, // es el valor por defecto, pues el supervisor no lo puede asignar
+            'reported_at'           =>  \Carbon\Carbon::now()->toDateTimeString(),
             'comment'               =>  'Comentario de prueba'
         ];
         
+        $I->dontSeeRecord('activity_reports', $activityToReport);
+        
         $I->submitForm('form', $activityToReport, 'Registrar');
+        
+        // veo que estoy de nuevo en la página de registro de actividad minera
+        $I->seeCurrentUrlEquals('/activityReport/create?employee_id=1');
+        
+        // no debe haber mensajes de alerta o error
+        $I->dontSeeElement('div', ['class' => 'alert alert-warning alert-dismissible']);
+        $I->dontSeeElement('div', ['class' => 'alert alert-danger alert-dismissible']);
+        
+        // veo un mensaje de éxito en la operación
+        $I->see('Actividad Registrada Correctamente.', '.alert-success');
         
         // veo que en la base de datos efectivamente existe el registro que acabo de crear
         $I->seeRecord('activity_reports', $activityToReport);
         
-        // veo que estoy de nuevo en la página de registro de actividad minera
-        $I->seeCurrentUrlEquals('/activityReport/create?employee_id='.$employees->first()->id);
+        // refresco la página
+        $I->amOnPage('/activityReport/create?employee_id=1');
         
-        // veo u mensaje de éxito en la operación
-        $I->see('Actividad Registrada Correctamente.', '.alert-success');
-        
-        // no veo mesajes de error o alerta por nunguna parte
-        $I->dontSeeElement('div', ['class' => 'alert-danger']);
-        $I->dontSeeElement('div', ['class' => 'alert-warning']);
-
-        // veo que en la tabla de la vista previa está el registro que acabo de cargar, como
-        // consecuencia debe estar seleccionado el trabajador automáticamente
-        $I->see('2', 'tbody tr:last-child td:nth-child(2)'); // 2 porque la primera columna es para el label total y la segunda es donde debe estar la labor registrada
+        // veo que en la tabla de la vista previa está el registro que acabo de cargar
+        $I->see('2', 'tbody tr td');
+        $I->see('0', 'tbody tr td');
         
     }
     
     /**
      * 
-     */ 
+     */
     public function testErrorMessages(FunctionalTester $I)
     {
         // info del trabajador
@@ -289,7 +311,6 @@ class ReportMiningActivityCest
         $I->see('Debes digitar la cantidad.', '.text-danger');
         
         
-        
         // ----------------------------
         // ------ tercera prueba ------
         // ----------------------------
@@ -366,8 +387,9 @@ class ReportMiningActivityCest
         $data = [
             'employee_id'           =>      $employee->id,
             'mining_activity_id'    =>      2,
-            'quantity'              =>      3,
+            'quantity'              =>      4,
             'price'                 =>      15000,
+            'reported_at'           =>      \Carbon\Carbon::now()->toDateTimeString(),
             'comment'               =>      'test comment'
         ];
         
@@ -382,6 +404,10 @@ class ReportMiningActivityCest
         
         // veo un mensaje de exito en la operación
         $I->see('Actividad Registrada Correctamente.', '.alert-success');
+        
+        // veo que en la tabla de la vista previa está el registro que acabo de cargar
+        $I->see('4', 'tbody tr td');
+        $I->see('60000', 'tbody tr td');
         
         // cierro sesión
         $I->logout();
@@ -421,9 +447,10 @@ class ReportMiningActivityCest
         // la info del reporte a enviar
         $data = [
             'employee_id'           =>      $employee->id,
-            'mining_activity_id'    =>      2,
+            'mining_activity_id'    =>      4,
             'quantity'              =>      3,
-            //'price'                 =>      15000, // no puedo asignar este campo
+            'reported_at'           =>      \Carbon\Carbon::now()->toDateTimeString(),
+            //'price'               =>      15000, // no puedo asignar este campo
         ];
         
         // envío el formluario
@@ -438,7 +465,8 @@ class ReportMiningActivityCest
         // veo un mensaje de exito en la operación
         $I->see('Actividad Registrada Correctamente.', '.alert-success');
         
-        
-        
+        // veo que en la tabla de la vista previa está el registro que acabo de cargar
+        $I->see('3', 'tbody tr td');
+        $I->see('0', 'tbody tr td');
     }
 }
