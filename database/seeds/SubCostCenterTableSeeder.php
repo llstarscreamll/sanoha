@@ -16,55 +16,107 @@ class SubCostCenterTableSeeder extends Seeder
         $data = [];
         
         $costCenters = \sanoha\Models\CostCenter::all();
-
-        foreach($costCenters as $costCenter){
-            
-            $data[] = [
-                'cost_center_id'    =>      $costCenter->id,
-                'name'              =>      'Bocamina 1',
-                'short_name'        =>      'B1',
-                'description'       =>      'Descripción de la bocamina',
-                'created_at'        =>      $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
-                'updated_at'        =>      $date->toDateTimeString()
-            ];
-            
-            $data[] = [
-                'cost_center_id'    =>      $costCenter->id,
-                'name'              =>      'Bocamina 2',
-                'short_name'        =>      'B2',
-                'description'       =>      'Descripción de la bocamina',
-                'created_at'        =>      $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
-                'updated_at'        =>      $date->toDateTimeString()
-            ];
-            
-            if($faker->numberBetween(1,2) === 2){
-             
-                $data[] = [
-                    'cost_center_id'    =>      $costCenter->id,
-                    'name'              =>      'Bocamina 3',
-                    'short_name'        =>      'B3',
-                    'description'       =>      'Descripción de la bocamina',
-                    'created_at'        =>      $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
-                    'updated_at'        =>      $date->toDateTimeString()
-                ]; 
-
-            }
-            
-            if($faker->numberBetween(1,2) === 2){
-             
-                $data[] = [
-                    'cost_center_id'    =>      $costCenter->id,
-                    'name'              =>      'Bocamina 4',
-                    'short_name'        =>      'B4',
-                    'description'       =>      'Descripción de la bocamina',
-                    'created_at'        =>      $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
-                    'updated_at'        =>      $date->toDateTimeString()
-                ]; 
-
-            }   
-        }
         
-        DB::table('sub_cost_centers')->delete();
+        // --------------------------------
+        // beteitiva
+        // --------------------------------
+        $data[] = [
+            'cost_center_id'    =>      1, // beteitiva
+            'name'              =>      'Bocamina 1',
+            'short_name'        =>      'B1',
+            'description'       =>      'Beteitiva Bocamina 1',
+            'created_at'        =>      $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'        =>      $date->toDateTimeString()
+        ];
+
+        $data[] = [
+            'cost_center_id'    =>      1, // beteitiva
+            'name'              =>      'Bocamina 2',
+            'short_name'        =>      'B2',
+            'description'       =>      'Beteitiva Bocamina 2',
+            'created_at'        =>      $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'        =>      $date->toDateTimeString()
+        ];
+
+        $data[] = [
+            'cost_center_id'    =>      1, // beteitiva
+            'name'              =>      'Bocamina 3',
+            'short_name'        =>      'B3',
+            'description'       =>      'Beteitiva Bocamina 3',
+            'created_at'        =>      $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'        =>      $date->toDateTimeString()
+        ];
+
+
+        // --------------------------------
+        // Cazadero
+        // --------------------------------
+        $data[] = [
+            'cost_center_id'    =>      2, // Cazadero
+            'name'              =>      'Bocamina 1',
+            'short_name'        =>      'B1',
+            'description'       =>      'Cazadero Bocamina 1',
+            'created_at'        =>      $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'        =>      $date->toDateTimeString()
+        ];
+
+        // --------------------------------
+        // Curital
+        // --------------------------------
+        $data[] = [
+            'cost_center_id'    =>      3, // Curital
+            'name'              =>      'Bocamina 1',
+            'short_name'        =>      'B1',
+            'description'       =>      'Curital Bocamina 1',
+            'created_at'        =>      $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'        =>      $date->toDateTimeString()
+        ];
+
+        // --------------------------------
+        // Escalera
+        // --------------------------------
+        $data[] = [
+            'cost_center_id'    =>      4, // Escalera
+            'name'              =>      'Bocamina 1',
+            'short_name'        =>      'B1',
+            'description'       =>      'Escalera Bocamina 1',
+            'created_at'        =>      $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'        =>      $date->toDateTimeString()
+        ];
+
+        $data[] = [
+            'cost_center_id'    =>      4, // Escalera
+            'name'              =>      'Bocamina 4',
+            'short_name'        =>      'B4',
+            'description'       =>      'Escalera Bocamina 4',
+            'created_at'        =>      $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'        =>      $date->toDateTimeString()
+        ];
+
+        // --------------------------------
+        // Pinos
+        // --------------------------------
+        $data[] = [
+            'cost_center_id'    =>      5, // Pinos
+            'name'              =>      'Bocamina 1',
+            'short_name'        =>      'B1',
+            'description'       =>      'Pinos Bocamina 1',
+            'created_at'        =>      $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'        =>      $date->toDateTimeString()
+        ];
+
+        // --------------------------------
+        // Sanoha
+        // --------------------------------
+        $data[] = [
+            'cost_center_id'    =>      6, // Sanoha
+            'name'              =>      'Bocamina 1',
+            'short_name'        =>      'B1',
+            'description'       =>      'Sanoha Bocamina 1',
+            'created_at'        =>      $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'        =>      $date->toDateTimeString()
+        ];
+
         DB::table('sub_cost_centers')->insert($data);
     }
 }

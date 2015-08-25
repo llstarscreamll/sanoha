@@ -15,6 +15,9 @@ fieldset{
 .display-inline{ display: inline; }
 .display-inline-block{ display: inline-block; }
 
+.font-size-10{ font-size: 10px; }
+.font-size-12{ font-size: 12px; }
+
 .link-black{ color: inherit; }
 
 .margin-bottom-0{ margin-bottom: 0px; }

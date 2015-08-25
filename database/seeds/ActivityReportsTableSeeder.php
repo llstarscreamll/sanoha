@@ -29,7 +29,7 @@ class ActivityReportsTableSeeder extends Seeder
                     'sub_cost_center_id'    =>      $faker->numberBetween(1,$sub_cost_centers),
                     'employee_id'           =>      $faker->numberBetween(1,$employees), // empleados creados en EmployeesTableSeeder
                     'mining_activity_id'    =>      $faker->numberBetween(1,18), // actividades creadas en MiningActivitiesTableSeeder
-                    'quantity'              =>      $faker->numberBetween(1,50),
+                    'quantity'              =>      $faker->numberBetween(1,50).'.'.$faker->numberBetween(1,10),
                     'price'                 =>      $faker->numberBetween(5000,25000),
                     'reported_by'           =>      $faker->numberBetween(1,3),
                     'reported_at'           =>      $date->toDateTimeString(),
@@ -37,7 +37,6 @@ class ActivityReportsTableSeeder extends Seeder
                     'updated_at'            =>      $date->toDateTimeString(),
                     'deleted_at'            =>      null
                 ];
-                
             }
             
             $date = $date->addDay();

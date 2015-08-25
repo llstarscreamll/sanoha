@@ -24,8 +24,9 @@ class ActivityReportFormRequest extends Request {
 		$costCenter 		= \Session::get('current_cost_center_id');
 		$mining_activity 	= \sanoha\Models\MiningActivity::where('id', '=', $this->input('mining_activity_id'))->get()->first();
 		
-		$date_after = \Carbon\Carbon::now()->subDays(2)->toDateString();
-		$date_before = \Carbon\Carbon::now()->addDays(1)->toDateString();
+		/* Se alarga la restricción por unos días mientras mientras se ponen al tanto con los reportes */
+		$date_after = \Carbon\Carbon::now()->subDays(10)->toDateString();
+		$date_before = \Carbon\Carbon::now()->addDays(5)->toDateString();
 		
 		$rules 				= [];
 		

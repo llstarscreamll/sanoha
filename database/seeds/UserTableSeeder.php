@@ -30,7 +30,7 @@ class UserTableSeeder extends Seeder
         ];
         
         // create random users
-        for ($i = 0; $i < 20; $i++) {
+        /*for ($i = 0; $i < 20; $i++) {
             $data[] = [
                 'name'          =>    $faker->firstName,
                 'lastname'      =>    $faker->lastname,
@@ -41,7 +41,7 @@ class UserTableSeeder extends Seeder
                 'updated_at'    =>    $date->toDateTimeString(),
                 'deleted_at'    =>    null
             ];
-        }
+        }*/
         
         DB::table('users')->delete();
         DB::table('users')->insert($data);

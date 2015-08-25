@@ -17,7 +17,7 @@ class ActivityReportController extends Controller {
 	 * 
 	 * @var	string
 	 */
-	private $costCenterId;
+	private $cost_center_id;
 	
 	/**
 	 * 
@@ -31,7 +31,7 @@ class ActivityReportController extends Controller {
 		// control de acceso a los métodos de esta clase
 		$this->middleware('checkPermmisions', ['except' => ['store','update','selectCostCenterView','setCostCenter']]);
 		
-		$this->costCenter_id = \Session::get('current_cost_center_id');
+		$this->cost_center_id = \Session::get('current_cost_center_id');
 	}
 
 	/**
@@ -83,15 +83,15 @@ class ActivityReportController extends Controller {
         $parameters['employee'] 		= !empty($request->get('find')) ? $request->get('find') : null;
 		$parameters['from'] 			= $start;
 		$parameters['to'] 				= $end;
-		$parameters['costCenter_id'] 	= $this->costCenter_id;
-		$parameters['costCenter_name'] 	= \sanoha\Models\CostCenter::findOrFail($this->costCenter_id)->name;
+		$parameters['costCenter_id'] 	= $this->cost_center_id;
+		$parameters['costCenter_name'] 	= \sanoha\Models\CostCenter::findOrFail($this->cost_center_id)->name;
 
 		$activities = ActivityReport::getActivities($parameters);
 		
 		$orderedActivities = ActivityReport::sortActivities($activities);
 		
 		$miningActivities = MiningActivity::orderBy('short_name')->get();
-
+		
 		return view('activityReports.index', compact('orderedActivities', 'miningActivities', 'parameters', 'search_input'));
 	}
 	
@@ -115,8 +115,8 @@ class ActivityReportController extends Controller {
         $parameters['employee'] 		= $request->get('find', null);
 		$parameters['from'] 			= $start;
 		$parameters['to'] 				= $end;
-		$parameters['costCenter_id'] 	= $this->costCenter_id;
-		$parameters['costCenter_name'] 	= \sanoha\Models\CostCenter::findOrFail($this->costCenter_id)->name;
+		$parameters['costCenter_id'] 	= $this->cost_center_id;
+		$parameters['costCenter_name'] 	= \sanoha\Models\CostCenter::findOrFail($this->cost_center_id)->name;
 		
 		$activities = ActivityReport::getCalendarActivities($parameters);
 		
@@ -140,12 +140,12 @@ class ActivityReportController extends Controller {
         $parameters['employee_id'] 		= $request->get('employee_id', null);
 		$parameters['from'] 			= $start;
 		$parameters['to'] 				= $end;
-		$parameters['costCenter_id'] 	= $this->costCenter_id;
-		$parameters['costCenter_name'] 	= \sanoha\Models\CostCenter::findOrFail($this->costCenter_id)->name;
+		$parameters['costCenter_id'] 	= $this->cost_center_id;
+		$parameters['costCenter_name'] 	= \sanoha\Models\CostCenter::findOrFail($this->cost_center_id)->name;
 		
 		$employee = empty($parameters['employee_id']) ? null : \sanoha\Models\Employee::findOrFail($parameters['employee_id']);
 	
-		$subCostCenterEmployees = \sanoha\Models\SubCostCenter::where('cost_center_id', $this->costCenter_id)->with('employees')->get();
+		$subCostCenterEmployees = \sanoha\Models\SubCostCenter::where('cost_center_id', $this->cost_center_id)->with('employees')->get();
 		
 		$employees = [];
 		
@@ -180,7 +180,7 @@ class ActivityReportController extends Controller {
 	public function store(ActivityReportFormRequest $request)
 	{
 		$data = $request->all();
-		
+
 		$employee = \sanoha\Models\Employee::findOrFail($data['employee_id']);
 		
 		$activity 						=	new ActivityReport;
@@ -204,7 +204,7 @@ class ActivityReportController extends Controller {
 		$activity->save()
 			? \Session::flash('success', 'Actividad Registrada Correctamente.')
 			: \Session::flash('error', 'Error registrando la actividad.');
-		
+
 		return redirect()->back()->withInput($request->only('employee_id'));
 	}
 
@@ -226,8 +226,8 @@ class ActivityReportController extends Controller {
         $parameters['employee_id'] 		= $activity->employee_id;
 		$parameters['from'] 			= $activity->created_at->startOfDay();
 		$parameters['to'] 				= $activity->created_at->endOfDay();
-		$parameters['costCenter_id'] 	= $this->costCenter_id;
-		$parameters['costCenter_name'] 	= \sanoha\Models\CostCenter::findOrFail($this->costCenter_id)->name;
+		$parameters['costCenter_id'] 	= $this->cost_center_id;
+		$parameters['costCenter_name'] 	= \sanoha\Models\CostCenter::findOrFail($this->cost_center_id)->name;
 		
 		return view('activityReports.show', compact('activity', 'subCostCenterEmployees', 'parameters'));
 	}
@@ -250,10 +250,10 @@ class ActivityReportController extends Controller {
         $parameters['employee_id'] 		= $activity->employee_id;
 		$parameters['from'] 			= $start;
 		$parameters['to'] 				= $end;
-		$parameters['costCenter_id'] 	= $this->costCenter_id;
-		$parameters['costCenter_name'] 	= \sanoha\Models\CostCenter::findOrFail($this->costCenter_id)->name;
+		$parameters['costCenter_id'] 	= $this->cost_center_id;
+		$parameters['costCenter_name'] 	= \sanoha\Models\CostCenter::findOrFail($this->cost_center_id)->name;
 		
-		$subCostCenterEmployees = \sanoha\Models\SubCostCenter::where('cost_center_id', $this->costCenter_id)->with('employees')->get();
+		$subCostCenterEmployees = \sanoha\Models\SubCostCenter::where('cost_center_id', $this->cost_center_id)->with('employees')->get();
 		
 		$employees = [];
 		

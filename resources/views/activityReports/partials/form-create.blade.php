@@ -69,7 +69,7 @@
                             <div class="col-md-3 col-md-offset-3">
                                 <div class="form-group">
                                     {!! Form::label('quantity', 'Cantidad') !!}
-                                    {!! Form::number('quantity', null, ['class' => 'form-control', 'id' => 'quantity', 'min' => '1']) !!}
+                                    {!! Form::number('quantity', null, ['class' => 'form-control', 'id' => 'quantity', 'step' => '0.1', 'min' => '1']) !!}
                                     @if ($errors->has('quantity'))
                                     <div class="text-danger">
                                         {!! $errors->first('quantity') !!}

@@ -50,7 +50,7 @@
 			</tr>
 		</thead>
 		
-		<tbody>
+		<tbody class="">
 			
 			{{-- No print the reported_by data --}}
 			@foreach($orderedActivities as $key => $activity)
@@ -60,18 +60,18 @@
 					
 					@foreach($activity as $k => $v)
 
-							@if(!is_array($v))
-							<td class="{{ $k !== 'employee_fullname' ? 'text-center' : '' }}">
-								<span>{{ $v }}</span>
-							</td>
-							@else
-							<td class="{{ $k !== 'employee_fullname' ? 'text-center' : '' }}">
-								<span data-toggle="tooltip" data-placement="top" title="Cantidad {{$k}}">{{ $v['quantity'] }}</span><br>
-							<div>
-								<span data-toggle="tooltip" data-placement="bottom" title="Precio {{$k}}">{{ $v['price'] }}</span>
-							</div>
-							</td>
-							@endif
+						@if(!is_array($v))
+						<td class="{{ $k !== 'employee_fullname' ? 'text-center' : '' }}">
+							<span>{{$v}}</span>
+						</td>
+						@else
+						<td class="{{ $k !== 'employee_fullname' ? 'text-center' : '' }}">
+							<span data-toggle="tooltip" data-placement="top" title="Cantidad {{$k}}">{{ $v['quantity'] }}</span><br>
+						<div>
+							<span data-toggle="tooltip" data-placement="bottom" title="Valor de los {{$k}}">{{number_format($v['price'], 0, ',', '.')}}</span>
+						</div>
+						</td>
+						@endif
 						
 					@endforeach
 					

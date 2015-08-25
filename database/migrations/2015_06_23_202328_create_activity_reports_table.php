@@ -18,8 +18,8 @@ class CreateActivityReportsTable extends Migration {
 			$table->integer('sub_cost_center_id')->unsigned(); // foreign key
 			$table->integer('employee_id')->unsigned(); // foreign key
 			$table->integer('mining_activity_id')->unsigned(); // foreign key
-			$table->integer('quantity')->default(0);
-			$table->integer('price')->default('0');
+			$table->decimal('quantity', 3, 2)->default(0);
+			$table->bigInteger('price')->default('0');
 			$table->string('comment')->nullable();
 			$table->integer('reported_by')->unsigned(); // foreign key
 			$table->dateTime('reported_at');

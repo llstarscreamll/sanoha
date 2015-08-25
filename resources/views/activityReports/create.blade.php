@@ -96,7 +96,8 @@ $(function() {
             },
             "startDate": "{{Carbon\Carbon::now()->format('m/d/Y')}}",
             "endDate": "{{Carbon\Carbon::now()->format('m/d/Y')}}",
-            "minDate": "{{Carbon\Carbon::now()->subDays(1)->format('m/d/Y')}}",
+            /* Se quita la restricción por unos días mientras mientras se ponen al tanto con los reportes */
+            //"minDate": "{{Carbon\Carbon::now()->subDays(1)->format('m/d/Y')}}",
             "maxDate": "{{Carbon\Carbon::now()->format('m/d/Y')}}",
             "opens": "left",
             "drops": "down",

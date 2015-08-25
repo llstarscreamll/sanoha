@@ -178,7 +178,7 @@ class ReportMiningActivityCest
         $activityToReport = [
             'employee_id'           =>  1,
             'mining_activity_id'    =>  2,
-            'quantity'              =>  2,
+            'quantity'              =>  2.5,
             'reported_at'           =>  \Carbon\Carbon::now()->toDateTimeString(),
             'comment'               =>  'Comentario de prueba'
         ];
@@ -204,7 +204,7 @@ class ReportMiningActivityCest
         $I->amOnPage('/activityReport/create?employee_id=1');
         
         // veo que en la tabla de la vista previa está el registro que acabo de cargar
-        $I->see('2', 'tbody tr td');
+        $I->see('2.5', 'tbody tr td');
         $I->see('0', 'tbody tr td');
         
     }

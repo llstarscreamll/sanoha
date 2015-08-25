@@ -191,14 +191,15 @@ class ActivityReport extends Model
             // creating indexes (columns)
             foreach ($miningActivities as $keyMiningActivity => $valueMiningActivity) {
                 
-                $ordered_activities[$value->employee_id]['employee_fullname'] = $value->employee_name . ' ' . $value->employee_lastname;
+                $ordered_activities[$value->employee_id]['employee_fullname'] = ucwords(strtolower($value->employee_name)) . ' ' . ucwords(strtolower($value->employee_lastname));
                 $ordered_activities[$value->employee_id][$valueMiningActivity->short_name]['quantity'] = 0;
                 $ordered_activities[$value->employee_id][$valueMiningActivity->short_name]['price'] = 0;
+                $ordered_activities[$value->employee_id][$valueMiningActivity->short_name]['unit_price'] = 0;
                 
                 $totals['totals']['totals'] = 'Total';
                 $totals['totals'][$valueMiningActivity->short_name]['quantity'] = 0;
                 $totals['totals'][$valueMiningActivity->short_name]['price'] = 0;
-                
+
             }
         }
         
@@ -208,9 +209,9 @@ class ActivityReport extends Model
             foreach ($activities as $key2 => $value2) {
                 
                 if($value->short_name === $value2->activity_shortname){
-                    $ordered_activities[$value2->employee_id][$value2->activity_shortname]['quantity'] += $value2->activity_quantity;
-                    $ordered_activities[$value2->employee_id][$value2->activity_shortname]['price'] += ($value2->activity_quantity * $value2->activity_price);
-                    
+                    $ordered_activities[$value2->employee_id][$value2->activity_shortname]['quantity'] += floatval($value2->activity_quantity);
+                    $ordered_activities[$value2->employee_id][$value2->activity_shortname]['price'] += (floatval($value2->activity_quantity) * floatval($value2->activity_price));
+
                     // calculing totals
                     $totals['totals'][$value->short_name]['quantity'] += $value2->activity_quantity;
                     $totals['totals'][$value->short_name]['price'] += ($value2->activity_quantity * $value2->activity_price);
