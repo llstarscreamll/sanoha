@@ -152,7 +152,7 @@ class ActivityReport extends Model
                     \DB::raw('concat(sws_activity_reports.quantity, " ", sws_mining_activities.name, " a $", sws_activity_reports.price, " (c/u) por ", sws_employees.name, " ", sws_employees.lastname) as title'),
                     \DB::raw('concat("'. url('activityReport') .'/", sws_activity_reports.id) as url'),
                     \DB::raw('concat("event-success") as class'),
-                    \DB::raw('concat(UNIX_TIMESTAMP(STR_TO_DATE(sws_activity_reports.reported_at, "%Y-%m-%d %H:%i:%s")), "000") as start'), // start
+                    \DB::raw('concat(UNIX_TIMESTAMP( concat(STR_TO_DATE(sws_activity_reports.reported_at, "%Y-%m-%d"), " 06:00:00") ), "000") as start'), // start
                     \DB::raw('concat(UNIX_TIMESTAMP( concat(STR_TO_DATE(sws_activity_reports.reported_at, "%Y-%m-%d"), " 18:00:00") ), "000") as end'), // start
                     //'' // end
                     )

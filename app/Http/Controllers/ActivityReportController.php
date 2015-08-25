@@ -119,7 +119,7 @@ class ActivityReportController extends Controller {
 		$parameters['costCenter_name'] 	= \sanoha\Models\CostCenter::findOrFail($this->cost_center_id)->name;
 		
 		$activities = ActivityReport::getCalendarActivities($parameters);
-		
+
 		$activities = json_encode($activities);
 		
 		return view('activityReports.calendar', compact('search_input', 'parameters', 'activities'));
