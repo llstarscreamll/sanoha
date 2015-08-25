@@ -21,7 +21,7 @@ class ActivityReportController extends Controller {
 	
 	/**
 	 * 
-	 */ 
+	 */
 	public function __construct()
 	{
 		// me aseguro que se haya elejido un centro de costos y que el usuario tenga acceso
@@ -311,7 +311,11 @@ class ActivityReportController extends Controller {
 	 */
 	public function destroy($id)
 	{
-		//
+		$id = \Request::has('id') ? \Request::only('id')['id'] : $id;
+        
+        (ActivityReport::destroy($id)) ? \Session::flash('success', [is_array($id) && count($id) > 1 ? 'Las actividades han sido movidas a la papelera correctamente.' : 'La actividad se ha movido a la papelera correctamente.']) : \Session::flash('error', [is_array($id) ? 'Ocurrió un error moviendo las actividades a la papelera.' : 'Ocurrió un problema moviendo la actividad a la papelera.']) ;
+
+        return redirect()->route('activityReport.index');
 	}
 
 }

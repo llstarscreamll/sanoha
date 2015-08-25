@@ -154,7 +154,6 @@ class ActivityReport extends Model
                     \DB::raw('concat("event-success") as class'),
                     \DB::raw('concat(UNIX_TIMESTAMP( concat(STR_TO_DATE(sws_activity_reports.reported_at, "%Y-%m-%d"), " 06:00:00") ), "000") as start'), // start
                     \DB::raw('concat(UNIX_TIMESTAMP( concat(STR_TO_DATE(sws_activity_reports.reported_at, "%Y-%m-%d"), " 18:00:00") ), "000") as end'), // start
-                    //'' // end
                     )
 				)
             // solo los empleados de cierto centro de costo deben aparecer

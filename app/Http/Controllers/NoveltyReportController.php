@@ -243,7 +243,7 @@ class NoveltyReportController extends Controller
 	{
 		$id = \Request::has('id') ? \Request::only('id')['id'] : $id;
         
-        (NoveltyReport::destroy($id)) ? \Session::flash('success', [is_array($id) && count($id) > 1 ? 'Las novedades han sido movidos a la papelera correctamente.' : 'La novedad ha sido movida a la papelera correctamente.']) : \Session::flash('error', [is_array($id) ? 'Ocurrió un error moviendo las novedades a la papelera.' : 'Ocurrió un problema moviendo la novedads a la papelera.']) ;
+        (NoveltyReport::destroy($id)) ? \Session::flash('success', [is_array($id) && count($id) > 1 ? 'Las novedades han sido movidos a la papelera correctamente.' : 'La novedad ha sido movida a la papelera correctamente.']) : \Session::flash('error', [is_array($id) ? 'Ocurrió un error moviendo las novedades a la papelera.' : 'Ocurrió un problema moviendo la novedades a la papelera.']) ;
 
         return redirect()->route('noveltyReport.index');
 	}

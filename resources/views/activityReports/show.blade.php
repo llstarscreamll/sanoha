@@ -89,11 +89,38 @@
                         <span class="glyphicon glyphicon-pencil"></span>
                         Editar
                     </a>
+                    
+                    {{-- This button triggers the confirmation modal window --}}
+                    <button class="btn btn-danger" data-toggle="modal" data-target="#modal_confirm">
+                        <span class="glyphicon glyphicon-trash"></span>
+                        Mover a Papelera
+                    </button>
                 </div>
                     
 			</div>
 		</div>
 	</div>
+	
+	{{-- Modal Window --}}
+    <div class="modal fade" id="modal_confirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Está Seguro?</h4>
+            </div>
+            <div class="modal-body">
+              Se moverá a la papelera la información de la actividad de <strong>{{ $activity->employee->fullname }}</strong>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                {!! Form::open(['route' => ['activityReport.destroy', $activity->id], 'method' => 'DELETE', 'class' => 'display-inline']) !!}
+                    <button type="submit" class="btn btn-danger">Confirmar</button>
+                {!! Form::close() !!}
+            </div>
+          </div>
+        </div>
+    </div>
 @endsection
 
 @section('script')
