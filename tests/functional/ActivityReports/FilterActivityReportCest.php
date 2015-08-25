@@ -113,14 +113,14 @@ class FilterActivityReportCest
         // veo las actividades registradas, los datos de prueba están creados en _common/ActivityReports.php
         $I->see('Trabajador 1 B1', 'tbody tr:nth-child(1) td');
         $I->see('5', 'tbody tr:nth-child(1) td');
-        $I->see('125000', 'tbody tr:nth-child(1) td'); // 5 * 25000 = 125000
+        $I->see('125.000', 'tbody tr:nth-child(1) td'); // 5 * 25000 = 125000
         
         $I->see('Trabajador 2 B2', 'tbody tr:nth-child(2) td');
         $I->see('2', 'tbody tr:nth-child(2) td');
-        $I->see('20000', 'tbody tr:nth-child(2) td'); // 2 * 10000 = 20000
+        $I->see('20.000', 'tbody tr:nth-child(2) td'); // 2 * 10000 = 20000
         
         $I->see('Trabajador 2 B2', 'tbody tr:nth-child(2) td'); // en la misma fila porque es el mismo trabajador
         $I->see('4', 'tbody tr:nth-child(2) td');
-        $I->see('48000', 'tbody tr:nth-child(2) td'); // 4 * 12000 = 48000
+        $I->see('48.000', 'tbody tr:nth-child(2) td'); // 4 * 12000 = 48000
     }
 }

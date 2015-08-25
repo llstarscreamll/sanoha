@@ -344,7 +344,7 @@ class ReportMiningActivityCest
         // no veo mensaje de error del comentario
         $I->dontSee('El comentario sólo debe contener letras y/o espacios.', '.text-danger');
         // ahora si veo error en la cantidad pues tiene referencia válida a la labor minera para obtener el límite
-        $I->see('El rango permitido es entre 1 y 10.', '.text-danger');
+        $I->see('El rango permitido es entre 0.1 y 10.', '.text-danger');
     }
     
     /**
