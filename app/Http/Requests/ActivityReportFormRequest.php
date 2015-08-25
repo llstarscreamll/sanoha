@@ -41,7 +41,7 @@ class ActivityReportFormRequest extends Request {
 			];
 
 			if($mining_activity){
-				$rules['quantity']			=		'required|numeric|between:1,' . $mining_activity->maximum;
+				$rules['quantity']			=		'required|numeric|between:0.1,' . $mining_activity->maximum;
 			}
 		}
 		
