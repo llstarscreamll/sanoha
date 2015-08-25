@@ -36,12 +36,12 @@ class ActivityReportFormRequest extends Request {
 				'employee_id'				=>		'required|numeric|exists:employees,id',//,cost_center_id,' . $costCenter,
 				'mining_activity_id'		=>		'required|numeric|exists:mining_activities,id',
 				'quantity' 					=>		'required|numeric',
-				'reported_at'				=>		'required|date|after:'.$date_after.'|before:'.$date_before,
+				'reported_at'				=>		'required|date|after:'.$date_after.'|before:'.$date_before, 
 				'comment'					=>		'alpha_spaces'
 			];
 
 			if($mining_activity){
-				$rules['quantity']			=		'required|numeric|between:1,' . $mining_activity->maximum;
+				$rules['quantity']			=		'required|numeric|between:0.1,' . $mining_activity->maximum;
 			}
 		}
 		

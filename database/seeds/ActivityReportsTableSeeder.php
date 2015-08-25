@@ -18,7 +18,7 @@ class ActivityReportsTableSeeder extends Seeder
         $date = $date->subDays($days/2);
         $employees = \sanoha\Models\Employee::all()->count();
         $sub_cost_centers = \sanoha\Models\SubCostCenter::count();
-        
+
         $data = [];
         
         for ($i=0; $i<$days; $i++) {
@@ -26,7 +26,7 @@ class ActivityReportsTableSeeder extends Seeder
             for($j=0; $j<50; $j++){
                 
                 $data[] = [
-                    'sub_cost_center_id'    =>      $faker->numberBetween(1,$sub_cost_centers),
+                    'sub_cost_center_id'    =>      $faker->numberBetween(1,$sub_cost_centers-3),
                     'employee_id'           =>      $faker->numberBetween(1,$employees), // empleados creados en EmployeesTableSeeder
                     'mining_activity_id'    =>      $faker->numberBetween(1,18), // actividades creadas en MiningActivitiesTableSeeder
                     'quantity'              =>      $faker->numberBetween(1,50).'.'.$faker->numberBetween(1,10),

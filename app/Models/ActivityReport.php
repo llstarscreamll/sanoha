@@ -111,7 +111,8 @@ class ActivityReport extends Model
 				'mining_activities.short_name as activity_shortname',
 				'cost_centers.name as costCenter_name')
             // solo los empleados de cierto centro de costo deben aparecer
-			->where('cost_centers.id', '=', $parameters['costCenter_id']);
+			->where('cost_centers.id', '=', $parameters['costCenter_id'])
+			->whereNull('activity_reports.deleted_at');
 		
 		if(isset($parameters['employee']) && !empty($parameters['employee']))
 		    $data = self::addSearchByEmployee($data, $parameters['employee']);
@@ -157,7 +158,8 @@ class ActivityReport extends Model
                     )
 				)
             // solo los empleados de cierto centro de costo deben aparecer
-			->where('cost_centers.id', '=', $parameters['costCenter_id']);
+			->where('cost_centers.id', '=', $parameters['costCenter_id'])
+			->whereNull('activity_reports.deleted_at');
 		
 		if(isset($parameters['employee']) && !empty($parameters['employee']))
 		    $data = self::addSearchByEmployee($data, $parameters['employee']);

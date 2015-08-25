@@ -76,9 +76,9 @@ class MoveToTrashCest
             'price'                 =>  '5000',
             'comment'               =>  'test',
             'reported_by'           =>  1,
-            'reported_at'           =>  '2015-08-07 08:00:00',
-            'created_at'            =>  '2015-08-08 08:00:00',
-            'updated_at'            =>  '2015-08-08 08:00:00',
+            'reported_at'           =>  \Carbon\Carbon::now()->subDays(1)->toDateTimeString(),
+            'created_at'            =>  \Carbon\Carbon::now()->subDays(1)->toDateTimeString(),
+            'updated_at'            =>  \Carbon\Carbon::now()->subDays(1)->toDateTimeString(),
             'deleted_at'            =>  null
         ];
         
@@ -89,6 +89,15 @@ class MoveToTrashCest
         
         // hago clic en el proyecto que quiero trabajar
         $I->click('Proyecto Beteitiva', 'a');
+        $I->see('Reporte de Labores Mineras', 'h1');
+        $I->see('Proyecto Beteitiva', 'th h3');
+        
+        $report_date = \Carbon\Carbon::now()->subDays(1)->format('d-m-Y');
+        
+        // el rango de fechas del reporte debe ser mostrado en la tabla
+        $I->see('Desde '.$report_date, 'th h4');
+        $I->see('Hasta '.$report_date, 'th h4');
+        $I->see('Trabajador 1', 'tbody tr td');
         
         // estoy en la página de vista en sólo lectura
         $I->amOnPage('/activityReport/1');
@@ -99,6 +108,9 @@ class MoveToTrashCest
         
         // veo mensage de exito en la operación
         $I->see('La actividad se ha movido a la papelera correctamente.');
+        $I->see('Reporte de Labores Mineras', 'h1');
+        $I->dontSee('Proyecto Beteitiva', 'th h3');
+        $I->see('No se encontraron registros...', '.alert-danger');
         $I->dontSeeRecord('activity_reports', $data[0]);
     }
 }
