@@ -63,7 +63,8 @@ $(function() {
         },
         "startDate": "{{Carbon\Carbon::now()->format('m/d/Y')}}",
         "endDate": "{{Carbon\Carbon::now()->format('m/d/Y')}}",
-        "minDate": "{{Carbon\Carbon::now()->subDays(1)->format('m/d/Y')}}",
+        /* se deshabilita el rango de fechas mientras se ponen al día en los registros */
+        //"minDate": "{{Carbon\Carbon::now()->subDays(1)->format('m/d/Y')}}",
         "maxDate": "{{Carbon\Carbon::now()->format('m/d/Y')}}",
         "opens": "left",
         "drops": "down",
