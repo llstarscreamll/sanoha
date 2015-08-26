@@ -14,7 +14,7 @@ class AddWorkedHoursColumnToactivityReportsTable extends Migration {
 	{
 		Schema::table('activity_reports', function(Blueprint $table)
 		{
-			$table->integer('worked_hours')->default(1)->after('price');
+			$table->integer('worked_hours')->default(8)->after('price'); // ocho horas de trabajo
 		});
 	}
 
