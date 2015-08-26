@@ -40,6 +40,7 @@ class ActivityReports
                     'mining_activity_id'    =>      $faker->numberBetween(1,18), // actividades creadas en MiningActivitiesTableSeeder
                     'quantity'              =>      $faker->numberBetween(1,50),
                     'price'                 =>      $faker->numberBetween(5000,25000),
+                    'worked_hours'          =>      $faker->numberBetween(1,12),
                     'reported_by'           =>      $faker->numberBetween(1,3),
                     'reported_at'           =>      $date->toDateTimeString(),
                     'created_at'            =>      $date->toDateTimeString(),

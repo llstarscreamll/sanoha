@@ -87,6 +87,7 @@ class ReportMiningActivityCest
             'mining_activity_id'    =>  2,
             'quantity'              =>  2,
             'price'                 =>  '5000',
+            'worked_hours'          =>  4,
             'comment'               =>  'test comment',
             'reported_by'           =>  1,
             'reported_at'           =>  '2015-07-05 10:00:00'
@@ -160,6 +161,7 @@ class ReportMiningActivityCest
         $I->seeElement('input', ['type' => 'checkbox', 'name' =>  'attended', 'checked' => 'checked']);
         $I->seeElement('select', ['name' => 'mining_activity_id']); // el select con las labores mineras
         $I->seeElement('input', ['name' =>  'quantity']); // el input para digitar la cantidad
+        $I->seeElement('input', ['name' =>  'worked_hours']); // el input para digitar la cantidad
         $I->seeElement('input', ['name' =>  'reported_at']); // el input para digitar la fecha en que se hizo la actividad
         
         // ------------------------------------------------------------------------------------------
@@ -170,7 +172,8 @@ class ReportMiningActivityCest
         // pero el precio jamás debe quedar vació, se debe asignar automáticamente en el backend según
         // los históricos de x actividad.
         // ------------------------------------------------------------------------------------------
-        $I->dontSeeElement('input', ['name' => 'price', 'step' => '100']); // NO VEO el input para digitar el precio
+        $I->dontSeeElement('input', ['name' => 'price', 'step' => '1']); // NO VEO el input para digitar el precio
+        $I->seeElement('input', ['name' => 'worked_hours', 'step' => '1', 'max' => '12']); // campo de horas trabajadas, máximo 12 horas a reportar
         $I->seeElement('button', ['type' => 'submit']); // el botton para enviar el formulario
         
         // ahora si veo la tabla donde se mostrarán los registros de las actividades del trabajador
@@ -194,6 +197,7 @@ class ReportMiningActivityCest
             'employee_id'           =>  1,
             'mining_activity_id'    =>  2,
             'quantity'              =>  2.5,
+            'worked_hours'          =>  8,
             'reported_at'           =>  \Carbon\Carbon::now()->toDateTimeString(),
             'comment'               =>  'Comentario de prueba'
         ];

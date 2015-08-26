@@ -64,12 +64,21 @@
                                 </div>
                             </div>
                             
-                            <div class="col-md-6 col-md-offset-3">
+                            <div class="col-md-3 col-md-offset-3 form-group">
+                                {!! Form::label('', 'Horas Trabajadas') !!}
+                                {!! Form::number('', $activity->worked_hours, ['class' => 'form-control', 'disabled']) !!}
+                                    
+                                @if ($errors->has('worked_hours'))
+                                <div class="text-danger">
+                                    {!! $errors->first('worked_hours') !!}
+                                </div>
+                                @endif
+                            </div>
+                            
+                            <div class="col-md-3">
                                 <div class="form-group">
                                 <label for="reported_at">Fecha de Actividad</label>
-                                <div class="input-group">
-                                    {!! Form::text('reported_at', $activity->reported_at, ['class' => 'form-control', 'id' => 'reported_at', 'placeholder' => 'Elegir Fecha', 'readonly']) !!}
-                                </div>
+                                {!! Form::text('reported_at', $activity->reported_at, ['class' => 'form-control', 'id' => 'reported_at', 'placeholder' => 'Elegir Fecha', 'readonly']) !!}
                                 </div>
                             </div>
 

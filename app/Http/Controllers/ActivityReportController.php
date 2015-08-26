@@ -246,6 +246,7 @@ class ActivityReportController extends Controller {
 		 */
 		
 		$activity->price 				=	isset($data['price']) ? $data['price'] : $historical_price;
+		$activity->worked_hours			=	$data['worked_hours'];
 		$activity->comment 				=	$data['comment'];
 		$activity->reported_by 			=	\Auth::getUser()->id;
 		$activity->reported_at 			=	$data['reported_at'];
@@ -351,6 +352,7 @@ class ActivityReportController extends Controller {
 		$activity->mining_activity_id 	= $request->get('mining_activity_id');
 		$activity->quantity 			= $request->get('quantity');
 		$activity->price 				= $request->has('price') ? $request->get('price') : 0;
+		$activity->worked_hours			= $request->get('worked_hours');
 		$activity->comment				= $request->get('comment');
 		$activity->save() ? \Session::flash('success', 'Actualización de Actividad Minera exitosa.') : \Session::flash('error', 'Ocurrió un error actualizando la actividad.') ;
 	
