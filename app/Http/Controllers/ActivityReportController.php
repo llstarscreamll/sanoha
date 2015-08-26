@@ -133,15 +133,43 @@ class ActivityReportController extends Controller {
 	/**
 	 * Muestra la vista que tiene el reporte con los registros individuales
 	 */
-	public function individual()
+	public function individual(Request $request)
 	{
 		$cost_center_id = $this->cost_center_id;
 		
-		$activities = ActivityReport::whereHas('subCostCenter', function($q) use ($cost_center_id){
-				$q->where('cost_center_id', $cost_center_id);
-			})->paginate(15);
+		$search_input = $request->all();
 		
-		return view('activityReports.individual', compact('activities'));
+		$start = Carbon::createFromFormat('Y-m-d', $request->has('from') ? $request->get('from') : '1900-01-01')->startOfDay();
+        $end = Carbon::createFromFormat('Y-m-d', $request->has('to') ? $request->get('to') : date('Y-m-d'))->endOfDay();
+
+        $parameters['employee'] 		= !empty($request->get('find')) ? $request->get('find') : null;
+		$parameters['from'] 			= $start;
+		$parameters['to'] 				= $end;
+		$parameters['cost_center_id'] 	= $this->cost_center_id;
+		$parameters['cost_center_name'] 	= \sanoha\Models\CostCenter::findOrFail($this->cost_center_id)->name;
+		
+		$activities = ActivityReport::where('reported_at', '>=', $parameters['from'])
+			->where('reported_at', '<=', $parameters['to'])
+			->orderBy('updated_at', 'desc')
+			->whereHas('employee', function($q) use ($parameters)
+				{
+				    $q->where(function($q) use ($parameters){
+				    	$q->where('name', 'like', '%'.$parameters["employee"].'%')
+				    		->orWhere('lastname', 'like', '%'.$parameters["employee"].'%')
+				    		->orWhere('identification_number', 'like', '%'.$parameters["employee"].'%');
+				    });
+				
+				})
+			->whereHas('subCostCenter', function($q) use ($parameters){
+				$q->where('cost_center_id', $parameters['cost_center_id']);
+			})
+			->paginate(15);
+		
+		// esto para que las cajas de búsqueda no tengas los valores por defecto
+		$parameters['from'] = $request->has('from') ? $parameters['from'] : null;
+		$parameters['to'] = $request->has('to') ? $parameters['to'] : null;
+		
+		return view('activityReports.individual', compact('activities', 'search_input', 'parameters'));
 	}
 
 	/**

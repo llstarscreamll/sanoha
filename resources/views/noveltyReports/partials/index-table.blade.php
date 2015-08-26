@@ -43,7 +43,7 @@
 				    	
 				    	<div class="hidden-print">
 					        {{-- Paginador --}}
-							{!! $novelties->render() !!}
+							{!! $novelties->appends($search_input)->render() !!}
 				    	</div>
 				</div>
 				

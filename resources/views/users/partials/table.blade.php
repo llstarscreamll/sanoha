@@ -46,6 +46,6 @@
 	</div>
 	
 	{{-- Paginador --}}
-	{!! $users->render() !!}
+	{!! $users->appends($input)->render() !!}
 	
 {!! Form::close() !!}

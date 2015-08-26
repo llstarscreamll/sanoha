@@ -62,39 +62,6 @@
 	<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/2.9.0/moment.min.js"></script>
 	<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker.js"></script>
 	<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker-bs3.css" />
-
-
-    <script type="text/javascript">
-        
-        $(document).ready(function(){
-        	
-        	{{-- trigger form submit when click on action buttons --}}
-        	$('.action-buttons button[type=submit]').click(function(){
-        		$('form[name=table-form]').submit();
-        	});
-            
-            {{-- searching if there are checkboxes checked to toggle enable action buttons --}}
-            scanCheckedCheckboxes('.checkbox-table-item');
-            
-            {{-- toggle the checkbox checked state from row click --}}
-            toggleCheckboxFromRowClick();
-            
-            {{-- toggle select all checkboxes --}}
-            toggleCheckboxes();
-            
-            {{-- listen click on checkboxes to change row class and count the ones checked --}}
-            $('.checkbox-table-item').click(function(event) {
-                scanCheckedCheckboxes('.'+$(this).attr('class'));
-                event.stopPropagation();
-            });
-            
-            {{-- Initialize all tooltips --}}
-            $('[data-toggle="tooltip"]').tooltip();
-            
-        });
-        
-    </script>
-    
     
     <script type="text/javascript">
         $(function() {

@@ -1,6 +1,6 @@
 <div class="col-md-6">
 
-    {!! Form::model($search_input, ['route' => $search_target, 'method' => 'GET', 'class' => 'hidden-print']) !!}
+    {!! Form::model($search_input, ['route' => $search_target, 'method' => 'GET', 'class' => 'hidden-print', 'name' => 'search']) !!}
 
             <div class="input-group">
                 
@@ -34,13 +34,13 @@
 
         {!! Form::hidden(
             'from',
-            $parameters['from']->toDateString(),
+            is_null($parameters['from']) ? '' : $parameters['from']->toDateString(),
             ['id' => 'from']
         ) !!}
         
         {!! Form::hidden(
             'to',
-            $parameters['to']->toDateString(),
+            is_null($parameters['to']) ? '' : $parameters['to']->toDateString(),
             ['id' => 'to']
         ) !!}
         
