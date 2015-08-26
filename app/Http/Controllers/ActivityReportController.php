@@ -201,6 +201,7 @@ class ActivityReportController extends Controller {
 		$data = $request->all();
 
 		$employee = \sanoha\Models\Employee::findOrFail($data['employee_id']);
+		$historical_price = \sanoha\Models\ActivityReport::getHistoricalActivityPrice($data['mining_activity_id'], $employee->sub_cost_center_id);
 		
 		$activity 						=	new ActivityReport;
 		$activity->sub_cost_center_id	=	$employee->sub_cost_center_id;
@@ -215,14 +216,20 @@ class ActivityReportController extends Controller {
 		 * controlar esta parte verificando primero si se tienen los permisos para
 		 * asignar el precio, el valor por defecto en la base de datos es 0
 		 */
-		$activity->price 				=	isset($data['price']) ? $data['price'] : '';
+		
+		$activity->price 				=	isset($data['price']) ? $data['price'] : $historical_price;
 		$activity->comment 				=	$data['comment'];
 		$activity->reported_by 			=	\Auth::getUser()->id;
 		$activity->reported_at 			=	$data['reported_at'];
 		
-		$activity->save()
-			? \Session::flash('success', 'Actividad Registrada Correctamente.')
-			: \Session::flash('error', 'Error registrando la actividad.');
+		if($activity->save()){
+			\Session::flash('success', 'Actividad Registrada Correctamente.');
+			
+			if(!isset($data['price']) && $historical_price == 0)
+				\Session::flash('warning', 'La actividad fue registrada, pero no se asignó el precio porque no hay históricos en que basar la selección.');
+			
+		}else
+			\Session::flash('error', 'Error registrando la actividad.');
 
 		return redirect()->back()->withInput($request->only('employee_id'));
 	}

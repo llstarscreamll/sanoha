@@ -237,6 +237,9 @@ class ActivityReport extends Model
                 
     }
     
+    /**
+     * 
+     */ 
     public function getReportersFullname()
     {
         $reporters = [];
@@ -246,6 +249,30 @@ class ActivityReport extends Model
         }
         
         return $reporters;
+    }
+    
+    /**
+     * Obtiene el precio histórico de una actividad en un subcentro de costo específico
+     * 
+     * @param   int     $mining_activity_id
+     * @param   int     $sub_cost_center_id
+     * 
+     * @return  int
+     */
+    public static function getHistoricalActivityPrice($mining_activity_id, $sub_cost_center_id)
+    {
+        $historical_activity = \sanoha\Models\ActivityReport::where('mining_activity_id', $mining_activity_id)
+            ->where('sub_cost_center_id', $sub_cost_center_id)
+            ->orderBy('reported_at', 'desc')
+            ->first();
+        
+        if($historical_activity)
+            $price = $historical_activity->price;
+        else {
+            $price = 0;
+        }
+        
+        return $price;
     }
     
 }

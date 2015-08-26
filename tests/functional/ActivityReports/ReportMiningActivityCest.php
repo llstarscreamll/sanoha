@@ -79,6 +79,19 @@ class ReportMiningActivityCest
         // necesito la lista de labores mineras que puedo registrar
         $labors = \sanoha\Models\MiningActivity::all();
         
+        // creo un registro antiguo para que tenga referencia para asígnar el precio
+        // de la actividad que voy a registrar
+        \sanoha\Models\ActivityReport::create([
+            'sub_cost_center_id'    =>  1,
+            'employee_id'           =>  1,
+            'mining_activity_id'    =>  2,
+            'quantity'              =>  2,
+            'price'                 =>  '5000',
+            'comment'               =>  'test comment',
+            'reported_by'           =>  1,
+            'reported_at'           =>  '2015-07-05 10:00:00'
+        ]);
+        
         // -----------------------
         // --- Empieza el test ---
         // -----------------------
@@ -153,7 +166,9 @@ class ReportMiningActivityCest
         // Nuevo Requerimiento...
         //
         // el supervisor no puede asignar precios de las labores mineras registradas, por lo tanto
-        // no puede ver el campo price o precio en el formulario, esto queda para un proceso aparte
+        // no puede ver el campo price o precio en el formulario, esto queda para un proceso aparte,
+        // pero el precio jamás debe quedar vació, se debe asignar automáticamente en el backend según
+        // los históricos de x actividad.
         // ------------------------------------------------------------------------------------------
         $I->dontSeeElement('input', ['name' => 'price', 'step' => '100']); // NO VEO el input para digitar el precio
         $I->seeElement('button', ['type' => 'submit']); // el botton para enviar el formulario
@@ -203,9 +218,9 @@ class ReportMiningActivityCest
         // refresco la página
         $I->amOnPage('/activityReport/create?employee_id=1');
         
-        // veo que en la tabla de la vista previa está el registro que acabo de cargar
+        // veo que en la tabla de la vista previa está el registro que acabo de cargar, con el precio histórico que se ha asignado en ese centro de costo a esa actividad
         $I->see('2.5', 'tbody tr td');
-        $I->see('0', 'tbody tr td');
+        $I->see('12.500', 'tbody tr td'); // 2.5 a $5.000 cada actividad que fue lo que se ha pagado antes
         
     }
     
@@ -407,7 +422,7 @@ class ReportMiningActivityCest
         
         // veo que en la tabla de la vista previa está el registro que acabo de cargar
         $I->see('4', 'tbody tr td');
-        $I->see('60000', 'tbody tr td');
+        $I->see('60.000', 'tbody tr td');
         
         // cierro sesión
         $I->logout();
@@ -457,7 +472,12 @@ class ReportMiningActivityCest
         $I->submitForm('form', $data);
         
         // veo en la base de datos el nuevo registro
-        $I->seeRecord('activity_reports', $data+['price' => '']);
+        $I->seeRecord('activity_reports', $data+['price' => 0]);
+        
+        // como no se asignó precio por el usuario y porque no hay histórico, entonces
+        // debo ver un mensage de alerta donde me informe que no se ha asignado el precio
+        // automáticamente porque no hay históricos en que basar la selección del precio
+        $I->see('La actividad fue registrada, pero no se asignó el precio porque no hay históricos en que basar la selección.', '.alert-warning');
         
         // veo que estoy en la misma url
         $I->seeCurrentUrlEquals('/activityReport/create?employee_id='.$employee->id);

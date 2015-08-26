@@ -55,7 +55,7 @@
                         							<td class="{{ $k !== 'employee_fullname' ? 'text-center' : '' }}">
                         								<span data-toggle="tooltip" data-placement="top" title="Cantidad">{{ $v['quantity'] }}</span><br>
                         							<div>
-                        								<span data-toggle="tooltip" data-placement="bottom" title="Precio">{{ $v['price'] }}</span>
+                        								<span data-toggle="tooltip" data-placement="bottom" title="Precio">{{number_format($v['price'], 0, ',', '.')}}</span>
                         							</div>
                         							</td>
                         							@endif
