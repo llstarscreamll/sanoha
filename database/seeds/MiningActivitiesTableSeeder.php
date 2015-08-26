@@ -17,7 +17,7 @@ class MiningActivitiesTableSeeder extends Seeder
         $data[] = [
             'name'          =>      'Vagoneta de Carbón',
             'short_name'    =>      'VC',
-            'maximum'       =>      '15',
+            'maximum'       =>      '100',
             'created_at'            =>      $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
             'updated_at'            =>      $date->toDateTimeString(),
             'deleted_at'            =>      null
@@ -80,7 +80,7 @@ class MiningActivitiesTableSeeder extends Seeder
         $data[] = [
             'name'          =>    'Malacate',
             'short_name'    =>    'MLC',
-            'maximum'       =>      '50',
+            'maximum'       =>      '100',
             'created_at'            =>      $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
             'updated_at'            =>      $date->toDateTimeString(),
             'deleted_at'            =>      null

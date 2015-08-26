@@ -34,6 +34,14 @@ class ActivityReport extends Model
     /**
      * 
      */
+    public function subCostCenter()
+    {
+        return $this->belongsTo('\sanoha\Models\SubCostCenter');
+    }
+    
+    /**
+     * 
+     */
     public function employee()
     {
         return $this->belongsTo('sanoha\Models\Employee');

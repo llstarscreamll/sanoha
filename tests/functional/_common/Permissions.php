@@ -163,8 +163,16 @@ class Permissions
             'name'           => 'activityReport.assignCosts',
             'display_name'   => 'Asiganr Costos de Actividades',
             'description'    => 'Asiganr los precios de las actividades mineras registradas en el sistema',
-            'created_at'    =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
-            'updated_at'    =>  $this->date->toDateTimeString()
+            'created_at'     =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'     =>  $this->date->toDateTimeString()
+        ];
+        
+        $this->data[] = [
+            'name'           => 'activityReport.individual',
+            'display_name'   => 'Reporte de Registros Individuales',
+            'description'    => 'Reporte con los registros de las actividades reportadas individualmente',
+            'created_at'     =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'     =>  $this->date->toDateTimeString()
         ];
         
         // -----------------------------------------------------

@@ -47,7 +47,7 @@ class Permission extends EntrustPermission
             foreach($this->categories as $key => $value){
                 
                     if(strpos($permission['name'], $key) !== false){
-                    $orderedPermissions[$key][] = $permission;
+                        $orderedPermissions[$key][] = $permission;
                 }
             }
             

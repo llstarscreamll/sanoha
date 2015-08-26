@@ -57,6 +57,10 @@ Route::group(['middleware' => 'auth'], function(){
         'as'    =>  'activityReport.calendar',
         'uses'  =>  'ActivityReportController@calendar'
     ]);
+    Route::get('activityReport/individual', [
+        'as'    =>  'activityReport.individual',
+        'uses'  =>  'ActivityReportController@individual'
+    ]);
     Route::resource('activityReport', 'ActivityReportController');
     
 });

@@ -54,8 +54,13 @@ class ActivityReportController extends Controller {
 	 * @param	string		El id del centro de costos de la DB
 	 * @return	redirect	Redirecciona al vista index de reporte de actividades
 	 */ 
-	public function setCostCenter($cost_center){
-		\Session::put('current_cost_center_id', $cost_center);
+	public function setCostCenter($cost_center)
+	{
+		$cost_center = \sanoha\Models\CostCenter::findOrFail($cost_center);
+		
+		\Session::put('current_cost_center_name', $cost_center->name);
+		\Session::put('current_cost_center_id', $cost_center->id);
+		
 		return redirect()->route('activityReport.index');
 	}
 
@@ -123,6 +128,20 @@ class ActivityReportController extends Controller {
 		$activities = json_encode($activities);
 		
 		return view('activityReports.calendar', compact('search_input', 'parameters', 'activities'));
+	}
+	
+	/**
+	 * Muestra la vista que tiene el reporte con los registros individuales
+	 */
+	public function individual()
+	{
+		$cost_center_id = $this->cost_center_id;
+		
+		$activities = ActivityReport::whereHas('subCostCenter', function($q) use ($cost_center_id){
+				$q->where('cost_center_id', $cost_center_id);
+			})->paginate(15);
+		
+		return view('activityReports.individual', compact('activities'));
 	}
 
 	/**
