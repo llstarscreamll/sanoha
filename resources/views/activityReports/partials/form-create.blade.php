@@ -82,7 +82,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     {!! Form::label('price', 'Precio') !!}
-                                    {!! Form::number('price', null, ['class' => 'form-control', 'step' => '100']) !!}
+                                    {!! Form::number('price', null, ['class' => 'form-control', 'step' => '1']) !!}
                                     
                                     @if ($errors->has('price'))
                                     <div class="text-danger">
