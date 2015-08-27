@@ -116,7 +116,7 @@
                                 <div class="form-group">
                                 <label for="reported_at">Fecha de Actividad</label>
                                 <div class="input-group">
-                                    {!! Form::text('reported_at', isset($activity->created_at) ? $activity->created_at->toDateString() : null, ['class' => 'form-control', 'id' => 'reported_at', 'placeholder' => 'Elegir Fecha', 'readonly']) !!}
+                                    {!! Form::text('reported_at', isset($activity->reported_at) ? $activity->reported_at->toDateString() : null, ['class' => 'form-control', 'id' => 'reported_at', 'placeholder' => 'Elegir Fecha', 'readonly']) !!}
                                     <span id="calendar-trigger" class="input-group-btn">
                                         <button class="btn btn-default" type="button">
                                         <span class="glyphicon glyphicon-calendar"></span>

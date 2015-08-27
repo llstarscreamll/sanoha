@@ -97,7 +97,7 @@ class EditActivityCest
         $I->seeOptionIsSelected('mining_activity_id', 'Avance Roca | AR');
         $I->seeElement('input', ['value' => '2']);
         $I->seeElement('input', ['value' => '5000']);
-        $I->seeElement('input', ['value' => '2015-08-07 08:00:00']);
+        $I->seeElement('input', ['value' => '2015-08-07']);
         $I->see('test', 'textarea');
         
         $I->submitForm('form', [
@@ -120,7 +120,7 @@ class EditActivityCest
         $I->seeOptionIsSelected('mining_activity_id', 'Embasado | E');
         $I->seeElement('input', ['value' => '4']);
         $I->seeElement('input', ['value' => '10000']);
-        $I->seeElement('input', ['value' => '2015-08-07 08:00:00']);
+        $I->seeElement('input', ['value' => '2015-08-07']);
         $I->see('test 2', 'textarea');
     }
 }
