@@ -68,6 +68,7 @@ class FlatReportCest
             'mining_activity_id'    =>  1,
             'quantity'              =>  2,
             'price'                 =>  '5000',
+            'worked_hours'          =>  10,
             'comment'               =>  'test',
             'reported_by'           =>  1,
             'reported_at'           =>  '2015-08-07 08:00:00',
@@ -110,6 +111,7 @@ class FlatReportCest
         $I->see('2', 'tbody tr td');
         $I->see('5.000', 'tbody tr td');
         $I->see('10.000', 'tbody tr td');
+        $I->see('10', 'tbody tr td'); // las horas trabajadas
     }
     
     /**
