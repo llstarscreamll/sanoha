@@ -296,7 +296,8 @@ class ActivityReportController extends Controller {
 	public function edit($id, Request $request)
 	{
 		$activity = ActivityReport::findOrFail($id);
-		
+		$activity->reported_at = $activity->reported_at->toDateString();
+
 		$start = $activity->reported_at->startOfDay();
         $end = $activity->reported_at->endOfDay();
         
@@ -353,6 +354,7 @@ class ActivityReportController extends Controller {
 		$activity->quantity 			= $request->get('quantity');
 		$activity->price 				= $request->has('price') ? $request->get('price') : 0;
 		$activity->worked_hours			= $request->get('worked_hours');
+		$activity->reported_at 			= $request->get('reported_at');
 		$activity->comment				= $request->get('comment');
 		$activity->save() ? \Session::flash('success', 'Actualización de Actividad Minera exitosa.') : \Session::flash('error', 'Ocurrió un error actualizando la actividad.') ;
 	

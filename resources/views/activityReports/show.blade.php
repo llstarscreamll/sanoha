@@ -78,7 +78,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                 <label for="reported_at">Fecha de Actividad</label>
-                                {!! Form::text('reported_at', $activity->reported_at, ['class' => 'form-control', 'id' => 'reported_at', 'placeholder' => 'Elegir Fecha', 'readonly']) !!}
+                                {!! Form::text('reported_at', $activity->reported_at->toDateString(), ['class' => 'form-control', 'id' => 'reported_at', 'disabled']) !!}
                                 </div>
                             </div>
 

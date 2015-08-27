@@ -8,7 +8,9 @@
                         </div>
                         @endif
                     </div>
-                        
+                    
+                    <div class="clear-fix"></div>
+                    
                     @if(!is_null($parameters['employee_id']))
                     
                         @if(\Route::currentRouteName() == 'activityReport.create')
@@ -39,6 +41,8 @@
                             </div>
                         @endif
                         
+                            <div class="clear-fix"></div>
+                            
                             <div class="form-group col-md-6 col-md-offset-3">
                                 {!! Form::label('mining_activity_id', 'Labor Minera') !!}
                                 <select name="mining_activity_id" id="mining_activity_id" class="form-control selectpicker show-tick">
@@ -65,6 +69,8 @@
                                 @endif
                                 
                             </div>
+                            
+                            <div class="clear-fix"></div>
                             
                             <div class="col-md-3 col-md-offset-3">
                                 <div class="form-group">
@@ -93,6 +99,8 @@
                             </div>
                             @endif
                             
+                            <div class="clear-fix"></div>
+                            
                             <div class="col-md-3 col-md-offset-3 form-group">
                                 {!! Form::label('worked_hours', 'Horas Trabajadas') !!}
                                 {!! Form::number('worked_hours', null, ['class' => 'form-control', 'step' => '1', 'max' => '12', 'min' => '1']) !!}
@@ -108,7 +116,7 @@
                                 <div class="form-group">
                                 <label for="reported_at">Fecha de Actividad</label>
                                 <div class="input-group">
-                                    {!! Form::text('reported_at', null, ['class' => 'form-control', 'id' => 'reported_at', 'placeholder' => 'Elegir Fecha', 'readonly']) !!}
+                                    {!! Form::text('reported_at', isset($activity->created_at) ? $activity->created_at->toDateString() : null, ['class' => 'form-control', 'id' => 'reported_at', 'placeholder' => 'Elegir Fecha', 'readonly']) !!}
                                     <span id="calendar-trigger" class="input-group-btn">
                                         <button class="btn btn-default" type="button">
                                         <span class="glyphicon glyphicon-calendar"></span>
@@ -123,6 +131,8 @@
                                 </div>
                             </div>
                             
+                            <div class="clear-fix"></div>
+                            
                             <div class="col-md-6 col-md-offset-3">
                                 <div class="form-group">
                                     {!! Form::label('comment', 'Comentario') !!}
@@ -135,6 +145,8 @@
                                     @endif
                                 </div>
                             </div>
+                            
+                            <div class="clear-fix"></div>
                             
                             <div class="col-md-6 col-md-offset-3">
                                 <button type="submit" class="{{$btn_options['class']}}">
