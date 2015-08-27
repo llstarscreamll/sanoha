@@ -104,7 +104,7 @@ class NoveltyReportController extends Controller
 				$q->where('cost_center_id', $parameters['cost_center_id']);
 			})
 			->paginate(15);
-		
+		//dd($parameters, $request->only('from'));
 		// esto para que las cajas de búsqueda no tengas los valores por defecto
 		$parameters['from'] = $request->has('from') ? $parameters['from'] : null;
 		$parameters['to'] = $request->has('to') ? $parameters['to'] : null;

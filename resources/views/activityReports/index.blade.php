@@ -108,6 +108,6 @@
         });
         
         });
-</script>
+    </script>
 
 @stop()

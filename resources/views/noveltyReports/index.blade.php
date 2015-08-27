@@ -80,7 +80,7 @@
 	<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker.js"></script>
 	<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker-bs3.css" />
     
-    <script type="text/javascript">
+        <script type="text/javascript">
         $(function() {
         
         $('#reportrange').daterangepicker({
@@ -125,6 +125,6 @@
         });
         
         });
-</script>
+    </script>
 
 @stop()
