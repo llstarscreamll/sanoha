@@ -65,10 +65,11 @@ class ActivityReportController extends Controller {
 	}
 
 	/**
-	 * Muestro un informe con las actividades reportadas, en donde se podrá consultar
-	 * filtrar por fechas, por nombres, apellidos, número de documento, etc... El
-	 * reporte predeterminado muestra las actividades registradas del dia
-	 * anterior.
+	 * Muestro un informe con las actividades reportadas, precios, totales, etc...
+	 * A este reporte le llaman el de nómina...
+	 * Se podrá consultar filtrar por fechas, por nombres, apellidos, número de
+	 * documento, etc... El reporte predeterminado muestra las actividades
+	 * registradas del dia anterior.
 	 * 
 	 * @param	sanoha\Http\RequestsActivityReportFormRequest	$requests
 	 * @return	\Illuminate\Http\Response	
@@ -95,8 +96,9 @@ class ActivityReportController extends Controller {
 		
 		$orderedActivities = ActivityReport::sortActivities($activities);
 		
-		$miningActivities = MiningActivity::orderBy('short_name')->get();
-		
+		//$miningActivities2 = MiningActivity::orderBy('short_name')->get();
+		$miningActivities = MiningActivity::customOrder();
+
 		return view('activityReports.index', compact('orderedActivities', 'miningActivities', 'parameters', 'search_input'));
 	}
 	
