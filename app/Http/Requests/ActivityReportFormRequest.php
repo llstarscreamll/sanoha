@@ -25,7 +25,7 @@ class ActivityReportFormRequest extends Request {
 		$mining_activity 	= \sanoha\Models\MiningActivity::where('id', '=', $this->input('mining_activity_id'))->get()->first();
 		
 		/* Se alarga la restricción por unos días mientras mientras se ponen al tanto con los reportes */
-		$date_after = \Carbon\Carbon::now()->subDays(10)->toDateString();
+		$date_after = \Carbon\Carbon::now()->subDays(30)->toDateString();
 		$date_before = \Carbon\Carbon::now()->addDays(5)->toDateString();
 		
 		$rules 				= [];
