@@ -24,7 +24,7 @@
 						        	<tr>
 						        		<td>{!! Form::checkbox('id[]', $novelty->id, false, ['class' => 'checkbox-table-item', 'id' => 'novelty-report-'.$novelty->id]) !!}</td>
 						        		<td><a href="{{route('noveltyReport.show', [$novelty->id])}}">{{$novelty->id}}</a></td>
-						        		<td>{{$novelty->employee->fullname}}</td>
+						        		<td>{{ucwords(strtolower($novelty->employee->fullname))}}</td>
 						        		<td>{{$novelty->novelty->name}}</td>
 						        		<td>{{$novelty->reported_at->toDateString()}}</td>
 						        	</tr>

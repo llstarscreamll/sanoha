@@ -111,6 +111,31 @@ class NoveltyReportController extends Controller
 		
 		return view('noveltyReports.index', compact('novelties', 'search_input', 'parameters'));
 	}
+	
+	/**
+	 * La vista en calendario de las novedades reportadas
+	 */
+	public function calendar(Request $request)
+	{
+		$search_input = $request->all();
+		
+		$start = Carbon::createFromFormat('Y-m-d', $request->has('from') ? $request->get('from') : '1900-01-01')->startOfDay();
+        $end = Carbon::createFromFormat('Y-m-d', $request->has('to') ? $request->get('to') : date('Y-m-d'))->endOfDay();
+
+        $parameters['employee'] 		= !empty($request->get('find')) ? $request->get('find') : null;
+		$parameters['from'] 			= $start;
+		$parameters['to'] 				= $end;
+		$parameters['cost_center_id'] 	= $this->cost_center_id;
+		$parameters['cost_center_name'] = \sanoha\Models\CostCenter::findOrFail($this->cost_center_id)->name;
+		
+		$json_novelties = \sanoha\Models\NoveltyReport::getCalendarNovelties($parameters);
+		
+		// esto para que las cajas de búsqueda no tengas los valores por defecto
+		$parameters['from'] = $request->has('from') ? $parameters['from'] : null;
+		$parameters['to'] = $request->has('to') ? $parameters['to'] : null;
+
+		return view('noveltyReports.calendar', compact('json_novelties', 'search_input', 'parameters'));
+	}
 
 	/**
 	 * Show the form for creating a new resource.

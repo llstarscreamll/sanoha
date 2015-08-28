@@ -63,7 +63,7 @@ class MoveToTrashCest
      * mediante el botón "Mover a la papelera" de la vista de sólo lectura de la
      * actividad
      */ 
-    public function tryToTest(FunctionalTester $I)
+    public function moveToTrash(FunctionalTester $I)
     {
          $I->am('soy un supervisor del Proyecto Beteitiva');
         $I->wantTo('editar una actividad minera de un trabajador de mi proyecto');
@@ -95,12 +95,11 @@ class MoveToTrashCest
         $report_date = \Carbon\Carbon::now()->subDays(1)->format('d-m-Y');
         
         // el rango de fechas del reporte debe ser mostrado en la tabla
-        $I->see('Desde '.$report_date, 'th h4');
-        $I->see('Hasta '.$report_date, 'th h4');
         $I->see('Trabajador 1', 'tbody tr td');
         
         // estoy en la página de vista en sólo lectura
-        $I->amOnPage('/activityReport/1');
+        $I->click('1', 'tbody tr td a');
+        $I->seeCurrentUrlEquals('/activityReport/1');
         $I->see('Detalle de Labor Minera', 'h1');
         
         // doy clic al botón "Mover a la Papelera"

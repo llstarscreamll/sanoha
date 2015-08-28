@@ -88,7 +88,7 @@ class SelectCostCenterCest
         $I->click('Proyecto Beteitiva', '.list-group-item a');
         
         // y soy redireccionado a la página de reporte de actividades mineras
-        $I->seeCurrentUrlEquals('/activityReport');
+        $I->seeCurrentUrlEquals('/activityReport/individual');
         
         //dd(\sanoha\Models\ActivityReport::all()->toArray());
         //\sanoha\Models\ActivityReport::all()->toArray();
@@ -124,7 +124,7 @@ class SelectCostCenterCest
         $I->click('Proyecto Sanoha', 'a');
         
         // y soy redireccionado a la página re reporte de actividades
-        $I->seeCurrentUrlEquals('/activityReport');
+        $I->seeCurrentUrlEquals('/activityReport/individual');
         
         // y veo que la cabecera del reporte tiene el nombre del proyecto o
         // centro de costos que elejí

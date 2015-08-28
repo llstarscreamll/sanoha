@@ -7,9 +7,9 @@
     </a>
     
     {{-- Link a la vista de tabla --}}
-    <a class="btn btn-default" href="{{route('activityReport.index')}}" role="button"  data-toggle="tooltip" data-placement="top" title="Reporte de Nomina">
+    <a class="btn btn-default" href="{{route('activityReport.index')}}" role="button"  data-toggle="tooltip" data-placement="top" title="Reporte de Nómina">
         <span class="glyphicon glyphicon-usd"></span>
-        <span class="sr-only">Reporte de Nomina</span>
+        <span class="sr-only">Reporte de Nómina</span>
     </a>
     
     {{-- Link a la vista de reportes individuales --}}

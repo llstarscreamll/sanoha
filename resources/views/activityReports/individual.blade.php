@@ -11,9 +11,9 @@
 			<div class="panel-heading">
 				<h1>
 					Reporte de Labores Mineras
-					<small class="action-icons">
-						<a class="btn btn-default btn-sm" href="#" role="button"><span class="glyphicon glyphicon-plus"></span></a>
-					</small>
+					
+					@include ('activityReports.partials.action-buttons')
+					
 				</h1>
 			</div>
 
@@ -33,7 +33,7 @@
 				        <thead>
 				        	<tr>
 				        		<th colspan=6>
-				        			{{\Session::get('current_cost_center_name')}}
+				        			<h3>{{\Session::get('current_cost_center_name')}}</h3>
 				        		</th>
 				        	</tr>
 				            <tr>
@@ -43,6 +43,7 @@
 				                <th>Cantidad</th>
 				                <th>Precio</th>
 				                <th>Total</th>
+				                <th>Fecha</th>
 				            </tr>
 				        </thead>
 				        
@@ -56,6 +57,7 @@
 				            		<td>{{$activity->quantity}}</td>
 				            		<td>{{number_format($activity->price, 0, ',', '.')}}</td>
 				            		<td>{{number_format($activity->quantity * $activity->price, 0, ',', '.')}}</td>
+				            		<td>{{$activity->reported_at->toDateString()}}</td>
 				            	</tr>
 				            	
 				            @endforeach

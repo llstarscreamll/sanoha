@@ -78,6 +78,7 @@ class FilterActivityReportCest
         $I->amOnPage('/home');
         $I->see('Proyecto Beteitiva', 'a');
         $I->click('Proyecto Beteitiva', 'a'); // el proyecto o centro de costo creado en UserCommons
+        $I->click('Reporte de Nómina', 'a');
         
         // hago clic en el vinculo al proyecto que tengo acceso
         $I->seeCurrentUrlEquals('/activityReport');

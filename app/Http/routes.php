@@ -32,31 +32,42 @@ Route::group(['middleware' => 'auth'], function(){
     /**
      * Reporte de Novedades
      */
+     // para setear el costo de centro de trabajo
      Route::get('noveltyReport/project/{short_name?}', [
         'as'    =>  'noveltyReport.setCostCenter',
         'uses'  =>  'NoveltyReportController@setCostCenter'
     ]);
+    // la vista para seleccionar el centro de costo de trabajo
     Route::get('noveltyReport/selectCostCenter', [
         'as'    =>  'noveltyReport.selectCostCenter',
         'uses'  =>  'NoveltyReportController@selectCostCenterView'
+    ]);
+    // la vista en calendario de las novedades reportadas
+    Route::get('noveltyReport/calendar', [
+        'as'    =>  'noveltyReport.calendar',
+        'uses'  =>  'NoveltyReportController@calendar'
     ]);
     Route::resource('noveltyReport', 'NoveltyReportController');
     
     /**
      * Reporte de Actividades Mineras
      */
+    // para setear el costo de centro de trabajo
     Route::get('activityReport/project/{short_name?}', [
         'as'    =>  'activityReport.setCostCenter',
         'uses'  =>  'ActivityReportController@setCostCenter'
     ]);
+    // la vista para seleccionar el centro de costo de trabajo
     Route::get('activityReport/selectCostCenter', [
         'as'    =>  'activityReport.selectCostCenter',
         'uses'  =>  'ActivityReportController@selectCostCenterView'
     ]);
+    // la vista en calendario de las actividades mineras reportadas
     Route::get('activityReport/calendar', [
         'as'    =>  'activityReport.calendar',
         'uses'  =>  'ActivityReportController@calendar'
     ]);
+    // reporte de actividades mineras individuales
     Route::get('activityReport/individual', [
         'as'    =>  'activityReport.individual',
         'uses'  =>  'ActivityReportController@individual'

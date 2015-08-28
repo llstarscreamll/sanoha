@@ -87,7 +87,7 @@ class FlatReportCest
         $I->click('Proyecto Beteitiva', 'a'); // el proyecto o centro de costo creado en UserCommons
         
         // hago clic en el vinculo al proyecto que tengo acceso
-        $I->seeCurrentUrlEquals('/activityReport');
+        $I->seeCurrentUrlEquals('/activityReport/individual');
         $I->seeInSession('current_cost_center_id', 1); // el id del centro de costos ue seleccioné
         $I->seeInSession('current_cost_center_name', 'Proyecto Beteitiva'); // el id del centro de costos ue seleccioné
 
@@ -171,7 +171,7 @@ class FlatReportCest
         $I->click('Proyecto Beteitiva', 'a'); // el proyecto o centro de costo creado en UserCommons
         
         // hago clic en el vinculo al proyecto que tengo acceso
-        $I->seeCurrentUrlEquals('/activityReport');
+        $I->seeCurrentUrlEquals('/activityReport/individual');
         $I->seeElement('a', ['class' => 'btn btn-default', 'title' => 'Reporte de Registros Individuales']);
         $I->click('Reporte de Registros Individuales', 'a');
         

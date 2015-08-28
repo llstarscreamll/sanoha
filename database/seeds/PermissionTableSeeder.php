@@ -210,6 +210,14 @@ class PermissionTableSeeder extends Seeder
             'updated_at'    =>  $date->toDateTimeString()
         ];
         
+        $data[] = [
+            'name'           => 'noveltyReport.calendar',
+            'display_name'   => 'Ver Reporte en Calendario de Novedades',
+            'description'    => 'Ver un reporte en calendario de las novedades registradas',
+            'created_at'    =>  $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'    =>  $date->toDateTimeString()
+        ];
+        
         DB::table('permissions')->insert($data);
     }
 }

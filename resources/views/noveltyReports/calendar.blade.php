@@ -1,13 +1,12 @@
 @extends('app')
 
 @section('title')
-	Reporte de Labores Mineras
+	Reportes de Novedad
 @stop
 
 @section('style')
     {{-- Bootstrap Calendar --}}    
     <link href="{{ asset('/resources/bootstrap-calendar/css/calendar.css') }}" rel="stylesheet">
-    
 @stop
 
 @section('content')
@@ -16,11 +15,11 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h1>
-					<a href="{{ url(route('activityReport.index'))}}" class="link-black">
-						Reporte de Labores Mineras
+					<a href="{{ url(route('noveltyReport.index'))}}" class="link-black">
+						Reportes de Novedad
 					</a>
 					
-					@include ('activityReports.partials.action-buttons')
+					@include ('noveltyReports.partials.action-buttons')
 					
 				</h1>
 				
@@ -31,16 +30,16 @@
 				@include ('layout.notifications')
 				
                 <div class="row hidden-print">
-				    @include ('activityReports.partials.views-links')
+				    @include ('noveltyReports.partials.views-links')
 				    
-				    @include ('activityReports.partials.searchForm', ['search_target' => 'activityReport.calendar'])
+				   @include ('noveltyReports.partials.search-form', ['search_target' => 'noveltyReport.calendar'])
 				</div>
                 
-				@if($activities != '[]')
+				@if($json_novelties != '[]')
     				
     				<div class="row">
         				<div class="col-xs-12">
-                		    <h3 style="display:inline;">{{$parameters['costCenter_name']}}</h3>
+                		    <h3 style="display:inline;">{{\Session::get('current_cost_center_name')}}</h3>
   
                 			<div class="btn-group pull-right">
                 				<button class="btn btn-warning" data-calendar-view="year">Año</button>
@@ -105,7 +104,7 @@
             	"use strict";
             
             	var options = {
-            		events_source: {!! $activities !!},
+            		events_source: {!! $json_novelties !!},
             		language: 'es-ES',
             		view: 'month',
             		tmpl_path: "{{url('resources/bootstrap-calendar/tmpls/').'/'}}",
