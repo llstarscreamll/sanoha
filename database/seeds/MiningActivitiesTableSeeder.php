@@ -176,7 +176,6 @@ class MiningActivitiesTableSeeder extends Seeder
             'deleted_at'            =>      null
         ];
         
-    DB::table('mining_activities')->delete();
     DB::table('mining_activities')->insert($data);    
     }
 }

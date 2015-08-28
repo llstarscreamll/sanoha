@@ -98,7 +98,7 @@ class ActivityReportController extends Controller {
 		
 		//$miningActivities2 = MiningActivity::orderBy('short_name')->get();
 		$miningActivities = MiningActivity::customOrder();
-
+		
 		return view('activityReports.index', compact('orderedActivities', 'miningActivities', 'parameters', 'search_input'));
 	}
 	

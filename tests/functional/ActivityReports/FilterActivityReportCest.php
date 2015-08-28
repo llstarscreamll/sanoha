@@ -86,7 +86,8 @@ class FilterActivityReportCest
         
         // titulo de la página
         $I->see('Reporte de Actividades');
-        
+        $I->amOnPage('/activityReport');
+
         // no veo el mensaje "No se encontraron registros..."
         $I->dontSee('No se encontraron registros...', '.alert-danger');
         

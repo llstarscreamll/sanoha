@@ -185,12 +185,15 @@ class ActivityReport extends Model
     
     /**
      * 
+     * @param   Array
      */
     public static function sortActivities($activities)
     {
         // get sorted mining activities
         $miningActivities = \sanoha\Models\MiningActivity::customOrder();
         
+        //dd($activities, $miningActivities, \sanoha\Models\MiningActivity::all()->toArray());
+
         $ordered_activities = [];
         $totals = [];
 

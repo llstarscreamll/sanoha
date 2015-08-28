@@ -58,7 +58,7 @@ class MiningActivity extends Model
             7  =>  'TRM',
             8  =>  'MLC',
             9  =>  'BENDA',
-            10  =>  'EVA',
+            10  =>  'EVS',
             11  =>  'ADM',
             12  =>  'CRG',
             13  =>  'CDS',
@@ -68,13 +68,13 @@ class MiningActivity extends Model
             17  =>  'MTDPT',
             18  =>  'OTROS'
         ];
-        $data = [];
+        $data = array();
         
         foreach ($labors as $labor) {
             
             foreach ($order as $key => $value) {
             
-                if($value === $labor->short_name)
+                if($value === $labor->short_name){
                     $data[$key] = [
                         'id'                    =>  $labor->id,
                         'name'                  =>  $labor->name,
@@ -82,12 +82,12 @@ class MiningActivity extends Model
                         'maximum'               =>  $labor->maximum,
                         'nameAndAbbreviation'   =>  $labor->nameAndAbbreviation,
                     ];
-            
+                }
             }
         }
         
         ksort($data);
-        
+
         return $data;
     }
 }
