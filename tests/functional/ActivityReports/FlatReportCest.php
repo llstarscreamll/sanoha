@@ -107,7 +107,7 @@ class FlatReportCest
         $I->see('Proyecto Beteitiva', 'th');
         $I->see('1', 'tbody tr td a');
         $I->see('Trabajador 1', 'tbody tr td');
-        $I->see('Avance Roca', 'tbody tr td');
+        $I->see('Vagoneta de Carbón', 'tbody tr td');
         $I->see('2', 'tbody tr td');
         $I->see('5.000', 'tbody tr td');
         $I->see('10.000', 'tbody tr td');

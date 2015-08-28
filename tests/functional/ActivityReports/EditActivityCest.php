@@ -94,7 +94,7 @@ class EditActivityCest
         
         // veo los campos del formulario con los datos del registro
         $I->seeOptionIsSelected('employee_id', 'Trabajador 1 B1');
-        $I->seeOptionIsSelected('mining_activity_id', 'Avance Roca | AR');
+        $I->seeOptionIsSelected('mining_activity_id', 'Vagoneta de Carbón | VC');
         $I->seeElement('input', ['value' => '2']);
         $I->seeElement('input', ['value' => '5000']);
         $I->seeElement('input', ['value' => '2015-08-07']);
@@ -117,7 +117,7 @@ class EditActivityCest
         
         // veo los campos del formulario con los datos del registro
         $I->seeOptionIsSelected('employee_id', 'Trabajador 2 B2');
-        $I->seeOptionIsSelected('mining_activity_id', 'Embasado | E');
+        $I->seeOptionIsSelected('mining_activity_id', 'Vagoneta de Roca | VR');
         $I->seeElement('input', ['value' => '4']);
         $I->seeElement('input', ['value' => '10000']);
         $I->seeElement('input', ['value' => '2015-08-07']);
