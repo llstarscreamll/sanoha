@@ -24,8 +24,8 @@
                                         @foreach($miningActivities as $activity)
                                         
                                             <th>
-                                                <span title="{{$activity->name}}" data-toggle="tooltip">
-                                                    {{$activity->short_name}}
+                                                <span title="{{$activity['name']}}" data-toggle="tooltip">
+                                                    {{$activity['short_name']}}
                                                 </span>
                                             </th>
                                         

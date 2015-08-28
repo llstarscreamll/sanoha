@@ -52,11 +52,11 @@
                                     @foreach($miningActivities as $mActivity)
                                         
                                         <option
-                                            value="{{$mActivity->id}}"
-                                            data-maximum="{{$mActivity->maximum}}"
-                                            {{ isset($activity) && $activity->mining_activity_id === $mActivity->id ? 'selected' : '' }}
-                                            {{ old('mining_activity_id') === $mActivity->id ? 'selected' : '' }}
-                                        >{{$mActivity->nameAndAbbreviation}}</option>
+                                            value="{{$mActivity['id']}}"
+                                            data-maximum="{{$mActivity['maximum']}}"
+                                            {{ isset($activity) && $activity->mining_activity_id === $mActivity['id'] ? 'selected' : '' }}
+                                            {{ old('mining_activity_id') === $mActivity['id'] ? 'selected' : '' }}
+                                        >{{$mActivity['nameAndAbbreviation']}}</option>
                                     
                                     @endforeach
                                     

@@ -79,7 +79,8 @@ class MiningActivity extends Model
                         'id'                    =>  $labor->id,
                         'name'                  =>  $labor->name,
                         'short_name'            =>  $labor->short_name,
-                        'NameAndAbbreviation'   =>  $labor->nameAndAbbreviation,
+                        'maximum'               =>  $labor->maximum,
+                        'nameAndAbbreviation'   =>  $labor->nameAndAbbreviation,
                     ];
             
             }

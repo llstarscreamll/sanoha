@@ -207,7 +207,7 @@ class ActivityReportController extends Controller {
 		}
 
 		// actividades mineras
-		$miningActivities = MiningActivity::orderBy('short_name')->get();
+		$miningActivities = MiningActivity::customOrder();
 		
 		// actividades registradas del empleado
 		$employee_activities = ActivityReport::getActivities($parameters);
