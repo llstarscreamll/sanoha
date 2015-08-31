@@ -69,7 +69,7 @@ class CreateCest
         $I->amOnPage('/noveltyReport/create?employee_id=1');
         
         // veo los títulos que me dicen donde y en que centro de costo me encuentro
-        $I->see('Reportar Novedad Proyecto Beteitiva', 'h1');
+        $I->see('Reportar Novedad', 'legend');
         
         // veo los campos necesarios para reportar la novedad
         $I->seeElement('form');

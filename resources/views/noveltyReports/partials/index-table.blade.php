@@ -10,8 +10,8 @@
 				        		</th>
 				        	</tr>
 					        <tr>
-					        	<th>{!! Form::checkbox('check_all', 'check_all', null, ['id' => 'check_all']) !!}</th>
-					        	<th>#</th>
+					        	<th class="hidden-print">{!! Form::checkbox('check_all', 'check_all', null, ['id' => 'check_all']) !!}</th>
+					        	<th class="hidden-print">#</th>
 					            <th>Nombres</th>
 					            <th>Novedad</th>
 					            <th>Fecha</th>
@@ -22,8 +22,8 @@
 				        	@if(count($novelties) > 0)
 						        @foreach($novelties as $novelty)
 						        	<tr>
-						        		<td>{!! Form::checkbox('id[]', $novelty->id, false, ['class' => 'checkbox-table-item', 'id' => 'novelty-report-'.$novelty->id]) !!}</td>
-						        		<td><a href="{{route('noveltyReport.show', [$novelty->id])}}">{{$novelty->id}}</a></td>
+						        		<td class="hidden-print">{!! Form::checkbox('id[]', $novelty->id, false, ['class' => 'checkbox-table-item', 'id' => 'novelty-report-'.$novelty->id]) !!}</td>
+						        		<td class="hidden-print"><a href="{{route('noveltyReport.show', [$novelty->id])}}">{{$novelty->id}}</a></td>
 						        		<td>{{ucwords(strtolower($novelty->employee->fullname))}}</td>
 						        		<td>{{$novelty->novelty->name}}</td>
 						        		<td>{{$novelty->reported_at->toDateString()}}</td>

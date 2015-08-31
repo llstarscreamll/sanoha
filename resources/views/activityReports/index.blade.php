@@ -101,6 +101,9 @@
         });
         
         });
+        
+        {{-- Initialize all tooltips --}}
+        $('[data-toggle="tooltip"]').tooltip();
     </script>
 
 @stop()

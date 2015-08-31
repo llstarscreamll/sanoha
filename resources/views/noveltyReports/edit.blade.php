@@ -10,10 +10,7 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h1>
-					Actualizar Novedad
-					<small class="action-icons">
-                        {{\Session::get('current_cost_center_name')}}
-    				</small>
+					<a class="link-black" href="{{route('noveltyReport.index')}}">Reportes de Novedad</a> <small>{{\Session::get('current_cost_center_name')}}</small>
 				</h1>
 			</div>
 
@@ -23,7 +20,10 @@
 				
 				{!! Form::model($novelty, ['route' => ['noveltyReport.update', $novelty->id], 'method' => 'PUT']) !!}
 				
-				@include('noveltyReports.partials.create-edit-form')
+				    <fieldset>
+                        <legend class="col-md-6 col-md-offset-3">Actualizar Detalles de Novedad</legend>
+				        @include('noveltyReports.partials.create-edit-form')
+				    </fieldset>
 				
 				<div class="col-md-6 col-md-offset-3">
     				<button class="btn btn-warning">

@@ -10,7 +10,7 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h1>
-					Reportar Novedad <small>{{\Session::get('current_cost_center_name')}}</small>
+					<a class="link-black" href="{{route('noveltyReport.index')}}">Reportes de Novedad</a> <small>{{\Session::get('current_cost_center_name')}}</small>
 				</h1>
 			</div>
 
@@ -19,9 +19,12 @@
 			    @include ('layout.notifications')
 
 				{!! Form::open(['route' => 'noveltyReport.store', 'method' => 'POST']) !!}
-				
-				    @include('noveltyReports.partials.create-edit-form')
-				
+				    
+				    <fieldset>
+                        <legend class="col-md-6 col-md-offset-3">Reportar Novedad</legend>
+				        @include('noveltyReports.partials.create-edit-form')
+				    </fieldset>
+				    
 			        <div class="col-md-6 col-md-offset-3">
                         <button type="submit" class="btn btn-primary">
                             <span class="glyphicon glyphicon-floppy-disk"></span>

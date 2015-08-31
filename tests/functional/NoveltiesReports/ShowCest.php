@@ -97,9 +97,8 @@ class ShowCest
         
         // estoy en la página del detalle de la novedad reportada
         $I->seeCurrentUrlEquals('/noveltyReport/1');
-        $I->see('Detalles de Novedad Reportada', 'h1');
+        $I->see('Detalles de Novedad', 'legend');
         $I->see('Proyecto Beteitiva', 'h1 small');
-        $I->see('Vista de Sólo Lectura', 'legend');
         
         // veo que la información mostrada corresponde con lo que hay en BD
         $I->seeElement('input', ['value' => 'Proyecto Beteitiva - Bocamina 1', 'disabled' => 'disabled']);

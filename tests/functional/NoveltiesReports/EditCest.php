@@ -95,12 +95,12 @@ class EditCest
         
         // estoy en la página del detalle de la novedad reportada
         $I->seeCurrentUrlEquals('/noveltyReport/1');
-        $I->see('Detalles de Novedad Reportada', 'h1');
+        $I->see('Detalles de Novedad', 'legend');
         $I->click('Editar', 'a');
         
         // estoy en la página de edición
         $I->seeCurrentUrlEquals('/noveltyReport/1/edit');
-        $I->see('Actualizar Novedad', 'h1');
+        $I->see('Actualizar Detalles de Novedad', 'legend');
         $I->see('Detalles de Novedad', 'legend');
         
         // veo que la información mostrada corresponde con lo que hay en BD
@@ -120,7 +120,7 @@ class EditCest
         
         // estoy en la página del detalle de la novedad reportada
         $I->seeCurrentUrlEquals('/noveltyReport/1');
-        $I->see('Detalles de Novedad Reportada', 'h1');
+        $I->see('Detalles de Novedad', 'legend');
         
         $I->see('Novedad actualizada exitosamente.', '.alert-success');
         

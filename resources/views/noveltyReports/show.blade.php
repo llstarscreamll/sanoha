@@ -10,10 +10,7 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h1>
-					Detalles de Novedad Reportada
-					<small class="action-icons">
-						{{\Session::get('current_cost_center_name')}}
-					</small>
+					<a class="link-black" href="{{route('noveltyReport.index')}}">Reportes de Novedad</a> <small>{{\Session::get('current_cost_center_name')}}</small>
 				</h1>
 			</div>
 
@@ -23,8 +20,8 @@
 				
 				<form>
 				    <fieldset>
-				        <legend>
-				            Vista de Sólo Lectura
+				        <legend class="col-md-6 col-md-offset-3">
+				            Detalles de Novedad
 				        </legend>
 				        
         				<div class="col-md-6 col-md-offset-3 form-group">

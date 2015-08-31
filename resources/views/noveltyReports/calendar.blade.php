@@ -109,7 +109,7 @@
             		view: 'month',
             		tmpl_path: "{{url('resources/bootstrap-calendar/tmpls/').'/'}}",
             		tmpl_cache: false,
-            		day: '{{ date("Y-m-d") }}',
+            		day: '{{$parameters["from"]->toDateString()}}',
             		onAfterEventsLoad: function(events) {
             			if(!events) {
             				return;

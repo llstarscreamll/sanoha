@@ -109,7 +109,6 @@
             		view: 'month',
             		tmpl_path: "{{url('resources/bootstrap-calendar/tmpls/').'/'}}",
             		tmpl_cache: true,
-            		//day: '{{ date("Y-m-d") }}',
             		day: '{{$parameters["from"]->toDateString()}}',
             		onAfterEventsLoad: function(events) {
             			if(!events) {
@@ -194,7 +193,6 @@
                 event.stopPropagation();
             });
 
-            
             {{-- Initialize all tooltips --}}
             $('[data-toggle="tooltip"]').tooltip();
             
