@@ -28,6 +28,8 @@
 				</div>
 				
 				<div class="table-responsive margin-top-10">
+					{!! Form::model($activities, ['route' => ['activityReport.destroy'], 'method' => 'DELETE', 'name' => 'table-form']) !!}
+					
 				    <table class="table table-hover table-bordered table-vertical-align-middle">
 				        
 				        <thead>
@@ -37,6 +39,7 @@
 				        		</th>
 				        	</tr>
 				            <tr>
+				            	<th>{!! Form::checkbox('check_all', 'check_all', null, ['id' => 'check_all']) !!}</th>
 				                <th>#</th>
 				                <th>Empleado</th>
 				                <th>Actividad</th>
@@ -52,6 +55,7 @@
 					            @foreach($activities as $activity)
 					            	
 					            	<tr>
+					            		<td>{!! Form::checkbox('id[]', $activity->id, false, ['class' => 'checkbox-table-item', 'id' => 'activity-'.$activity->id]) !!}</td>
 					            		<td><a href="{{route('activityReport.show', $activity->id)}}">{{$activity->id}}</a></td>
 					            		<td>{{ucwords(strtolower($activity->employee->fullname))}}</td>
 					            		<td>{{$activity->miningActivity->name}}</td>
@@ -76,6 +80,8 @@
 				        </tbody>
 				        
 				    </table>
+				    
+				    {!! Form::close() !!}
 				</div>
 				{!!$activities->render()!!}
 
@@ -93,6 +99,29 @@
     
     <script type="text/javascript">
         $(function() {
+        	
+        	{{-- trigger form submit when click on action buttons --}}
+        	$('.action-buttons button[type=submit]').click(function(){
+        		$('form[name=table-form]').submit();
+        	});
+            
+            {{-- searching if there are checkboxes checked to toggle enable action buttons --}}
+            scanCheckedCheckboxes('.checkbox-table-item');
+            
+            {{-- toggle the checkbox checked state from row click --}}
+            toggleCheckboxFromRowClick();
+            
+            {{-- toggle select all checkboxes --}}
+            toggleCheckboxes();
+            
+            {{-- listen click on checkboxes to change row class and count the ones checked --}}
+            $('.checkbox-table-item').click(function(event) {
+                scanCheckedCheckboxes('.'+$(this).attr('class'));
+                event.stopPropagation();
+            });
+            
+            {{-- Initialize all tooltips --}}
+            $('[data-toggle="tooltip"]').tooltip();
         
         $('#reportrange').daterangepicker({
             format: 'MM/DD/YYYY',
