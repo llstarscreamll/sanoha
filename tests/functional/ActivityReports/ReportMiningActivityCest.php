@@ -63,7 +63,7 @@ class ReportMiningActivityCest
     
     /**
      * Pruebo la restricción de no reportar la misma actividad mnera dos veces en el mismo día
-     *//*
+     */
     public function reportSameMiningLaborTwice(FunctionalTester $I)
     {
         // la actividad a duplicar
@@ -112,7 +112,7 @@ class ReportMiningActivityCest
         $I->seeCurrentUrlEquals('/activityReport/create?employee_id=1');
         $I->dontSeeElement('div', ['class' => 'alert alert-success alert-dismissible']);
         $I->see('El trabajador ya reportó Vagoneta de Roca el día '.\Carbon\Carbon::now()->toDateString().'.', '.alert-danger');
-    }*/
+    }
 
     /**
      *  Pruebo el formulario de reporte de actividad o labor minera
@@ -167,12 +167,12 @@ class ReportMiningActivityCest
         $I->seeCurrentUrlEquals('/activityReport/create');
         
         // veo que el título de la página es "Registrar Labor Minera"
-        $I->see('Registrar Labor Minera', 'h1');
+        $I->see('Reportar Labor Minera', 'legend');
         
         // veo que está divido en secciones el formulario, un fielset donde
         // están los compos para el registro y otro fieldset donde está la vista previa de
         // los datos cargados al trabajador
-        $I->see('Detalles de Labor', 'fieldset legend');
+        $I->see('Reportar Labor Minera', 'fieldset legend');
         $I->see('Vista Previa de Actividades', 'fieldset legend');
         
         // veo que hay un select con los nombres de los trabajadores del centro
@@ -304,7 +304,7 @@ class ReportMiningActivityCest
         $I->seeCurrentUrlEquals('/activityReport/create');
        
         // veo que el título de la página es el que corresponde
-        $I->see('Registrar Labor Minera', 'h1');
+        $I->see('Reportar Labor Minera', 'fieldset');
        
         // selecciono al trabajador y envío el formulario para que me cargue los demás campos
         $I->submitForm('form', ['employee_id' => $employee->id]);
@@ -331,7 +331,7 @@ class ReportMiningActivityCest
         $I->seeCurrentUrlEquals('/activityReport/create?employee_id='.$employee->id);
        
         // debo ver el título correspondiente
-        $I->see('Registrar Labor Minera', 'h1');
+        $I->see('Reportar Labor Minera', 'legend');
        
         // veo que el formulario tiene unos errores
         $I->seeFormHasErrors();
@@ -367,7 +367,7 @@ class ReportMiningActivityCest
         $I->seeCurrentUrlEquals('/activityReport/create?employee_id='.$employee->id);
        
         // debo ver el título correspondiente
-        $I->see('Registrar Labor Minera', 'h1');
+        $I->see('Reportar Labor Minera', 'legend');
        
         // veo que el formulario tiene unos errores
         $I->seeFormHasErrors();
@@ -403,7 +403,7 @@ class ReportMiningActivityCest
         $I->seeCurrentUrlEquals('/activityReport/create?employee_id='.$employee->id);
        
         // debo ver el título correspondiente
-        $I->see('Registrar Labor Minera', 'h1');
+        $I->see('Reportar Labor Minera', 'legend');
        
         // veo que el formulario tiene unos errores
         //$I->seeFormHasErrors();

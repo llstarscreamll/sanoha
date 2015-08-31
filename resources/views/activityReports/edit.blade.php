@@ -10,7 +10,7 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h1>
-					Editar Labor Minera Reportada <small>{{$parameters['costCenter_name']}}</small>
+					<a class="link-black" href="{{route('activityReport.individual')}}">Reporte de Labores Mineras</a> <small>{{$parameters['costCenter_name']}}</small>
 				</h1>
 				
 			</div>
@@ -21,8 +21,8 @@
 				
                 {!! Form::model($activity, ['route' => ['activityReport.update', $activity->id], 'method' => 'PUT']) !!}
                     <fieldset>
-                        <legend>
-                            Detalles de Labor
+                        <legend class="form-group col-md-6 col-md-offset-3">
+                            Actualizar Detalles de Labor Minera
                             <span data-toggle="tooltip" data-placement="top" title="Fecha de Reporte" class="small-date">
                                 {{ isset($activity) ? $activity->reported_at->format('l j \\of F Y') : \Carbon\Carbon::now()->format('l j \\of F Y') }}
                             </span>

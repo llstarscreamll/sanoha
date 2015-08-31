@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('title')
-	Registrar Labor Minera
+	Reportar Labor Minera
 @stop
 
 @section('content')
@@ -10,7 +10,7 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h1>
-					Registrar Labor Minera <small>{{$parameters['costCenter_name']}}</small>
+					<a class="link-black" href="{{route('activityReport.individual')}}">Reporte de Labores Mineras</a> <small>{{$parameters['costCenter_name']}}</small>
 				</h1>
 				
 			</div>
@@ -22,8 +22,8 @@
                 {!! Form::open(['route' => (is_null($parameters['employee_id']) ? 'activityReport.create' : 'activityReport.store'), 'method' => is_null($parameters['employee_id']) ? 'GET' : 'POST']) !!}
                     
                     <fieldset>
-                        <legend>
-                            Detalles de Labor
+                        <legend class="form-group col-md-6 col-md-offset-3">
+                            Reportar Labor Minera
                             <span data-toggle="tooltip" data-placement="top" title="Fecha de Reporte" class="small-date">
                                 {{ isset($activity) ? $activity->reported_at->format('l j \\of F Y') : \Carbon\Carbon::now()->format('l j \\of F Y') }}
                             </span>

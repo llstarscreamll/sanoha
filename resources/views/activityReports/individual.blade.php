@@ -48,19 +48,31 @@
 				        </thead>
 				        
 				        <tbody>
-				            @foreach($activities as $activity)
-				            	
-				            	<tr>
-				            		<td><a href="{{route('activityReport.show', $activity->id)}}">{{$activity->id}}</a></td>
-				            		<td>{{ucwords(strtolower($activity->employee->fullname))}}</td>
-				            		<td>{{$activity->miningActivity->name}}</td>
-				            		<td>{{$activity->quantity}}</td>
-				            		<td>{{number_format($activity->price, 0, ',', '.')}}</td>
-				            		<td>{{number_format($activity->quantity * $activity->price, 0, ',', '.')}}</td>
-				            		<td>{{$activity->reported_at->toDateString()}}</td>
-				            	</tr>
-				            	
-				            @endforeach
+				        	@if(count($activities) > 0)
+					            @foreach($activities as $activity)
+					            	
+					            	<tr>
+					            		<td><a href="{{route('activityReport.show', $activity->id)}}">{{$activity->id}}</a></td>
+					            		<td>{{ucwords(strtolower($activity->employee->fullname))}}</td>
+					            		<td>{{$activity->miningActivity->name}}</td>
+					            		<td>{{$activity->quantity}}</td>
+					            		<td>{{number_format($activity->price, 0, ',', '.')}}</td>
+					            		<td>{{number_format($activity->quantity * $activity->price, 0, ',', '.')}}</td>
+					            		<td>{{$activity->reported_at->toDateString()}}</td>
+					            	</tr>
+					            	
+					            @endforeach
+							@else
+							
+								<tr>
+									<td colspan=7>
+										<div class="alert alert-danger">
+											No se encontraron registros...
+										</div>
+									</td>
+								</tr>
+							
+							@endif
 				        </tbody>
 				        
 				    </table>

@@ -90,7 +90,7 @@ class EditActivityCest
         
         
         $I->amOnPage('/activityReport/1/edit');
-        $I->see('Editar Labor Minera Reportada', 'h1');
+        $I->see('Actualizar Detalles de Labor Minera', 'legend');
         
         // veo los campos del formulario con los datos del registro
         $I->seeOptionIsSelected('employee_id', 'Trabajador 1 B1');
@@ -109,11 +109,11 @@ class EditActivityCest
         ]);
         
         $I->seeCurrentUrlEquals('/activityReport/1');
-        $I->see('Detalle de Labor Minera', 'h1');
+        $I->see('Detalles de Labor', 'legend');
         $I->see('Actualización de Actividad Minera exitosa.', '.alert-success');
         
         $I->amOnPage('/activityReport/1/edit');
-        $I->see('Editar Labor Minera Reportada', 'h1');
+        $I->see('Actualizar Detalles de Labor Minera', 'legend');
         
         // veo los campos del formulario con los datos del registro
         $I->seeOptionIsSelected('employee_id', 'Trabajador 2 B2');

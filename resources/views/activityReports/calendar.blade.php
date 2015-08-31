@@ -94,7 +94,6 @@
 	<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker.js"></script>
 	<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker-bs3.css" />
 
-
     <script type="text/javascript">
         
             {{-- ************************************
@@ -109,8 +108,9 @@
             		language: 'es-ES',
             		view: 'month',
             		tmpl_path: "{{url('resources/bootstrap-calendar/tmpls/').'/'}}",
-            		tmpl_cache: false,
-            		day: '{{ date("Y-m-d") }}',
+            		tmpl_cache: true,
+            		//day: '{{ date("Y-m-d") }}',
+            		day: '{{$parameters["from"]->toDateString()}}',
             		onAfterEventsLoad: function(events) {
             			if(!events) {
             				return;

@@ -100,7 +100,7 @@ class MoveToTrashCest
         // estoy en la página de vista en sólo lectura
         $I->click('1', 'tbody tr td a');
         $I->seeCurrentUrlEquals('/activityReport/1');
-        $I->see('Detalle de Labor Minera', 'h1');
+        $I->see('Detalles de Labor', 'legend');
         
         // doy clic al botón "Mover a la Papelera"
         $I->click('Confirmar', 'button');
@@ -108,7 +108,7 @@ class MoveToTrashCest
         // veo mensage de exito en la operación
         $I->see('La actividad se ha movido a la papelera correctamente.');
         $I->see('Reporte de Labores Mineras', 'h1');
-        $I->dontSee('Proyecto Beteitiva', 'th h3');
+        $I->see('Proyecto Beteitiva', 'th h3');
         $I->see('No se encontraron registros...', '.alert-danger');
         $I->dontSeeRecord('activity_reports', $data[0]);
     }
