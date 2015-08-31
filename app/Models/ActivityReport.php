@@ -7,6 +7,11 @@ class ActivityReport extends Model
 {
     use SoftDeletes;
 
+    /**
+     * The timestamps.
+     * 
+     * @var array
+     */ 
     protected $dates = ['reported_at', 'reported_at', 'updated_at', 'deleted_at'];
 
     /**
@@ -24,7 +29,9 @@ class ActivityReport extends Model
     protected $fillable = ['employee_id', 'sub_cost_center_id', 'mining_activity_id', 'quantity', 'price', 'comment', 'reported_by', 'reported_at'];
     
     /**
+     * Relación de Uno a Muchos.
      * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function miningActivity()
     {
@@ -32,7 +39,9 @@ class ActivityReport extends Model
     }
     
     /**
+     * Relación de Uno a Muchos.
      * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function subCostCenter()
     {
@@ -40,7 +49,9 @@ class ActivityReport extends Model
     }
     
     /**
+     * Relación de Uno a Muchos.
      * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function employee()
     {
@@ -48,7 +59,9 @@ class ActivityReport extends Model
     }
     
     /**
+     * Relación de Uno a Muchos.
      * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
     {
@@ -56,24 +69,22 @@ class ActivityReport extends Model
     }
     
     /**
+     * @param string $employee Los nombres, apellidos o cédula del empleado.
      * 
-     * 
-     * @return {object}
+     * @return  {object}
      */
     public static function addSearchByEmployee($query, $employee)
     {
         if(!empty( trim($employee) ))
-
            return $query->where(function($query) use ($employee){
                 $query->orWhere('employees.identification_number', 'LIKE', '%'.$employee.'%') // puede ser por número de identificación
                     ->orWhere('employees.name', 'LIKE', '%'.$employee.'%') // puede ser por nombre
                     ->orWhere('employees.lastname', 'LIKE', '%'.$employee.'%'); // puede ser por apellido
-                    
             });
     }
     
     /**
-     * 
+     * @param int $employee_id El id del empleado
      * 
      * @return {object}
      */
@@ -81,20 +92,22 @@ class ActivityReport extends Model
     {
         if(!empty( trim($employee_id) )){
             return $query->where('employees.id', '=', $employee_id);
-            
         }
-        
     }
     
     /**
+     * Obtengo las actividades mineras según los parámetros de búsqueda, que puedría
+     * ser por un rango de fechas, por nombres, apellidos o cédula del empleado.
      * 
+     * @param array $parameters
+     * 
+     * @return object Collection
      */
     public static function getActivities($parameters)
     {
         $data = \DB::table('activity_reports')
             // datos de las labores mineras
 			->join('mining_activities', 'activity_reports.mining_activity_id', '=', 'mining_activities.id')
-            // info de usuarios
             // datos del empleado
 			->join('employees', 'activity_reports.employee_id', '=', 'employees.id')
             // info de subcentro de costo

@@ -32,7 +32,7 @@
 				        
 				        <thead>
 				        	<tr>
-				        		<th colspan=6>
+				        		<th colspan=7>
 				        			<h3>{{\Session::get('current_cost_center_name')}}</h3>
 				        		</th>
 				        	</tr>

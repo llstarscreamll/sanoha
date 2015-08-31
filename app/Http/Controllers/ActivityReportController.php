@@ -20,7 +20,8 @@ class ActivityReportController extends Controller {
 	private $cost_center_id;
 	
 	/**
-	 * 
+	 * Seteo los middleware de seguridad y las variable que guarda el id del centro
+	 * de costo con el que va a trabajar el resto de métodos...
 	 */
 	public function __construct()
 	{
@@ -31,6 +32,7 @@ class ActivityReportController extends Controller {
 		// control de acceso a los métodos de esta clase
 		$this->middleware('checkPermmisions', ['except' => ['store','update','selectCostCenterView','setCostCenter']]);
 		
+		// el id del centro de costo de trabajo elegido
 		$this->cost_center_id = \Session::get('current_cost_center_id');
 	}
 
@@ -51,9 +53,10 @@ class ActivityReportController extends Controller {
 	 * el controlador, el centro de costo es seleccionado a través de la barra de
 	 * navegación o la vista generada en selectCostCenterView().
 	 * 
-	 * @param	string		El id del centro de costos de la DB
+	 * @param	string		El id del centro de costo en la BD
+	 * 
 	 * @return	redirect	Redirecciona al vista index de reporte de actividades
-	 */ 
+	 */
 	public function setCostCenter($cost_center)
 	{
 		$cost_center = \sanoha\Models\CostCenter::findOrFail($cost_center);
@@ -65,7 +68,7 @@ class ActivityReportController extends Controller {
 	}
 
 	/**
-	 * Muestro un informe con las actividades reportadas, precios, totales, etc...
+	 * Muestro un informe con las actividades reportadas con precios, totales, etc...
 	 * A este reporte le llaman el de nómina...
 	 * Se podrá consultar filtrar por fechas, por nombres, apellidos, número de
 	 * documento, etc... El reporte predeterminado muestra las actividades
@@ -208,7 +211,7 @@ class ActivityReportController extends Controller {
 
 		// actividades mineras
 		$miningActivities = MiningActivity::customOrder();
-		
+		//dd($miningActivities);
 		// actividades registradas del empleado
 		$employee_activities = ActivityReport::getActivities($parameters);
 		
@@ -228,6 +231,15 @@ class ActivityReportController extends Controller {
 	public function store(ActivityReportFormRequest $request)
 	{
 		$data = $request->all();
+		$data['reported_at'] = \Carbon\Carbon::createFromFormat('Y-m-d', $data['reported_at']);
+		//dd($data);
+		
+		if($reported_activity = \sanoha\Models\ActivityReport::where(function($q) use ($data){
+			$q	->where('employee_id', $data['employee_id'])
+				->where('mining_activity_id', $data['mining_activity_id'])
+				->whereBetween('reported_at', [$data['reported_at']->copy()->startOfDay()->toDateTimeString(), $data['reported_at']->copy()->endOfDay()->toDateTimeString()]);
+		})->first())
+			return redirect()->back()->with('error', 'El trabajador ya reportó '.$reported_activity->miningActivity->name.' el día '.$reported_activity->reported_at->toDateString().'.');
 
 		$employee = \sanoha\Models\Employee::findOrFail($data['employee_id']);
 		$historical_price = \sanoha\Models\ActivityReport::getHistoricalActivityPrice($data['mining_activity_id'], $employee->sub_cost_center_id);
@@ -245,12 +257,11 @@ class ActivityReportController extends Controller {
 		 * controlar esta parte verificando primero si se tienen los permisos para
 		 * asignar el precio, el valor por defecto en la base de datos es 0
 		 */
-		
 		$activity->price 				=	isset($data['price']) ? $data['price'] : $historical_price;
 		$activity->worked_hours			=	$data['worked_hours'];
 		$activity->comment 				=	$data['comment'];
 		$activity->reported_by 			=	\Auth::getUser()->id;
-		$activity->reported_at 			=	$data['reported_at'];
+		$activity->reported_at 			=	$data['reported_at']->toDateTimeString();
 		
 		if($activity->save()){
 			\Session::flash('success', 'Actividad Registrada Correctamente.');

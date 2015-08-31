@@ -48,16 +48,12 @@
                                 <select name="mining_activity_id" id="mining_activity_id" class="form-control selectpicker show-tick">
                                     
                                     <option value="" data-maximum="" {{ empty(old('mining_activity_id')) ? '' : 'selected' }}>Selecciona una actividad</option>
-                                    
                                     @foreach($miningActivities as $mActivity)
-                                        
                                         <option
                                             value="{{$mActivity['id']}}"
                                             data-maximum="{{$mActivity['maximum']}}"
                                             {{ isset($activity) && $activity->mining_activity_id === $mActivity['id'] ? 'selected' : '' }}
-                                            {{ old('mining_activity_id') === $mActivity['id'] ? 'selected' : '' }}
-                                        >{{$mActivity['nameAndAbbreviation']}}</option>
-                                    
+                                            {{ old('mining_activity_id') === $mActivity['id'] ? 'selected' : '' }}>{{$mActivity['nameAndAbbreviation']}}</option>
                                     @endforeach
                                     
                                 </select>

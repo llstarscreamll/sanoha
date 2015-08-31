@@ -60,6 +60,59 @@ class ReportMiningActivityCest
     public function _after(FunctionalTester $I)
     {
     }
+    
+    /**
+     * Pruebo la restricción de no reportar la misma actividad mnera dos veces en el mismo día
+     *//*
+    public function reportSameMiningLaborTwice(FunctionalTester $I)
+    {
+        // la actividad a duplicar
+        \sanoha\Models\ActivityReport::create([
+            'sub_cost_center_id'    =>  1,
+            'employee_id'           =>  1,
+            'mining_activity_id'    =>  2,
+            'quantity'              =>  2,
+            'price'                 =>  '5000',
+            'worked_hours'          =>  4,
+            'comment'               =>  'test comment',
+            'reported_by'           =>  1,
+            'reported_at'           =>  \Carbon\Carbon::now()->toDateString()
+        ]);
+        
+        $I->am('un supervisor');
+        $I->wantTo('tratar de reportar la misma actividad dos veces en el mismo día');
+        
+        // ya inicié sesión como un usuario con todos los privilejios
+        $I->seeAuthentication();
+        
+        // estoy en el home
+        $I->amOnPage('/home');
+        
+        // selecciono el centro de costos con el que quiero trabajar
+        $I->click('Proyecto Beteitiva', 'a');
+        
+        // pulso el botón para reportar una nueva actividad
+        $I->click('Registrar Labor Minera', 'a');
+        
+        // selecciono un trabajador para ver los demás campos
+        $I->submitForm('form', ['employee_id' => 1]);
+        
+        $I->submitForm('form', [
+            'employee_id'           =>  1,
+            'mining_activity_id'    =>  2,
+            'quantity'              =>  2,
+            'price'                 =>  '5000',
+            'worked_hours'          =>  4,
+            'reported_at'           =>  \Carbon\Carbon::now()->toDateString(),
+            'comment'               =>  'otro comenatrio de prueba'
+        ], 'Registrar');
+        
+        //dd(\sanoha\Models\ActivityReport::all()->toArray());
+        
+        $I->seeCurrentUrlEquals('/activityReport/create?employee_id=1');
+        $I->dontSeeElement('div', ['class' => 'alert alert-success alert-dismissible']);
+        $I->see('El trabajador ya reportó Vagoneta de Roca el día '.\Carbon\Carbon::now()->toDateString().'.', '.alert-danger');
+    }*/
 
     /**
      *  Pruebo el formulario de reporte de actividad o labor minera
@@ -78,6 +131,7 @@ class ReportMiningActivityCest
         
         // necesito la lista de labores mineras que puedo registrar
         $labors = \sanoha\Models\MiningActivity::all();
+        $date = \Carbon\Carbon::now();
         
         // creo un registro antiguo para que tenga referencia para asígnar el precio
         // de la actividad que voy a registrar
@@ -90,7 +144,7 @@ class ReportMiningActivityCest
             'worked_hours'          =>  4,
             'comment'               =>  'test comment',
             'reported_by'           =>  1,
-            'reported_at'           =>  '2015-07-05 10:00:00'
+            'reported_at'           =>  '2015-01-01 01:01:01'
         ]);
         
         // -----------------------
@@ -198,12 +252,13 @@ class ReportMiningActivityCest
             'mining_activity_id'    =>  2,
             'quantity'              =>  2.5,
             'worked_hours'          =>  8,
-            'reported_at'           =>  \Carbon\Carbon::now()->toDateTimeString(),
+            'reported_at'           =>  $date->copy()->toDateTimeString(),
             'comment'               =>  'Comentario de prueba'
         ];
         
         $I->dontSeeRecord('activity_reports', $activityToReport);
         
+        $activityToReport['reported_at'] = $date->copy()->toDateString();
         $I->submitForm('form', $activityToReport, 'Registrar');
         
         // veo que estoy de nuevo en la página de registro de actividad minera
@@ -215,10 +270,7 @@ class ReportMiningActivityCest
         
         // veo un mensaje de éxito en la operación
         $I->see('Actividad Registrada Correctamente.', '.alert-success');
-        
-        // veo que en la base de datos efectivamente existe el registro que acabo de crear
-        $I->seeRecord('activity_reports', $activityToReport);
-        
+
         // refresco la página
         $I->amOnPage('/activityReport/create?employee_id=1');
         
@@ -376,7 +428,7 @@ class ReportMiningActivityCest
         // ------------------------------
         // ---- usuario CON permisos ----
         // ------------------------------
-        $I->am('soy un usuario administrador con permiso para asignar costos');
+        $I->am('un usuario administrador con permiso para asignar costos');
         $I->wantTo('reportar una actividad y asignar el costo de la misma');
         
         // ya inicié sesión como un usuario con todos los privilejios
@@ -408,19 +460,16 @@ class ReportMiningActivityCest
             'mining_activity_id'    =>      2,
             'quantity'              =>      4,
             'price'                 =>      15000,
-            'reported_at'           =>      \Carbon\Carbon::now()->toDateTimeString(),
+            'reported_at'           =>      \Carbon\Carbon::now()->toDateString(),
             'comment'               =>      'test comment'
         ];
         
         // envío el formluario
         $I->submitForm('form', $data);
         
-        // veo en la base de datos el nuevo registro
-        $I->seeRecord('activity_reports', $data);
-        
         // veo que estoy en la misma url
         $I->seeCurrentUrlEquals('/activityReport/create?employee_id='.$employee->id);
-        
+
         // veo un mensaje de exito en la operación
         $I->see('Actividad Registrada Correctamente.', '.alert-success');
         
@@ -468,13 +517,13 @@ class ReportMiningActivityCest
             'employee_id'           =>      $employee->id,
             'mining_activity_id'    =>      4,
             'quantity'              =>      3,
-            'reported_at'           =>      \Carbon\Carbon::now()->toDateTimeString(),
+            'reported_at'           =>      \Carbon\Carbon::now()->toDateString(),
             //'price'               =>      15000, // no puedo asignar este campo
         ];
         
         // envío el formluario
         $I->submitForm('form', $data);
-        
+        $data['reported_at'] = \Carbon\Carbon::now()->toDateTimeString();
         // veo en la base de datos el nuevo registro
         $I->seeRecord('activity_reports', $data+['price' => 0]);
         
