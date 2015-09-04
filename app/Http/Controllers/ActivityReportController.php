@@ -257,7 +257,7 @@ class ActivityReportController extends Controller {
 		 * controlar esta parte verificando primero si se tienen los permisos para
 		 * asignar el precio, el valor por defecto en la base de datos es 0
 		 */
-		$activity->price 				=	isset($data['price']) ? $data['price'] : $historical_price;
+		$activity->price 				=	isset($data['price']) && !empty($data['price']) ? $data['price'] : $historical_price;
 		$activity->worked_hours			=	$data['worked_hours'];
 		$activity->comment 				=	$data['comment'];
 		$activity->reported_by 			=	\Auth::getUser()->id;
