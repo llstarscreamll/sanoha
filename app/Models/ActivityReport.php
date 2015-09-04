@@ -279,9 +279,10 @@ class ActivityReport extends Model
     {
         $historical_activity = \sanoha\Models\ActivityReport::where('mining_activity_id', $mining_activity_id)
             ->where('sub_cost_center_id', $sub_cost_center_id)
+            ->where('price', '!=', 0)
             ->orderBy('reported_at', 'desc')
             ->first();
-        
+
         if($historical_activity)
             $price = $historical_activity->price;
         else {
