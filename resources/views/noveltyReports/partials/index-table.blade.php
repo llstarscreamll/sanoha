@@ -5,8 +5,15 @@
 				    <table class="table table-hover">
 				        <thead>
 				        	<tr>
-				        		<th colspan=5 class="text-center">
-				        			{{\Session::get('current_cost_center_name', 'No se ha seleccionado centro de costo...')}}
+				        		<th colspan=3>
+				        			<h3>{{\Session::get('current_cost_center_name', 'No se ha seleccionado centro de costo...')}}</h3>
+				        		</th>
+				        		<th colspan=2>
+				        			<h4 class="text-right">
+										<small>Desde</small> {{ $parameters['from']->format('d-m-Y') }}
+										<br>
+										<small>Hasta</small> {{ $parameters['to']->format('d-m-Y') }}
+									</h4>
 				        		</th>
 				        	</tr>
 					        <tr>
