@@ -15,7 +15,7 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h1>
-					<a href="{{ url(route('activityReport.index'))}}" class="link-black">
+					<a href="{{ url(route('activityReport.individual'))}}" class="link-black">
 						Reporte de Labores Mineras
 					</a>
 					

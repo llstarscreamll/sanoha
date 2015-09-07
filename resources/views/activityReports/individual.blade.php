@@ -10,10 +10,10 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h1>
-					Reporte de Labores Mineras
-					
+					<a href="{{ url(route('activityReport.individual'))}}" class="link-black">
+						Reporte de Labores Mineras
+					</a>
 					@include ('activityReports.partials.action-buttons')
-					
 				</h1>
 			</div>
 
