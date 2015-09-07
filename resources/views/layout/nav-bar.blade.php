@@ -37,8 +37,8 @@
 							*******************************************
 						--}}
 						@if(\Auth::getUser()->can('activityReport.index'))
-							<li class="{{ \Request::is('activityReport*') ? 'active' : '' }}" id="activityReports">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Reporte de Actividades <span class="caret"></span></a>
+							<li class="{{ \Request::is('activityReport*') ? 'active' : '' }} dropdown" id="activityReports">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reporte de Actividades <span class="caret"></span></a>
 								<ul class="dropdown-menu" role="menu">
 									
 									{{--
@@ -67,7 +67,7 @@
 						--}}
 						@if(\Auth::getUser()->can('noveltyReport.index'))
 							<li class="{{ \Request::is('noveltyReport*') ? 'active' : '' }}" id="noveltyReports">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Reporte de Novedades <span class="caret"></span></a>
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reporte de Novedades <span class="caret"></span></a>
 								<ul class="dropdown-menu" role="menu">
 									
 									{{--

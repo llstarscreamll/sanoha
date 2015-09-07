@@ -77,12 +77,7 @@
 @section('script')
     
     {{-- Dependencia de los dos paquetes siguientes --}}
-    <!--
-    <script src="{{ asset('/resources/moment/moment.js') }}"></script>
-    -->
 	<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/2.9.0/moment.min.js"></script>
-    <!--
-    -->
     <script src="{{ asset('/resources/underscore/underscore-min.js') }}"></script>
     
     {{-- Bootstrap Calendar --}}
@@ -92,7 +87,6 @@
 	{{-- Include Date Range Picker --}}
 	<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker.js"></script>
 	<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker-bs3.css" />
-
 
     <script type="text/javascript">
         
@@ -108,7 +102,7 @@
             		language: 'es-ES',
             		view: 'month',
             		tmpl_path: "{{url('resources/bootstrap-calendar/tmpls/').'/'}}",
-            		tmpl_cache: false,
+            		tmpl_cache: true,
             		day: '{{$parameters["from"]->toDateString()}}',
             		onAfterEventsLoad: function(events) {
             			if(!events) {
@@ -193,7 +187,6 @@
                 event.stopPropagation();
             });
 
-            
             {{-- Initialize all tooltips --}}
             $('[data-toggle="tooltip"]').tooltip();
             
@@ -201,52 +194,51 @@
         
     </script>
     
-    
     <script type="text/javascript">
-$(function() {
-
-    $('#reportrange').daterangepicker({
-        format: 'MM/DD/YYYY',
-        startDate: moment('{{$parameters["from"]}}', 'YYYY-MM-DD'),
-        endDate: moment('{{ $parameters["to"] }}', 'YYYY-MM-DD'),
-        //minDate: '01/01/2012',
-        maxDate: moment().format('L'),
-        //dateLimit: { days: 60 },
-        showDropdowns: true,
-        showWeekNumbers: true,
-        timePicker: false,
-        timePickerIncrement: 1,
-        timePicker12Hour: true,
-        ranges: {
-           'Hoy': [moment(), moment()],
-           'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-           'Últimos 7 Dias': [moment().subtract(6, 'days'), moment()],
-           'Últimos 30 Dias': [moment().subtract(29, 'days'), moment()],
-           'Este Mes': [moment().startOf('month'), moment().endOf('month')],
-           'Mes Pasado': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-        },
-        opens: 'left',
-        drops: 'down',
-        buttonClasses: ['btn', 'btn-sm'],
-        applyClass: 'btn-primary',
-        cancelClass: 'btn-danger',
-        separator: ' hasta ',
-        locale: {
-            applyLabel: 'Aplicar',
-            cancelLabel: 'Cancelar',
-            fromLabel: 'Desde',
-            toLabel: 'Hasta',
-            customRangeLabel: 'Personalizado',
-            daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi','Sa'],
-            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-            firstDay: 1
-        }
-    }, function(start, end, label) {
-        $('#from').attr('value', start.format('YYYY-MM-DD'));
-        $('#to').attr('value', end.format('YYYY-MM-DD'));
-    });
- 
-});
-</script>
+        $(function() {
+        
+            $('#reportrange').daterangepicker({
+                format: 'MM/DD/YYYY',
+                startDate: moment('{{$parameters["from"]}}', 'YYYY-MM-DD'),
+                endDate: moment('{{ $parameters["to"] }}', 'YYYY-MM-DD'),
+                //minDate: '01/01/2012',
+                maxDate: moment().format('L'),
+                //dateLimit: { days: 60 },
+                showDropdowns: true,
+                showWeekNumbers: true,
+                timePicker: false,
+                timePickerIncrement: 1,
+                timePicker12Hour: true,
+                ranges: {
+                   'Hoy': [moment(), moment()],
+                   'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                   'Últimos 7 Dias': [moment().subtract(6, 'days'), moment()],
+                   'Últimos 30 Dias': [moment().subtract(29, 'days'), moment()],
+                   'Este Mes': [moment().startOf('month'), moment().endOf('month')],
+                   'Mes Pasado': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                },
+                opens: 'left',
+                drops: 'down',
+                buttonClasses: ['btn', 'btn-sm'],
+                applyClass: 'btn-primary',
+                cancelClass: 'btn-danger',
+                separator: ' hasta ',
+                locale: {
+                    applyLabel: 'Aplicar',
+                    cancelLabel: 'Cancelar',
+                    fromLabel: 'Desde',
+                    toLabel: 'Hasta',
+                    customRangeLabel: 'Personalizado',
+                    daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi','Sa'],
+                    monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                    firstDay: 1
+                }
+            }, function(start, end, label) {
+                $('#from').attr('value', start.format('YYYY-MM-DD'));
+                $('#to').attr('value', end.format('YYYY-MM-DD'));
+            });
+         
+        });
+    </script>
 
 @stop()

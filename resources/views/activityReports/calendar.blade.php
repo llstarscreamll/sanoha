@@ -7,7 +7,6 @@
 @section('style')
     {{-- Bootstrap Calendar --}}    
     <link href="{{ asset('/resources/bootstrap-calendar/css/calendar.css') }}" rel="stylesheet">
-    
 @stop
 
 @section('content')
@@ -78,12 +77,7 @@
 @section('script')
     
     {{-- Dependencia de los dos paquetes siguientes --}}
-    <!--
-    <script src="{{ asset('/resources/moment/moment.js') }}"></script>
-    -->
 	<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/2.9.0/moment.min.js"></script>
-    <!--
-    -->
     <script src="{{ asset('/resources/underscore/underscore-min.js') }}"></script>
     
     {{-- Bootstrap Calendar --}}
