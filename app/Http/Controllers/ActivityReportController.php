@@ -81,13 +81,8 @@ class ActivityReportController extends Controller {
 	{
 		$search_input = $request->all();
         
-        $start = Carbon::createFromFormat('Y-m-d', $request->has('from') ? $request->get('from') : date('Y-m-d'))->startOfDay();
-        $end = Carbon::createFromFormat('Y-m-d', $request->has('to') ? $request->get('to') : date('Y-m-d'))->endOfDay();
-        
-        if(!$request->has('from')){
-        	$start->subDays(1);
-        	$end->subDays(1);
-        }
+        $start = Carbon::createFromFormat('Y-m-d', $request->has('from') ? $request->get('from') : \Carbon\Carbon::now()->startOfMonth()->toDateString())->startOfDay();
+        $end = Carbon::createFromFormat('Y-m-d', $request->has('to') ? $request->get('to') : \Carbon\Carbon::now()->toDateString())->endOfDay();
         
         $parameters['employee'] 		= !empty($request->get('find')) ? $request->get('find') : null;
 		$parameters['from'] 			= $start;
@@ -113,13 +108,8 @@ class ActivityReportController extends Controller {
 	{
 		$search_input = $request->all();
 		
-		$start = Carbon::createFromFormat('Y-m-d', $request->has('from') ? $request->get('from') : date('Y-m-d'))->startOfDay();
-        $end = Carbon::createFromFormat('Y-m-d', $request->has('to') ? $request->get('to') : date('Y-m-d'))->endOfDay();
-        
-        if(!$request->has('from')){
-        	$start->startOfMonth();
-        	$end->endOfMonth();
-        }
+		$start = Carbon::createFromFormat('Y-m-d', $request->has('from') ? $request->get('from') : \Carbon\Carbon::now()->startOfMonth()->toDateString())->startOfDay();
+        $end = Carbon::createFromFormat('Y-m-d', $request->has('to') ? $request->get('to') : \Carbon\Carbon::now()->toDateString())->endOfDay();
         
         $parameters['employee'] 		= $request->get('find', null);
 		$parameters['from'] 			= $start;
@@ -142,8 +132,8 @@ class ActivityReportController extends Controller {
 		
 		$search_input = $request->all();
 		
-		$start = Carbon::createFromFormat('Y-m-d', $request->has('from') ? $request->get('from') : '1900-01-01')->startOfDay();
-        $end = Carbon::createFromFormat('Y-m-d', $request->has('to') ? $request->get('to') : date('Y-m-d'))->endOfDay();
+		$start = Carbon::createFromFormat('Y-m-d', $request->has('from') ? $request->get('from') : \Carbon\Carbon::now()->startOfYear()->toDateString())->startOfDay();
+        $end = Carbon::createFromFormat('Y-m-d', $request->has('to') ? $request->get('to') : \Carbon\Carbon::now()->toDateString())->endOfDay();
 
         $parameters['employee'] 		= !empty($request->get('find')) ? $request->get('find') : null;
 		$parameters['from'] 			= $start;
@@ -167,10 +157,6 @@ class ActivityReportController extends Controller {
 				$q->where('cost_center_id', $parameters['cost_center_id']);
 			})
 			->paginate(15);
-		
-		// esto para que las cajas de búsqueda no tengas los valores por defecto
-		$parameters['from'] = $request->has('from') ? $parameters['from'] : null;
-		$parameters['to'] = $request->has('to') ? $parameters['to'] : null;
 		
 		return view('activityReports.individual', compact('activities', 'search_input', 'parameters'));
 	}
