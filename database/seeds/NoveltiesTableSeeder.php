@@ -56,6 +56,20 @@ class NoveltiesTableSeeder extends Seeder
         'updated_at'    =>  $date->toDateTimeString()
         ];
         
+        $data[] = [
+        'name'         => 'Renunció',
+        'short_name'   => 'R',
+        'created_at'    =>  $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
+        'updated_at'    =>  $date->toDateTimeString()
+        ];
+        
+        $data[] = [
+        'name'         => 'Vacaciones',
+        'short_name'   => 'V',
+        'created_at'    =>  $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
+        'updated_at'    =>  $date->toDateTimeString()
+        ];
+        
         DB::table('novelties')->delete();
         DB::table('novelties')->insert($data);
     }
