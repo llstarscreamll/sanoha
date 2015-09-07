@@ -168,6 +168,24 @@ class MiningActivitiesTableSeeder extends Seeder
         ];
         
         $data[] = [
+            'name'                  =>      'Metros Avance Preparación',
+            'short_name'            =>      'MAP',
+            'maximum'               =>      '20',
+            'created_at'            =>      $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'            =>      $date->toDateTimeString(),
+            'deleted_at'            =>      null
+        ];
+        
+        $data[] = [
+            'name'                  =>      'Metros Avance Desarrollo',
+            'short_name'            =>      'MAD',
+            'maximum'               =>      '20',
+            'created_at'            =>      $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'            =>      $date->toDateTimeString(),
+            'deleted_at'            =>      null
+        ];
+        
+        $data[] = [
             'name'          =>    'Otros',
             'short_name'    =>    'OTROS',
             'maximum'       =>      '20',
