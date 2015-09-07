@@ -197,35 +197,40 @@ class ActivityReport extends Model
     }
     
     /**
+     * Ordeno las activiaddes encontradas en un array para ser impreasas en la vista
      * 
-     * @param   Array
+     * @param array $activities
+     * @return array
      */
     public static function sortActivities($activities)
     {
         // get sorted mining activities
         $miningActivities = \sanoha\Models\MiningActivity::customOrder();
-        
-        //dd($activities, $miningActivities, \sanoha\Models\MiningActivity::all()->toArray());
-
         $ordered_activities = [];
         $totals = [];
+        $employees_totals['employees_totals']['quantity'] = 0;
+        $employees_totals['employees_totals']['price'] = 0;
+        $employees_totals['employees_totals']['employee'] = '';
 
         // create array indexes (columns) with miningActivities table values
         foreach($activities as $key => $value){
             
             // creating indexes (columns)
             foreach ($miningActivities as $keyMiningActivity => $valueMiningActivity) {
-                
                 $ordered_activities[$value->employee_id]['employee_fullname'] = ucwords(strtolower($value->employee_name)) . ' ' . ucwords(strtolower($value->employee_lastname));
                 $ordered_activities[$value->employee_id][$valueMiningActivity['short_name']]['quantity'] = 0;
                 $ordered_activities[$value->employee_id][$valueMiningActivity['short_name']]['price'] = 0;
-                $ordered_activities[$value->employee_id][$valueMiningActivity['short_name']]['unit_price'] = 0;
-                
+
                 $totals['totals']['totals'] = 'Total';
                 $totals['totals'][$valueMiningActivity['short_name']]['quantity'] = 0;
                 $totals['totals'][$valueMiningActivity['short_name']]['price'] = 0;
-
+                
+                //$totals['totals']['employees_totals']['price'] = 0;
+               // $totals['totals']['employees_totals']['quantity'] = 0;
             }
+            
+            $ordered_activities[$value->employee_id]['employee_total']['quantity'] = 0;
+            $ordered_activities[$value->employee_id]['employee_total']['price'] = 0;
         }
         
         // asign values to above columns
@@ -235,13 +240,19 @@ class ActivityReport extends Model
                 
                 if($value['short_name'] === $value2->activity_shortname){
                     $ordered_activities[$value2->employee_id][$value2->activity_shortname]['quantity'] += floatval($value2->activity_quantity);
-                    $ordered_activities[$value2->employee_id][$value2->activity_shortname]['price'] += (floatval($value2->activity_quantity) * floatval($value2->activity_price));
-
+                    $ordered_activities[$value2->employee_id][$value2->activity_shortname]['price'] += floatval($value2->activity_quantity) * floatval($value2->activity_price);
+                    
+                    $ordered_activities[$value2->employee_id]['employee_total']['quantity'] += floatval($value2->activity_quantity);
+                    $ordered_activities[$value2->employee_id]['employee_total']['price'] += floatval($value2->activity_quantity) * floatval($value2->activity_price);
+                    $ordered_activities[$value2->employee_id]['employee_total']['employee'] = ucwords(strtolower($value2->employee_name) . ' ' . strtolower($value2->employee_lastname));
+                    
                     // calculing totals
                     $totals['totals'][$value['short_name']]['quantity'] += $value2->activity_quantity;
                     $totals['totals'][$value['short_name']]['price'] += ($value2->activity_quantity * $value2->activity_price);
                     
-                    //$totals['reported_by'][$value2->activity_reportedById] = $value2->activity_reportedById;
+                    $employees_totals['employees_totals']['quantity'] += floatval($value2->activity_quantity);
+                    $employees_totals['employees_totals']['price'] += floatval($value2->activity_quantity) * floatval($value2->activity_price);
+                    
                     $totals['reported_by'][$value2->activity_reportedById] = $value2->activity_reportedByName . ' ' .$value2->activity_reportedByLastname;
                 }
                 
@@ -249,8 +260,9 @@ class ActivityReport extends Model
             
         }
         
+        array_push($totals['totals'], $employees_totals['employees_totals']);
+
         return array_merge($ordered_activities, $totals);
-                
     }
     
     /**

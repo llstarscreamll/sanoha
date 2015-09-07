@@ -2,7 +2,7 @@
 	<table class="table table-hover table-bordered table-vertical-align-middle">
 		<thead>
 			<tr>
-				<th class="vertical-align-middle" colspan=7>
+				<th class="vertical-align-middle" colspan=8>
 					<h3 class="vertical-align-middle">{{ $parameters['costCenter_name'] }}</h3>
 				</th>
 				
@@ -46,7 +46,11 @@
 						</span>
 					</th>
 				@endforeach
-				
+				<th class="text-center">
+					<span title="Total Empleado" data-toggle="tooltip">
+						TOTAL
+					</span>
+				</th>
 			</tr>
 		</thead>
 		
@@ -62,14 +66,14 @@
 
 						@if(!is_array($v))
 						<td class="{{ $k !== 'employee_fullname' ? 'text-center' : '' }}">
-							<span>{{$v}}</span>
+							<span>{{$v}}</span> {{-- El nombre del empelado --}}
 						</td>
 						@else
 						<td class="{{ $k !== 'employee_fullname' ? 'text-center' : '' }}">
-							<span data-toggle="tooltip" data-placement="top" title="Cantidad {{$k}}">{{ $v['quantity'] }}</span><br>
-						<div>
-							<span data-toggle="tooltip" data-placement="bottom" title="Valor de los {{$k}}">{{number_format($v['price'], 0, ',', '.')}}</span>
-						</div>
+							<span data-toggle="tooltip" data-placement="top" title="{{$k == 'employee_total' ? 'Total Actividades '.$v['employee'] : 'Cantidad '.$k}}">{{ $v['quantity'] }}</span><br>
+							<div>
+								<span data-toggle="tooltip" data-placement="bottom" title="{{$k == 'employee_total' ? 'Precio Total '.$v['employee'] : 'Precio '.$k}}">{{number_format($v['price'], 0, ',', '.')}}</span>
+							</div>
 						</td>
 						@endif
 						
