@@ -62,6 +62,8 @@ class FlatReportCest
      */
     public function flatReportView(FunctionalTester $I)
     {
+        // creo dos actividades para hacer test de los cálculos de totales por empleado
+        $date = \Carbon\Carbon::now()->subDay();
         $data[] = [
             'sub_cost_center_id'    =>  1,
             'employee_id'           =>  1,
@@ -71,16 +73,31 @@ class FlatReportCest
             'worked_hours'          =>  10,
             'comment'               =>  'test',
             'reported_by'           =>  1,
-            'reported_at'           =>  '2015-08-07 08:00:00',
-            'created_at'            =>  '2015-08-08 08:00:00',
-            'updated_at'            =>  '2015-08-08 08:00:00',
+            'reported_at'           =>  $date->toDateTimeString(),
+            'created_at'            =>  $date->toDateTimeString(),
+            'updated_at'            =>  $date->toDateTimeString(),
+            'deleted_at'            =>  null
+        ];
+        
+        $data[] = [
+            'sub_cost_center_id'    =>  1,
+            'employee_id'           =>  1,
+            'mining_activity_id'    =>  2,
+            'quantity'              =>  4,
+            'price'                 =>  '10000',
+            'worked_hours'          =>  8,
+            'comment'               =>  'test two',
+            'reported_by'           =>  1,
+            'reported_at'           =>  $date->subDay()->toDateTimeString(),
+            'created_at'            =>  $date->subDay()->toDateTimeString(),
+            'updated_at'            =>  $date->subDay()->toDateTimeString(),
             'deleted_at'            =>  null
         ];
         
         \DB::table('activity_reports')->insert($data);
         
-        $I->am('supervisor del Projecto Beteitiva');
-        $I->wantTo('ver reporte de actividades reportadas individualmente en orden cronológico');
+        $I->am('supervisor del Proyecto Beteitiva');
+        $I->wantTo('ver reporte de actividades reportadas individuales');
     
         $I->amOnPage('/home');
         $I->see('Proyecto Beteitiva', 'a');
@@ -105,13 +122,24 @@ class FlatReportCest
         
         // veo que tipo de reporte y de que proyecto es el reporte
         $I->see('Proyecto Beteitiva', 'th');
-        $I->see('1', 'tbody tr td a');
-        $I->see('Trabajador 1', 'tbody tr td');
-        $I->see('Vagoneta de Carbón', 'tbody tr td');
-        $I->see('2', 'tbody tr td');
-        $I->see('5.000', 'tbody tr td');
-        $I->see('10.000', 'tbody tr td');
-        $I->see('10', 'tbody tr td'); // las horas trabajadas
+        // veo el rango de fechas del reporte
+        $report_date = \Carbon\Carbon::now();
+        $I->see($report_date->format('d-m-Y'), 'th h4');
+        $I->see($report_date->startOfYear()->format('d-m-Y'), 'th h4');
+        
+        // --- actividad 1
+        $I->see('1', 'tbody tr:first-child td a');
+        $I->see('Trabajador 1', 'tbody tr:first-child td');
+        $I->see('Vagoneta de Carbón', 'tbody tr:first-child td');
+        $I->see('2', 'tbody tr:first-child td'); // cantidad de la actividad 1
+        $I->see('5.000', 'tbody tr:first-child td'); // precio individual 1
+        $I->see('10.000', 'tbody tr:first-child td'); // precio total de la actividad 1
+        // --- actividad 2
+        $I->see('2', 'tbody tr:nth-child(2) td a');
+        $I->see('Vagoneta de Roca', 'tbody tr:nth-child(2) td');
+        $I->see('4', 'tbody tr:nth-child(2) td'); // cantidad de la actividad 2
+        $I->see('10.000', 'tbody tr:nth-child(2) td'); // precio individual 2
+        $I->see('40.000', 'tbody tr:nth-child(2) td'); // precio total de la actividad 2
     }
     
     /**
@@ -164,7 +192,7 @@ class FlatReportCest
         \DB::table('activity_reports')->insert($data);
         
         $I->am('supervisor del Projecto Beteitiva');
-        $I->wantTo('probar función de búsqueda en el reporte de actividades individuales');
+        $I->wantTo('hacer busqueda en el reporte de actividades individuales');
     
         $I->amOnPage('/home');
         $I->see('Proyecto Beteitiva', 'a');

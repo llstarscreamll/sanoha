@@ -61,19 +61,14 @@ class FilterActivityReportCest
     }
 
     /**
-     * Probar el reporte generado por defecto
+     * Probar el reporte de nómina de las actividades del día de ayer
      * 
-     * @param
+     * @param FunctionalTester $I
      */ 
-    public function testDefaultReport(FunctionalTester $I)
+    public function testPayrollReport(FunctionalTester $I)
     {
-        // deferencia en días desde hoy para crear el reporte y los datos de prueba
-        $days = 1; // uno porque el reporte que se genera por defecto es del día anterior
-        $project_id = 2; // centro de costos o Proyecto, se creó en SystemCommons
-        
-        // inicio el test
         $I->am('supervisor del Projecto Beteitiva');
-        $I->wantTo('ver que actividades se han reportado el día de ayer');
+        $I->wantTo('ver reporte de nómina de actividades de ayer');
     
         $I->amOnPage('/home');
         $I->see('Proyecto Beteitiva', 'a');
@@ -92,19 +87,19 @@ class FilterActivityReportCest
         $I->dontSee('No se encontraron registros...', '.alert-danger');
         
         // veo la tabla donde se muestran los datos
-        $I->see('', 'table');
+        $I->seeElement('table');
         
         // veo que tipo de reporte y de que proyecto es el reporte
         $I->see('Proyecto Beteitiva', 'th h3');
         
-        $report_date = \Carbon\Carbon::now()->startOfMonth(1)->format('d-m-Y');
+        $report_date = \Carbon\Carbon::now();
         
         // el rango de fechas del reporte debe ser mostrado en la tabla
-        $I->see('Desde '.$report_date, 'th h4');
-        $I->see('Hasta '.\Carbon\Carbon::now()->format('d-m-Y'), 'th h4');
+        $I->see('Hasta '.$report_date->format('d-m-Y'), 'th h4');
+        $I->see('Desde '.$report_date->startOfMonth(1)->format('d-m-Y'), 'th h4');
         
-        //veo que el nombre corto de todas las actividades mineras están en
-        // la cabecera de la tabla, pero tienen su nombre completo en el atributo title
+        // veo que el nombre corto de todas las actividades mineras están en la
+        // cabecera de la tabla, pero tienen su nombre completo en el atributo title
         $miningActivities = \sanoha\Models\MiningActivity::orderBy('name')->get();
 
         foreach ($miningActivities as $activity) {
@@ -112,17 +107,42 @@ class FilterActivityReportCest
             $I->seeElement('th span', ['title' => $activity->name, 'data-toggle' => 'tooltip']);
         }
         
+        // veo la columna de totales por empleado
+        $I->see('Total', 'th');
+        $I->seeElement('th span', ['title' => 'Total Empleado', 'data-toggle' => 'tooltip']);
+        
         // veo las actividades registradas, los datos de prueba están creados en _common/ActivityReports.php
         $I->see('Trabajador 1 B1', 'tbody tr:nth-child(1) td');
-        $I->see('5', 'tbody tr:nth-child(1) td');
-        $I->see('125.000', 'tbody tr:nth-child(1) td'); // 5 * 25000 = 125000
+        $I->see('5', 'tbody tr:nth-child(1) td'); // la cantidad
+        $I->see('125.000', 'tbody tr:nth-child(1) td'); // el valor de la actividad 5 * 25000 = 125000
+        $I->see('5', 'tbody tr:nth-child(1) td:last-child'); // total actividades de empleado
+        $I->see('125.000', 'tbody tr:nth-child(1) td:last-child'); // precio total de actividades de empleado
+        $I->seeElement('tbody tr:nth-child(1) td:last-child span', ['title' => 'Total Actividades Trabajador 1 B1', 'data-toggle' => 'tooltip']);
+        $I->seeElement('tbody tr:nth-child(1) td:last-child span', ['title' => 'Precio Total Trabajador 1 B1', 'data-toggle' => 'tooltip']);
         
         $I->see('Trabajador 2 B2', 'tbody tr:nth-child(2) td');
-        $I->see('2', 'tbody tr:nth-child(2) td');
+        $I->see('2', 'tbody tr:nth-child(2) td'); // cantidad actividad
         $I->see('20.000', 'tbody tr:nth-child(2) td'); // 2 * 10000 = 20000
+        $I->see('4', 'tbody tr:nth-child(2) td'); // cantidad segunda actividad en la misma fila porque es el mismo trabajador
+        $I->see('48.000', 'tbody tr:nth-child(2) td'); // valor segunda actividad 4 * 12000 = 48000
+        $I->see('6', 'tbody tr:nth-child(2) td:last-child'); // total actividades de empleado
+        $I->see('68.000', 'tbody tr:nth-child(2) td:last-child'); // precio total de actividades de empleado, 20.000 + 48.000 = 68.000
+        $I->seeElement('tbody tr:nth-child(2) td:last-child span', ['title' => 'Total Actividades Trabajador 2 B2', 'data-toggle' => 'tooltip']);
+        $I->seeElement('tbody tr:nth-child(2) td:last-child span', ['title' => 'Precio Total Trabajador 2 B2', 'data-toggle' => 'tooltip']);
         
-        $I->see('Trabajador 2 B2', 'tbody tr:nth-child(2) td'); // en la misma fila porque es el mismo trabajador
-        $I->see('4', 'tbody tr:nth-child(2) td');
-        $I->see('48.000', 'tbody tr:nth-child(2) td'); // 4 * 12000 = 48000
+        // los totales de cada labor minera
+        // --- actividad uno
+        $I->see('5', 'tbody tr:last-child td');
+        $I->see('125.000', 'tbody tr:last-child td');
+        // --- actividad dos
+        $I->see('2', 'tbody tr:last-child td');
+        $I->see('20.000', 'tbody tr:last-child td');    
+        // --- actividad tres
+        $I->see('4', 'tbody tr:last-child td');
+        $I->see('48.000', 'tbody tr:last-child td');   
+        
+        // los totales de todos los empleado en la fila-columna final
+        $I->see('193.000', 'tbody tr:last-child td:last-child');
+        $I->see('11', 'tbody tr:last-child td:last-child');
     }
 }

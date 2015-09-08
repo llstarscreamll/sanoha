@@ -67,16 +67,20 @@
 					@foreach($activity as $k => $v)
 
 						@if(!is_array($v))
-						<td class="{{ $k !== 'employee_fullname' ? 'text-center' : '' }}">
-							<span>{{$v}}</span> {{-- El nombre del empelado --}}
-						</td>
+							<td class="{{ $k !== 'employee_fullname' ? 'text-center' : '' }}">
+								<span>{{$v}}</span> {{-- El nombre del empelado --}}
+							</td>
 						@else
-						<td class="{{ $k !== 'employee_fullname' ? 'text-center' : '' }}">
-							<span data-toggle="tooltip" data-placement="top" title="{{$k == 'employee_total' ? 'Total Actividades '.$v['employee'] : 'Cantidad '.$k}}">{{ $v['quantity'] }}</span><br>
-							<div>
-								<span data-toggle="tooltip" data-placement="bottom" title="{{$k == 'employee_total' ? 'Precio Total '.$v['employee'] : 'Precio '.$k}}">{{number_format($v['price'], 0, ',', '.')}}</span>
-							</div>
-						</td>
+							<td class="{{ $k !== 'employee_fullname' ? 'text-center' : '' }}">
+								<span data-toggle="tooltip" data-placement="top" title="{{$k == 'employee_total' ? 'Total Actividades '.$v['employee'] : 'Cantidad '.$k}}">
+									{{ $v['quantity'] }}
+								</span><br>
+								<div>
+									<span data-toggle="tooltip" data-placement="bottom" title="{{$k == 'employee_total' ? 'Precio Total '.$v['employee'] : 'Precio '.$k}}">
+										{{number_format($v['price'], 0, ',', '.')}}
+									</span>
+								</div>
+							</td>
 						@endif
 						
 					@endforeach
@@ -85,16 +89,6 @@
 				@endif
 
 			@endforeach
-			
-			{{--
-					@foreach($activity as $k => $v)
-						@if($key !== $k.'_price')
-						<td class="{{ $k !== 'employee_fullname' ? 'text-center' : '' }} ">
-							{{ $v }}
-						</td>
-						@endif
-					@endforeach
-					--}}
 			
 		</tbody>
 	</table>
