@@ -97,11 +97,11 @@ class FilterActivityReportCest
         // veo que tipo de reporte y de que proyecto es el reporte
         $I->see('Proyecto Beteitiva', 'th h3');
         
-        $report_date = \Carbon\Carbon::now()->subDays(1)->format('d-m-Y');
+        $report_date = \Carbon\Carbon::now()->startOfMonth(1)->format('d-m-Y');
         
         // el rango de fechas del reporte debe ser mostrado en la tabla
         $I->see('Desde '.$report_date, 'th h4');
-        $I->see('Hasta '.$report_date, 'th h4');
+        $I->see('Hasta '.\Carbon\Carbon::now()->format('d-m-Y'), 'th h4');
         
         //veo que el nombre corto de todas las actividades mineras están en
         // la cabecera de la tabla, pero tienen su nombre completo en el atributo title

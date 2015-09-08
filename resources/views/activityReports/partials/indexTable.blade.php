@@ -34,6 +34,7 @@
 					</h4>
 				</th>
 			</tr>
+			
 			<tr>
 				<th>
 					Nombres
@@ -52,9 +53,10 @@
 					</span>
 				</th>
 			</tr>
+			
 		</thead>
 		
-		<tbody class="">
+		<tbody>
 			
 			{{-- No print the reported_by data --}}
 			@foreach($orderedActivities as $key => $activity)

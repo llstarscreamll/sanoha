@@ -198,14 +198,14 @@ class ActivityReportController extends Controller {
 		$miningActivities = MiningActivity::customOrder();
 		//dd($miningActivities);
 		// actividades registradas del empleado
-		$employee_activities = ActivityReport::getActivities($parameters);
+		$orderedActivities = ActivityReport::getActivities($parameters);
 		
 		// actividades registradas del empleado ordenadas
-		$employee_activities = ActivityReport::sortActivities($employee_activities);
+		$orderedActivities = ActivityReport::sortActivities($orderedActivities);
 		
 		$input = $request->all();
 
-		return view('activityReports.create', compact('employees', 'miningActivities', 'employee', 'employee_activities', 'parameters', 'input'));
+		return view('activityReports.create', compact('employees', 'miningActivities', 'employee', 'orderedActivities', 'parameters', 'input'));
 	}
 
 	/**

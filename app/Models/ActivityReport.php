@@ -225,8 +225,6 @@ class ActivityReport extends Model
                 $totals['totals'][$valueMiningActivity['short_name']]['quantity'] = 0;
                 $totals['totals'][$valueMiningActivity['short_name']]['price'] = 0;
                 
-                //$totals['totals']['employees_totals']['price'] = 0;
-               // $totals['totals']['employees_totals']['quantity'] = 0;
             }
             
             $ordered_activities[$value->employee_id]['employee_total']['quantity'] = 0;
@@ -260,7 +258,8 @@ class ActivityReport extends Model
             
         }
         
-        array_push($totals['totals'], $employees_totals['employees_totals']);
+        if(isset($totals['totals']))
+            array_push($totals['totals'], $employees_totals['employees_totals']);
 
         return array_merge($ordered_activities, $totals);
     }

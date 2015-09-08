@@ -523,7 +523,9 @@ class ReportMiningActivityCest
         
         // envío el formluario
         $I->submitForm('form', $data);
-        $data['reported_at'] = \Carbon\Carbon::now()->toDateTimeString();
+        
+        unset($data['reported_at']);
+        
         // veo en la base de datos el nuevo registro
         $I->seeRecord('activity_reports', $data+['price' => 0]);
         
