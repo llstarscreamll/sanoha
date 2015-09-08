@@ -1,5 +1,9 @@
 @extends('app')
 
+@section('title')
+	Iniciar Sesión
+@stop
+
 @section('content')
 <div class="container-fluid">
 	<div class="row">
