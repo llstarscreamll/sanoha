@@ -113,7 +113,7 @@ class EditCest
         $I->submitForm('form', [
             'employee_id'   =>  2,
             'novelty_id'    =>  2,
-            'reported_at'   =>  '2015-08-08',
+            'reported_at'   =>  $date = \Carbon\Carbon::now()->toDateString(),
             'comment'       =>  'Comentario de prueba'
         ],
         'Actualizar');
@@ -128,7 +128,7 @@ class EditCest
         $I->seeElement('input', ['value' => 'Proyecto Beteitiva - Bocamina 2', 'disabled' => 'disabled']);
         $I->seeElement('input', ['value' => 'Trabajador 2 B2', 'disabled' => 'disabled']);
         $I->seeElement('input', ['value' => 'Permiso No Remunerado', 'disabled' => 'disabled']);
-        $I->seeElement('input', ['value' => '2015-08-08', 'disabled' => 'disabled']);
+        $I->seeElement('input', ['value' => $date, 'disabled' => 'disabled']);
         $I->see('Comentario de prueba', 'textarea:disabled');
         
     }

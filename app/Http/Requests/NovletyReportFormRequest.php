@@ -40,13 +40,15 @@ class NovletyReportFormRequest extends Request {
 				'reported_at'				=>		'required|date|after:'.$date_after.'|before:'.$date_before,
 				'comment'					=>		'alpha_spaces'
 			];
-
+		
 		}
 		
 		if($current_route == 'noveltyReport.index' || $current_route == 'noveltyReport.calendar'){
+			$date = $this->request->has('from') ? \Carbon\Carbon::createFromFormat('Y-m-d', $this->request->get('from'))->subDay() : \Carbon\Carbon::now();
+			//if($this->request->get('from') != '') dd($this->request->get('from'));
 			$rules = [
 				'from'		=>	'date',
-				'to'		=>	'date|after:from',
+				'to'		=>	'date|after:'.$date->toDateString(),
 				'find'		=>	'alpha_numeric_spaces'
 			];
 		}

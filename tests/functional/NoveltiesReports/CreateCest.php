@@ -103,7 +103,7 @@ class CreateCest
         // lleno el formulario con los datos necesarios y lo envío
         $I->submitForm('form', [
            'employee_id'    => '1',
-           'novelty'        => '1',
+           'novelty_id'        => '1',
            'reported_at'    => \Carbon\Carbon::now()->subDays(1)->toDateString(),
            'comment'        => 'el trabajador no vino a trabajar'
         ], 'Reportar');

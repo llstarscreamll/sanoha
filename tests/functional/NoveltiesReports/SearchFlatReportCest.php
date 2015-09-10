@@ -60,7 +60,7 @@ class SearchFlatReportCest
     public function search(FunctionalTester $I)
     {
         $I->am('un supervisor de proyecto');
-        $I->wantTo('borrar una novedad reportada en la vista de sólo lectura');
+        $I->wantTo('buscar una novedad en el sistema');
         
         // datos de prueba
         $date = \Carbon\Carbon::now()->subDay();
