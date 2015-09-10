@@ -126,7 +126,7 @@ class ActivityReportController extends Controller {
 	/**
 	 * Muestra la vista que tiene el reporte con los registros individuales
 	 */
-	public function individual(Request $request)
+	public function individual(ActivityReportFormRequest $request)
 	{
 		$cost_center_id = $this->cost_center_id;
 		

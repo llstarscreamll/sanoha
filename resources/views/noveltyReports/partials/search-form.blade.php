@@ -32,6 +32,18 @@
                 </div>
             @endif
             
+            @if ($errors->has('from'))
+                <div class="text-danger">
+                    {!! $errors->first('from') !!}
+                </div>
+            @endif
+            
+            @if ($errors->has('to'))
+                <div class="text-danger">
+                    {!! $errors->first('to') !!}
+                </div>
+            @endif
+            
 
         {!! Form::hidden(
             'from',

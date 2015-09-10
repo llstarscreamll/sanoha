@@ -18,6 +18,16 @@ class CustomValidatorServiceProvider extends ServiceProvider
         });
         
         /**
+         * Extend validation, add "alpha_numeric_spaces" rule, allow:
+         * - alpha with accented characters (a-zA-ZÁÉÍÓÚáéíóú)
+         * - numbers (0-9)
+         * - spaces ( )
+         */ 
+        $this->app['validator']->extend('alpha_numeric_spaces', function ($attribute, $value, $parameters) {
+            return (bool) preg_match("/^[\p{L}\s0-9]+$/ui", $value);
+        });
+        
+        /**
          * Extend validation, add "alpha_dots" rule, allow:
          * - alpha without accented characters (a-zA-Z)
          * - dots (.)
@@ -36,7 +46,7 @@ class CustomValidatorServiceProvider extends ServiceProvider
          * - arroba (@)
          */ 
         $this->app['validator']->extend('text', function ($attribute, $value, $parameters) {
-            return (bool) preg_match("/^[\p{L}.\s-@]+$/ui", $value);
+            return (bool) preg_match("/^[\p{L}.\s-@0-9]+$/ui", $value);
         });
         
         

@@ -62,10 +62,146 @@ class ReportMiningActivityCest
     }
     
     /**
-     * Pruebo la restricción de no reportar la misma actividad mnera dos veces en el mismo día
+     * Pruebo los mensajes de error al reportar una novedad
+     */
+    public function testErrorMessages(FunctionalTester $I)
+    {
+        // info del trabajador
+        $employee = \sanoha\Models\Employee::first();
+        $date = \Carbon\Carbon::now();
+
+       // soy un supervisor minero y quiero probar los mensajes de error o alerta
+       // cuando intente ingresar información inválida en el formuario
+       $I->am('supervisor minero');
+       $I->wantTo('probar los mensajes de error del formulario de reporte de actividades mineras');
+       
+        // estoy en el home
+        $I->amOnPage('/home');
+        
+        // hago clic en el proyecto de trabajo y luego en registar labor mienra
+        $I->click('Proyecto Beteitiva', 'a');
+        $I->click('Registrar Labor Minera', 'a');
+           
+        // estoy en la página de registro de la actividad
+        $I->seeCurrentUrlEquals('/activityReport/create');
+       
+        // veo que el título de la página es el que corresponde
+        $I->see('Reportar Labor Minera', 'fieldset');
+       
+        // selecciono al trabajador y envío el formulario para que me cargue los demás campos
+        $I->submitForm('form', ['employee_id' => 1]);
+        
+        // veo que la url cambia un poco, pues tiene el id del empleado seleccionado
+        $I->seeCurrentUrlEquals('/activityReport/create?employee_id=1');
+        
+        // ----------------------------
+        // ----- primera prueba -------
+        // ----------------------------
+        // aquí los datos erroneos con lo que voy a enviar el formulrio
+        $report = [
+            'employee_id'           =>  876, // envío el formulario con la info de un empleado que no existe
+            'mining_activity_id'    =>  2649, // esta actividad tampoco existe
+            'quantity'              =>  600, // la cantidad sobrepasa lo permitido por la actividad minera seleccionada
+            'worked_hours'          =>  58, // horas trabajadas
+            'reported_at'           =>  '2015-5595', // horas trabajadas
+            'comment'               =>  'Test coment with dots...' // los comentarios no deben tener puntos
+        ];
+       
+        // envío el formulario
+        $I->submitForm('form', $report, 'Registrar');
+       
+        // veo que estoy en la misma url
+        $I->seeCurrentUrlEquals('/activityReport/create?employee_id=1');
+       
+        // debo ver el título correspondiente
+        $I->see('Reportar Labor Minera', 'legend');
+       
+        // veo que el formulario tiene unos errores
+        $I->seeFormHasErrors();
+       
+        // veo que cada error error es mostrado en una capa con el correspondiente
+        // estilo de error o alerta
+        $I->see('Trabajador inválido.', '.text-danger');
+        $I->see('Labor minera inválida.', '.text-danger');
+        $I->see('El tiempo trabajado debe ser entre 1 y 12 horas.', '.text-danger');
+        $I->see('El comentario sólo debe contener letras y/o espacios.', '.text-danger');
+        $I->see('La fecha tiene un formato inválido.', '.text-danger');
+
+        // no veo error en la cantidad pues no tiene referencia válida a la labor minera para obtener el límite
+        $I->dontSee('Debes digitar la cantidad.', '.text-danger');
+        
+        // ----------------------------
+        // ----- segunda prueba -------
+        // ----------------------------
+        
+        $I->wantTo('probar los mensajes de error en identifidores de trabajador y labor minera');
+        
+        // aquí los datos erroneos con lo que voy a enviar el formulrio
+        $report = [
+            'employee_id'           =>  'mm', // empleado con formato de id inválido
+            'mining_activity_id'    =>  'nn', // actividad con formato erróneo
+            'quantity'              =>  '', // la cantidad es obligatoria
+            'reported_at'           =>  $date->toDateString(),
+            'comment'               =>  '',
+        ];
+       
+        // envío el formulario
+        $I->submitForm('form', $report, 'Registrar');
+       
+        // veo que estoy en la misma url
+        $I->seeCurrentUrlEquals('/activityReport/create?employee_id=1');
+       
+        // debo ver el título correspondiente
+        $I->see('Reportar Labor Minera', 'legend');
+       
+        // veo que el formulario tiene unos errores
+        $I->seeFormHasErrors();
+       
+        // veo que cada error error es mostrado en una capa con el correspondiente
+        // estilo de error o alerta
+        $I->see('Identificador de empleado inválido.', '.text-danger');
+        $I->see('Identificador de labor minera inválido.', '.text-danger');
+        $I->dontSee('Debes digitar la cantidad.', '.text-danger');
+        // ya no veo mensaje de error del comentario
+        $I->dontSee('El comentario sólo debe contener letras y/o espacios.', '.text-danger');
+        
+        
+        // ----------------------------
+        // ------ tercera prueba ------
+        // ----------------------------
+        
+        $I->wantTo('probar los mensajes de error en la cantidad de la labor minera reportada');
+        
+        // aquí los datos erroneos con lo que voy a enviar el formulrio
+        $report = [
+            'employee_id'           =>  1, // envío el formulario con la info de un empleado que no existe
+            'mining_activity_id'    =>  1, // esta actividad tampoco existe
+            'quantity'              =>  600, // la cantidad sobrepasa lo permitido por la actividad minera seleccionada
+            'reported_at'           =>  '',
+            'comment'               =>  'Comentario de prueba' // los comentarios no deben tener puntos
+        ];
+
+        // envío el formulario
+        $I->submitForm('form', $report, 'Registrar');
+       
+        // veo que estoy en la misma url
+        $I->seeCurrentUrlEquals('/activityReport/create?employee_id=1');
+       
+        // debo ver el título correspondiente
+        $I->see('Reportar Labor Minera', 'legend');
+        
+        $I->see('Selecciona la fecha en que fue realizada la actividad.', '.text-danger');
+        // ahora si veo error en la cantidad pues tiene referencia válida a la labor minera para obtener el límite
+        $I->see('El rango permitido es entre 0.1 y 100.', '.text-danger');
+    }
+    
+    /**
+     * Pruebo la restricción de no reportar la misma actividad minera dos veces en el mismo día
      */
     public function reportSameMiningLaborTwice(FunctionalTester $I)
     {
+        $date = \Carbon\Carbon::now()->toDateString();
+        
         // la actividad a duplicar
         \sanoha\Models\ActivityReport::create([
             'sub_cost_center_id'    =>  1,
@@ -76,11 +212,11 @@ class ReportMiningActivityCest
             'worked_hours'          =>  4,
             'comment'               =>  'test comment',
             'reported_by'           =>  1,
-            'reported_at'           =>  \Carbon\Carbon::now()->toDateString()
+            'reported_at'           =>  $date
         ]);
         
         $I->am('un supervisor');
-        $I->wantTo('tratar de reportar la misma actividad dos veces en el mismo día');
+        $I->wantTo('tratar de reportar la misma actividad dos veces en el mismo dia');
         
         // ya inicié sesión como un usuario con todos los privilejios
         $I->seeAuthentication();
@@ -103,21 +239,19 @@ class ReportMiningActivityCest
             'quantity'              =>  2,
             'price'                 =>  '5000',
             'worked_hours'          =>  4,
-            'reported_at'           =>  \Carbon\Carbon::now()->toDateString(),
+            'reported_at'           =>  $date,
             'comment'               =>  'otro comenatrio de prueba'
         ], 'Registrar');
         
-        //dd(\sanoha\Models\ActivityReport::all()->toArray());
-        
         $I->seeCurrentUrlEquals('/activityReport/create?employee_id=1');
         $I->dontSeeElement('div', ['class' => 'alert alert-success alert-dismissible']);
-        $I->see('El trabajador ya reportó Vagoneta de Roca el día '.\Carbon\Carbon::now()->toDateString().'.', '.alert-danger');
+        $I->see('El trabajador ya reportó Vagoneta de Roca el día '.$date.'.', '.alert-danger');
     }
 
     /**
      *  Pruebo el formulario de reporte de actividad o labor minera
      * 
-     * @param
+     * @param FunctionalTester $I
      */
     public function reportMiningActivity(FunctionalTester $I)
     {
@@ -152,7 +286,7 @@ class ReportMiningActivityCest
         // -----------------------
         
         $I->am('soy un supervisor del Proyecto Beteitiva');
-        $I->wantTo('registrar la actividad minera de un trabajador de mi proyecto');
+        $I->wantTo('registrar la actividad minera de un trabajador');
         
         // estoy en el home del sistema
         $I->amOnPage('/home');
@@ -166,9 +300,6 @@ class ReportMiningActivityCest
         // veo que estoy en la url indicada
         $I->seeCurrentUrlEquals('/activityReport/create');
         
-        // veo que el título de la página es "Registrar Labor Minera"
-        $I->see('Reportar Labor Minera', 'legend');
-        
         // veo que está divido en secciones el formulario, un fielset donde
         // están los compos para el registro y otro fieldset donde está la vista previa de
         // los datos cargados al trabajador
@@ -180,13 +311,13 @@ class ReportMiningActivityCest
         $I->see('Trabajador 1 B1', 'select optgroup option');
         $I->see('Trabajador 2 B2', 'select optgroup option');
         
-        // veo que NO hay un select con las actividades mineras posibles a reportar,
-        // debo elejir primero al trabajador
+        // veo que no están presentes muchos campos porque debo elegir primero al trabajador
         $I->dontSeeElement('input', ['type' => 'checkbox', 'checked' => 'checked']); // por defecto está marcado
         $I->dontSeeElement('select', ['name' => 'mining_activity_id']);
         $I->dontSeeElement('input', ['name' => 'quantity']);
         $I->dontSeeElement('input', ['name' => 'price']);
         $I->dontSeeElement('input', ['name' => 'reported_at']);
+        $I->dontSeeElement('input', ['name' => 'worked_hours']);
         $I->dontSeeElement('textarea', ['name' => 'comment']);
         $I->dontSeeElement('button', ['type' => 'submit']);
         
@@ -198,7 +329,7 @@ class ReportMiningActivityCest
         // veo que el atributo action del formulario es /localhost/activityReport/create,
         // para que en la siguiente carga pueda pueda cargar la vista previa de los datos
         // del empleado
-        $I->seeElement('form', ['method'    =>  'GET']); /* url por verificar */
+        $I->seeElement('form', ['method'    =>  'GET']);
         
         // selecciono un trabajador de la lista y hago la simulación de envío del formulario
         // aunque no tengo botón, esto se hará con javascript en el onChange del select
@@ -217,7 +348,6 @@ class ReportMiningActivityCest
         $I->seeElement('input', ['name' =>  'quantity']); // el input para digitar la cantidad
         $I->seeElement('input', ['name' =>  'worked_hours']); // el input para digitar la cantidad
         $I->seeElement('input', ['name' =>  'reported_at']); // el input para digitar la fecha en que se hizo la actividad
-        
         // ------------------------------------------------------------------------------------------
         // Nuevo Requerimiento...
         //
@@ -226,7 +356,7 @@ class ReportMiningActivityCest
         // pero el precio jamás debe quedar vació, se debe asignar automáticamente en el backend según
         // los históricos de x actividad.
         // ------------------------------------------------------------------------------------------
-        $I->dontSeeElement('input', ['name' => 'price', 'step' => '1']); // NO VEO el input para digitar el precio
+        $I->dontSeeElement('input', ['name' => 'price']); // NO VEO el input para digitar el precio
         $I->seeElement('input', ['name' => 'worked_hours', 'step' => '1', 'max' => '12']); // campo de horas trabajadas, máximo 12 horas a reportar
         $I->seeElement('button', ['type' => 'submit']); // el botton para enviar el formulario
         
@@ -281,144 +411,6 @@ class ReportMiningActivityCest
     }
     
     /**
-     * 
-     */
-    public function testErrorMessages(FunctionalTester $I)
-    {
-        // info del trabajador
-        $employee = \sanoha\Models\Employee::first();
-        
-       // soy un supervisor minero y quiero probar los mensajes de error o alerta
-       // cuando intente ingresar información inválida en el formuario
-       $I->am('supervisor minero');
-       $I->wantTo('probar los mensajes de error del formulario de reporte de actividades mineras');
-       
-        // estoy en el home
-        $I->amOnPage('/home');
-        
-        // hago clic en el proyecto de trabajo y luego en registar labor mienra
-        $I->click('Proyecto Beteitiva', 'a');
-        $I->click('Registrar Labor Minera', 'a');
-           
-        // estoy en la página de registro de la actividad
-        $I->seeCurrentUrlEquals('/activityReport/create');
-       
-        // veo que el título de la página es el que corresponde
-        $I->see('Reportar Labor Minera', 'fieldset');
-       
-        // selecciono al trabajador y envío el formulario para que me cargue los demás campos
-        $I->submitForm('form', ['employee_id' => $employee->id]);
-        
-        // veo que la url cambia un poco, pues tiene el id del empleado seleccionado
-        $I->seeCurrentUrlEquals('/activityReport/create?employee_id='.$employee->id);
-        
-        // ----------------------------
-        // ----- primera prueba -------
-        // ----------------------------
-        
-        // aquí los datos erroneos con lo que voy a enviar el formulrio
-        $report = [
-            'employee_id'           =>  876, // envío el formulario con la info de un empleado que no existe
-            'mining_activity_id'    =>  2649, // esta actividad tampoco existe
-            'quantity'              =>  600, // la cantidad sobrepasa lo permitido por la actividad minera seleccionada
-            'comment'               =>  'Test coment with dots...' // los comentarios no deben tener puntos
-        ];
-       
-        // envío el formulario
-        $I->submitForm('form', $report, 'Registrar');
-       
-        // veo que estoy en la misma url
-        $I->seeCurrentUrlEquals('/activityReport/create?employee_id='.$employee->id);
-       
-        // debo ver el título correspondiente
-        $I->see('Reportar Labor Minera', 'legend');
-       
-        // veo que el formulario tiene unos errores
-        $I->seeFormHasErrors();
-       
-        // veo que cada error error es mostrado en una capa con el correspondiente
-        // estilo de error o alerta
-        $I->see('Trabajador inválido.', '.text-danger');
-        $I->see('Labor minera inválida.', '.text-danger');
-        $I->see('El comentario sólo debe contener letras y/o espacios.', '.text-danger');
-        // no veo error en la cantidad pues no tiene referencia válida a la labor minera para obtener el límite
-        $I->dontSee('Selecciona la cantidad.', '.text-danger');
-        
-        
-        
-        // ----------------------------
-        // ----- segunda prueba -------
-        // ----------------------------
-        
-        $I->wantTo('probar los mensajes de error en identifidores de trabajador y labor minera');
-        
-        // aquí los datos erroneos con lo que voy a enviar el formulrio
-        $report = [
-            'employee_id'           =>  'mm', // empleado con formato de id inválido
-            'mining_activity_id'    =>  'nn', // actividad con formato erróneo
-            'quantity'              =>  '', // la cantidad es obligatoria
-            'comment'               =>  ''
-        ];
-       
-        // envío el formulario
-        $I->submitForm('form', $report, 'Registrar');
-       
-        // veo que estoy en la misma url
-        $I->seeCurrentUrlEquals('/activityReport/create?employee_id='.$employee->id);
-       
-        // debo ver el título correspondiente
-        $I->see('Reportar Labor Minera', 'legend');
-       
-        // veo que el formulario tiene unos errores
-        $I->seeFormHasErrors();
-       
-        // veo que cada error error es mostrado en una capa con el correspondiente
-        // estilo de error o alerta
-        $I->see('Identificador de empleado inválido.', '.text-danger');
-        $I->see('Identificador de labor minera inválido.', '.text-danger');
-        // ya no veo mensaje de error del comentario
-        $I->dontSee('El comentario sólo debe contener letras y/o espacios.', '.text-danger');
-        // no veo error en la cantidad pues no tiene referencia válida a la labor minera para obtener el límite
-        $I->see('Debes digitar la cantidad.', '.text-danger');
-        
-        
-        // ----------------------------
-        // ------ tercera prueba ------
-        // ----------------------------
-        
-        $I->wantTo('probar los mensajes de error en la cantidad de la labor minera reportada');
-        
-        // aquí los datos erroneos con lo que voy a enviar el formulrio
-        $report = [
-            'employee_id'           =>  1, // envío el formulario con la info de un empleado que no existe
-            'mining_activity_id'    =>  1, // esta actividad tampoco existe
-            'quantity'              =>  600, // la cantidad sobrepasa lo permitido por la actividad minera seleccionada
-            'comment'               =>  'Comentario de prueba' // los comentarios no deben tener puntos
-        ];
-
-        // envío el formulario
-        $I->submitForm('form', $report, 'Registrar');
-       
-        // veo que estoy en la misma url
-        $I->seeCurrentUrlEquals('/activityReport/create?employee_id='.$employee->id);
-       
-        // debo ver el título correspondiente
-        $I->see('Reportar Labor Minera', 'legend');
-       
-        // veo que el formulario tiene unos errores
-        //$I->seeFormHasErrors();
-       
-        // veo que cada error error es mostrado en una capa con el correspondiente
-        // estilo de error o alerta
-        $I->dontSee('Identificador de empleado inválido.', '.text-danger');
-        $I->dontSee('Identificador de labor minera inválido.', '.text-danger');
-        // no veo mensaje de error del comentario
-        $I->dontSee('El comentario sólo debe contener letras y/o espacios.', '.text-danger');
-        // ahora si veo error en la cantidad pues tiene referencia válida a la labor minera para obtener el límite
-        $I->see('El rango permitido es entre 0.1 y 100.', '.text-danger');
-    }
-    
-    /**
      * Pruebo que determinado usuario puede asignar costos y otro no dependiendo de
      * los permisos que tenga asignados...
      */
@@ -444,7 +436,7 @@ class ReportMiningActivityCest
         $I->click('Registrar Labor Minera', 'a');
         
         // selecciono un trabajador para ver los demás campos
-        $I->submitForm('form', ['employee_id' => $employee->id]);
+        $I->submitForm('form', ['employee_id' => 1]);
         
         // y veo que todos los campos están presentes, incluido el de asignar
         // costo a la actividad pues yo tengo asignado tal permiso
@@ -455,12 +447,14 @@ class ReportMiningActivityCest
         $I->seeElement('textarea', ['name'  =>  'comment']);
         
         // la info del reporte a enviar
+        $date = \Carbon\Carbon::now();
         $data = [
-            'employee_id'           =>      $employee->id,
+            'employee_id'           =>      1,
             'mining_activity_id'    =>      2,
-            'quantity'              =>      4,
             'price'                 =>      15000,
-            'reported_at'           =>      \Carbon\Carbon::now()->toDateString(),
+            'quantity'              =>      4,
+            'worked_hours'          =>      8,
+            'reported_at'           =>      $date->toDateString(),
             'comment'               =>      'test comment'
         ];
         
@@ -468,12 +462,13 @@ class ReportMiningActivityCest
         $I->submitForm('form', $data);
         
         // veo que estoy en la misma url
-        $I->seeCurrentUrlEquals('/activityReport/create?employee_id='.$employee->id);
+        $I->seeCurrentUrlEquals('/activityReport/create?employee_id=1');
 
         // veo un mensaje de exito en la operación
         $I->see('Actividad Registrada Correctamente.', '.alert-success');
         
         // veo que en la tabla de la vista previa está el registro que acabo de cargar
+        //dd(\sanoha\Models\ActivityReport::all()->toArray());
         $I->see('4', 'tbody tr td');
         $I->see('60.000', 'tbody tr td');
         
@@ -502,22 +497,20 @@ class ReportMiningActivityCest
         $I->click('Registrar Labor Minera', 'a');
         
         // selecciono un trabajador para ver los demás campos
-        $I->submitForm('form', ['employee_id' => $employee->id]);
+        $I->submitForm('form', ['employee_id' => 1]);
         
         // y veo que todos los campos están presentes, menos el de asignar
         // costo a la actividad pues yo no tengo asignado tal permiso
-        $I->seeElement('select', ['name'  =>  'employee_id']);
-        $I->seeElement('select', ['name'  =>  'mining_activity_id']);
-        $I->seeElement('input', ['name'  =>  'quantity']);
         $I->dontSeeElement('input', ['name'  =>  'price']);
-        $I->seeElement('textarea', ['name'  =>  'comment']);
+
         
         // la info del reporte a enviar
         $data = [
-            'employee_id'           =>      $employee->id,
+            'employee_id'           =>      2,
             'mining_activity_id'    =>      4,
-            'quantity'              =>      3,
-            'reported_at'           =>      \Carbon\Carbon::now()->toDateString(),
+            'quantity'              =>      1,
+            'worked_hours'          =>      5,
+            'reported_at'           =>      $date->toDateString(),
             //'price'               =>      15000, // no puedo asignar este campo
         ];
         
@@ -526,8 +519,10 @@ class ReportMiningActivityCest
         
         unset($data['reported_at']);
         
+        //dd(\sanoha\Models\ActivityReport::all()->toArray());
         // veo en la base de datos el nuevo registro
         $I->seeRecord('activity_reports', $data+['price' => 0]);
+        
         
         // como no se asignó precio por el usuario y porque no hay histórico, entonces
         // debo ver un mensage de alerta donde me informe que no se ha asignado el precio
@@ -535,13 +530,13 @@ class ReportMiningActivityCest
         $I->see('La actividad fue registrada, pero no se asignó el precio porque no hay históricos en que basar la selección.', '.alert-warning');
         
         // veo que estoy en la misma url
-        $I->seeCurrentUrlEquals('/activityReport/create?employee_id='.$employee->id);
+        $I->seeCurrentUrlEquals('/activityReport/create?employee_id=1');
         
         // veo un mensaje de exito en la operación
         $I->see('Actividad Registrada Correctamente.', '.alert-success');
         
         // veo que en la tabla de la vista previa está el registro que acabo de cargar
-        $I->see('3', 'tbody tr td');
+        $I->see('1', 'tbody tr td');
         $I->see('0', 'tbody tr td');
     }
 }

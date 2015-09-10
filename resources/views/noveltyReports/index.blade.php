@@ -10,8 +10,9 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h1>
-					Reportes de Novedad
-					
+				    <a href="{{ url(route('noveltyReport.index'))}}" class="link-black">
+					    Reportes de Novedad
+					</a>
 					@include ('noveltyReports.partials.action-buttons')
 					
 				</h1>

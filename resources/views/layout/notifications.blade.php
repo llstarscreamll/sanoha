@@ -1,3 +1,5 @@
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
 
 {{-- Form Error Messages --}}
 
@@ -87,3 +89,5 @@
     </div>
 @endif
 
+    </div>
+</div>

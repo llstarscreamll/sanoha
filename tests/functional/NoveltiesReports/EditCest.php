@@ -57,9 +57,6 @@ class EditCest
     // tests
     public function updateReportedNovelty(FunctionalTester $I)
     {
-        $I->am('un ingheniero del área tecnica');
-        $I->wantTo('actualizar una novedad reportada');
-        
         // datos de prueba
         $date = \Carbon\Carbon::now()->subDay();
         $data = [];
@@ -75,6 +72,9 @@ class EditCest
         ];
         
         \DB::table('novelty_reports')->insert($data);
+        
+        $I->am('un ingheniero del área tecnica');
+        $I->wantTo('actualizar una novedad reportada');
         
         // estoy en el home
         $I->amOnPage('/home');

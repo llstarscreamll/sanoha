@@ -7,10 +7,11 @@ use Illuminate\Http\Request;
 
 use \Carbon\Carbon;
 
-use \sanoha\Models\SubCostCenter;
 use \sanoha\Models\Novelty;
-use \sanoha\Models\NoveltyReport;
 use \sanoha\Models\Employee;
+use \sanoha\Models\NoveltyReport;
+use \sanoha\Models\SubCostCenter;
+use sanoha\Http\Requests\NovletyReportFormRequest;
 
 class NoveltyReportController extends Controller
 {
@@ -71,7 +72,7 @@ class NoveltyReportController extends Controller
 	 *
 	 * @return Response
 	 */
-	public function index(Request $request)
+	public function index(NovletyReportFormRequest $request)
 	{
 		$search_input = $request->all();
 		
@@ -107,7 +108,7 @@ class NoveltyReportController extends Controller
 	/**
 	 * La vista en calendario de las novedades reportadas
 	 */
-	public function calendar(Request $request)
+	public function calendar(NovletyReportFormRequest $request)
 	{
 		$search_input = $request->all();
 		
@@ -157,9 +158,9 @@ class NoveltyReportController extends Controller
 	 *
 	 * @return Response
 	 */
-	public function store()
+	public function store(NovletyReportFormRequest $request)
 	{
-		$request = \Request::all();
+		$request = $request->all();
 		$sub_cost_center_id = Employee::findOrFail($request['employee_id'])->sub_cost_center_id;
 		
 		$novelty = new NoveltyReport;
@@ -228,9 +229,9 @@ class NoveltyReportController extends Controller
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
+	public function update($id, NovletyReportFormRequest $request)
 	{
-		$request = \Request::all();
+		$request = $request->all();
 		
 		$sub_cost_center_id = Employee::findOrFail($request['employee_id'])->sub_cost_center_id;
 		
