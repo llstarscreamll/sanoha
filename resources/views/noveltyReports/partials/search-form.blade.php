@@ -1,6 +1,6 @@
 <div class="col-md-6">
 
-    {!! Form::model($search_input, ['route' => $search_target, 'method' => 'GET', 'class' => 'hidden-print' ,'name' => 'search']) !!}
+    {!! Form::model($search_input, ['route' => $search_target, 'method' => 'GET', 'class' => 'hidden-print' ,'name' => 'search', 'id' => 'search']) !!}
 
             <div class="input-group">
                 

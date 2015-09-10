@@ -44,11 +44,9 @@ class NovletyReportFormRequest extends Request {
 		}
 		
 		if($current_route == 'noveltyReport.index' || $current_route == 'noveltyReport.calendar'){
-			$date = $this->request->has('from') ? \Carbon\Carbon::createFromFormat('Y-m-d', $this->request->get('from'))->subDay() : \Carbon\Carbon::now();
-			//if($this->request->get('from') != '') dd($this->request->get('from'));
 			$rules = [
 				'from'		=>	'date',
-				'to'		=>	'date|after:'.$date->toDateString(),
+				'to'		=>	'date',
 				'find'		=>	'alpha_numeric_spaces'
 			];
 		}
@@ -85,7 +83,6 @@ class NovletyReportFormRequest extends Request {
 			'find.alpha_numeric_spaces'	=>		'Sólo puedes digitar letras, números y/o espacios.',
 			
 			'to.date'					=>		'La fecha de fin del filtro tiene un formato inválido.',
-			'to.after'					=>		'La fecha de fin debe ser mas reciente que la de inicio.'
 		];
 	}
 

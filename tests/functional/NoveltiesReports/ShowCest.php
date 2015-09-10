@@ -60,7 +60,7 @@ class ShowCest
     public function readOnlyNoveltyDetails(FunctionalTester $I)
     {
         $I->am('un supervisor de proyecto');
-        $I->wantTo('ver detalle de sólo lectura de una novedad reportada');
+        $I->wantTo('ver detalle de solo lectura de una novedad reportada');
         
         // datos de prueba
         $date = \Carbon\Carbon::now()->subDay();

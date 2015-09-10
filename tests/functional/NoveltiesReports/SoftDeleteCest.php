@@ -61,7 +61,7 @@ class SoftDeleteCest
     public function softDeleteNovelty(FunctionalTester $I)
     {
         $I->am('un supervisor de proyecto');
-        $I->wantTo('borrar una novedad reportada en la vista de sólo lectura');
+        $I->wantTo('borrar una novedad reportada en la vista de solo lectura');
         
         // datos de prueba
         $date = \Carbon\Carbon::now()->subDay();
@@ -127,7 +127,7 @@ class SoftDeleteCest
     public function softDeleteManyNovelties(FunctionalTester $I)
     {
         $I->am('un supervisor de proyecto');
-        $I->wantTo('borrar varias novedades reportadas a la vez desde el index del  módulo');
+        $I->wantTo('borrar varias novedades reportadas a la vez desde el index del  modulo');
         
         // datos de prueba
         $date = \Carbon\Carbon::now()->subDay();

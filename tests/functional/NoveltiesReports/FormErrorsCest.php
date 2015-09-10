@@ -70,7 +70,7 @@ class FormErrorsCest
         $I->seeCurrentUrlEquals('/noveltyReport');
         
         /* -- Campos vacíos, nada pasa, pueden estar vacíos --  */
-        $I->submitForm('form[name=search]', [
+        $I->submitForm('#search', [
             'from'  =>  '',
             'to'    =>  '',
             'find'  =>  ''
@@ -88,15 +88,6 @@ class FormErrorsCest
         $I->see('La fecha de inicio del filtro tiene un formato inválido.', '.text-danger');
         $I->see('La fecha de fin del filtro tiene un formato inválido.', '.text-danger');
         $I->see('Sólo puedes digitar letras, números y/o espacios.', '.text-danger');
-        
-        /* -- La fecha final es inferior a la inicial --  */
-        $I->submitForm('form[name=search]', [
-            'from'  =>  '2015-08-20',
-            'to'    =>  '2015-08-01',
-            'find'  =>  'alejandro'
-        ]);
-        
-        $I->see('La fecha de fin debe ser mas reciente que la de inicio.', '.text-danger');
     }
 
     /**
