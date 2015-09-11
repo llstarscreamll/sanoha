@@ -32,8 +32,8 @@ Route::group(['middleware' => 'auth'], function(){
     /**
      * Reporte de Novedades
      */
-     // para setear el costo de centro de trabajo
-     Route::get('noveltyReport/project/{short_name?}', [
+    // para setear el costo de centro de trabajo
+    Route::get('noveltyReport/project/{short_name?}', [
         'as'    =>  'noveltyReport.setCostCenter',
         'uses'  =>  'NoveltyReportController@setCostCenter'
     ]);

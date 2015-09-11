@@ -49,7 +49,7 @@ class Permissions
         'display_name'   => 'Actualizar Rol',
         'description'    => 'Actualiza la información de los roles del sistema',
         'created_at'    =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
-            'updated_at'    =>  $this->date->toDateTimeString()
+        'updated_at'    =>  $this->date->toDateTimeString()
         ];
         
         $this->data[] = [
@@ -116,9 +116,6 @@ class Permissions
      */
     public function createActivityReportsModulePermissions()
     {
-        // -----------------------------------------------------
-        // 
-        // -----------------------------------------------------
         $this->data[] = [
             'name'           => 'activityReport.index',
             'display_name'   => 'Ver Reportes de Actividades Reportadas',
@@ -175,9 +172,22 @@ class Permissions
             'updated_at'     =>  $this->date->toDateTimeString()
         ];
         
-        // -----------------------------------------------------
-        // Permisos para el módulo de reporte de Novedades
-        // -----------------------------------------------------
+        $this->data[] = [
+            'name'           => 'activityReport.calendar',
+            'display_name'   => 'Reporte en Calendario de Actividades Mineras Registradas',
+            'description'    => 'La vista calendario mucho mas detallada de las actividades mineras registradas en el sistema',
+            'created_at'    =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'    =>  $this->date->toDateTimeString()
+        ];
+
+        \DB::table('permissions')->insert($this->data);
+    }
+    
+    /**
+     * Permisos para el módulo de reporte de Novedades
+     */
+    public function createNoveltyReportModulePermissions()
+    {
         $this->data[] = [
             'name'           => 'noveltyReport.index',
             'display_name'   => 'Ver reporte en tabla de actividades mineras registradas',

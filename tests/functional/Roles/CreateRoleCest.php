@@ -1,33 +1,10 @@
 <?php namespace Roles;
 
 use \FunctionalTester;
-
-use \sanoha\Models\User         as UserModel;
-use \sanoha\Models\Role         as RoleModel;
-use \sanoha\Models\Permission   as PermissionModel;
-
-use \common\User                as UserCommons;
-use \common\Permissions         as PermissionsCommons;
-use \common\Roles               as RolesCommons;
-
-use \sanoha\Http\Requests\RoleFormRequest;
+use \common\BaseTest;
 
 class CreateRoleCest
 {
-    /**
-     * The user commons actions
-     *
-     * @var \_common\UserCommons
-     */
-    private $userCommons;
-    
-    /**
-     * The validation error messages
-     * 
-     * @var array
-     */
-    private $messages = [];
-
     /**
      * Instanciate the UserCommons to create user roles and then login with
      * the $userCommons->adminUser data.
@@ -39,22 +16,10 @@ class CreateRoleCest
      */
     public function _before(FunctionalTester $I)
     {
-        $RoleFormRequest = new RoleFormRequest;
-        $this->messages = $RoleFormRequest->messages();
-        
-        // creo los permisos para el módulo de roles
-        $this->permissionsCommons = new PermissionsCommons;
-        $this->permissionsCommons->createRolesModulePermissions();
-        
-        // creo los roles de usuario y añado todos los permisos al rol de administrador
-        $this->rolesCommons = new RolesCommons;
-        $this->rolesCommons->createBasicRoles();
-        
-        // creo el usuairo administrador
-        $this->userCommons = new UserCommons;
-        $this->userCommons->createAdminUser();
+        $this->base_test = new BaseTest;
+        $this->base_test->roles();
 
-        $I->amLoggedAs($this->userCommons->adminUser);
+        $I->amLoggedAs($this->base_test->admin_user);
     }
 
     public function _after(FunctionalTester $I)
@@ -79,15 +44,13 @@ class CreateRoleCest
         $I->seeCurrentUrlEquals('/roles/create');
         $I->see('Crear Rol', 'h1');
         
-        sleep(1); // delaying 1 second, for the updated_at creating the role
-        
         $role = [
             'name'          =>  'technical.assistant',
             'display_name'  =>  'Auxiliar Técnica',
             'description'   =>  'Auxiliar del área técnica',
             'permissions'   =>  [
                 true,
-                false, 
+                false,
                 true,
                 false,
                 true
@@ -143,15 +106,15 @@ class CreateRoleCest
         // check form validation errors
         $I->seeFormHasErrors();
         $I->seeFormErrorMessages([
-            'name'              =>  str_replace(':min', '3', $this->messages['name.min']),
-            'display_name'      =>  str_replace(':min', '3', $this->messages['display_name.min']),
-            'description'       =>  str_replace(':min', '5', $this->messages['description.min']),
+            'name'              =>  str_replace(':min', '3', $this->base_test->roleFormMessages['name.min']),
+            'display_name'      =>  str_replace(':min', '3', $this->base_test->roleFormMessages['display_name.min']),
+            'description'       =>  str_replace(':min', '5', $this->base_test->roleFormMessages['description.min']),
         ]);
         
         // check that messages are always displayed on red (text-danger) text
-        $I->see(str_replace(':min', '3', $this->messages['name.min']), '.text-danger');
-        $I->see(str_replace(':min', '3', $this->messages['display_name.min']), '.text-danger');
-        $I->see(str_replace(':min', '5', $this->messages['description.min']), '.text-danger');
+        $I->see(str_replace(':min', '3', $this->base_test->roleFormMessages['name.min']), '.text-danger');
+        $I->see(str_replace(':min', '3', $this->base_test->roleFormMessages['display_name.min']), '.text-danger');
+        $I->see(str_replace(':min', '5', $this->base_test->roleFormMessages['description.min']), '.text-danger');
         
         /***********************
          * submit again the form
@@ -179,15 +142,15 @@ class CreateRoleCest
         // check form validation errors
         $I->seeFormHasErrors();
         $I->seeFormErrorMessages([
-            'name'              =>  str_replace(':max', '50', $this->messages['name.max']),
-            'display_name'      =>  str_replace(':max', '50', $this->messages['display_name.max']),
-            'description'       =>  str_replace(':max', '150', $this->messages['description.max']),
+            'name'              =>  str_replace(':max', '50', $this->base_test->roleFormMessages['name.max']),
+            'display_name'      =>  str_replace(':max', '50', $this->base_test->roleFormMessages['display_name.max']),
+            'description'       =>  str_replace(':max', '150', $this->base_test->roleFormMessages['description.max']),
         ]);
         
         // check that messages are always displayed on red (text-danger) text
-        $I->see(str_replace(':max', '50', $this->messages['name.max']), '.text-danger');
-        $I->see(str_replace(':max', '50', $this->messages['display_name.max']), '.text-danger');
-        $I->see(str_replace(':max', '150', $this->messages['description.max']), '.text-danger');
+        $I->see(str_replace(':max', '50', $this->base_test->roleFormMessages['name.max']), '.text-danger');
+        $I->see(str_replace(':max', '50', $this->base_test->roleFormMessages['display_name.max']), '.text-danger');
+        $I->see(str_replace(':max', '150', $this->base_test->roleFormMessages['description.max']), '.text-danger');
         
         /***********************
          * submit again the form
@@ -215,15 +178,15 @@ class CreateRoleCest
         // check form validation errors
         $I->seeFormHasErrors();
         $I->seeFormErrorMessages([
-            'name'              =>  $this->messages['name.alpha_dots'],
-            'display_name'      =>  $this->messages['display_name.alpha_spaces'],
-            'description'       =>  $this->messages['description.alpha_spaces'],
+            'name'              =>  $this->base_test->roleFormMessages['name.alpha_dots'],
+            'display_name'      =>  $this->base_test->roleFormMessages['display_name.alpha_spaces'],
+            'description'       =>  $this->base_test->roleFormMessages['description.alpha_spaces'],
         ]);
         
         // check that messages are always displayed on red (text-danger) text
-        $I->see($this->messages['name.alpha_dots'], '.text-danger');
-        $I->see($this->messages['display_name.alpha_spaces'], '.text-danger');
-        $I->see($this->messages['description.alpha_spaces'], '.text-danger');
+        $I->see($this->base_test->roleFormMessages['name.alpha_dots'], '.text-danger');
+        $I->see($this->base_test->roleFormMessages['display_name.alpha_spaces'], '.text-danger');
+        $I->see($this->base_test->roleFormMessages['description.alpha_spaces'], '.text-danger');
         
     }
 }

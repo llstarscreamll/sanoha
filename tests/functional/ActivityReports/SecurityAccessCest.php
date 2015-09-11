@@ -1,60 +1,16 @@
 <?php namespace ActivityReports;
 
 use \FunctionalTester;
-use \Carbon\Carbon;
+use \common\BaseTest;
 
-use \sanoha\Models\User         as UserModel;
-
-use \common\ActivityReports     as ActivityReportsCommons;
-use \common\SubCostCenters      as SubCostCentersCommons;
-use \common\CostCenters         as CostCentersCommons;
-use \common\Employees           as EmployeesCommons;
-use \common\MiningActivities    as MiningActivitiesCommons;
-use \common\User                as UserCommons;
-use \common\Permissions         as PermissionsCommons;
-use \common\Roles               as RolesCommons;
-
-class SecurityAccessActivityReportCest
+class SecurityAccessCest
 {
     public function _before(FunctionalTester $I)
     {
-        //creo centros de costo
-        $this->costCentersCommons = new CostCentersCommons;
-        $this->costCentersCommons->createCostCenters();
-        
-        // creo subcentros de costo
-        $this->subCostCentersCommons = new SubCostCentersCommons;
-        $this->subCostCentersCommons->createSubCostCenters();
-        
-        // creo los empleados
-        $this->employeeCommons = new EmployeesCommons;
-        $this->employeeCommons->createMiningEmployees();
-        
-        // creo actividades mineras
-        $this->miningActivities = new MiningActivitiesCommons;
-        $this->miningActivities->createMiningActivities();
+        $base_test = new BaseTest;
+        $base_test->activityReports();
 
-        // creo los permisos para el módulo de reporte de actividades mineras
-        $this->permissionsCommons = new PermissionsCommons;
-        $this->permissionsCommons->createActivityReportsModulePermissions();
-        
-        // creo los roles de usuario y añado todos los permisos al rol de administrador
-        $this->rolesCommons = new RolesCommons;
-        $this->rolesCommons->createBasicRoles();
-        
-        // creo el usuairo administrador
-        $this->userCommons = new UserCommons;
-        $this->user = $this->userCommons->createAdminUser();
-        $this->userCommons->createUsers();
-        
-        // creo algunos reportes de actividades mineras
-        //$this->activityReportsCommons = new ActivityReportsCommons;
-        //$this->activityReportsCommons->createActivityReports(2);
-        
-        // le asigno los centros de costo al usuario administrador
-        $this->user->subCostCenters()->sync([1,2,3,4]); // estos son los id's de los subcentros de los proyectos o centros de costo
-
-        $I->amLoggedAs($this->userCommons->adminUser);
+        $I->amLoggedAs($base_test->admin_user);
     }
 
     public function _after(FunctionalTester $I)
@@ -68,7 +24,7 @@ class SecurityAccessActivityReportCest
     public function costCentersActivityReports(FunctionalTester $I)
     {
         $I->am('supervisor minero');
-        $I->wantTo('revisar si tengo links de acceso al módulo de reporte de actividades de los Proyectos Beteitiva y Sanoha');
+        $I->wantTo('probar el acceso a los reportes mineros de mis centros de costo');
         
         // estoy en el home donde debo ver los links de acceso
         $I->amOnPage('/home');
@@ -89,20 +45,20 @@ class SecurityAccessActivityReportCest
     public function acceesToBeteitivaActivityReports(FunctionalTester $I)
     {
         $I->am('supervisor minero');
-        $I->wantTo('quiero ver si tengo acceso a los reportes de actividades mineras de algún proyecto');
+        $I->wantTo('probar mi acceso al modulo en Beteitiva');
         
         // asigno un centro de costos al usuario
-        UserModel::find($this->user->id)->subCostCenters()->sync([1]);
+        \sanoha\Models\User::find(1)->subCostCenters()->sync([1]);
         
         // veo que el cambio está hecho en la base de datos
         $I->seeRecord('sub_cost_center_owner', [
-            'user_id'               =>  $this->user->id,
+            'user_id'               =>  1,
             'sub_cost_center_id'    =>  1
             ]);
         
         // no veo algún otro centro de costo o proyecto asociado
         $I->dontSeeRecord('sub_cost_center_owner', [
-            'user_id'           =>  $this->user->id,
+            'user_id'           =>  1,
             'sub_cost_center_id'    =>  2
             ]);
         
@@ -123,20 +79,20 @@ class SecurityAccessActivityReportCest
     public function noAccessToCostCentersActivityReports(FunctionalTester $I)
     {
         $I->am('supervisor minero');
-        $I->wantTo('revisar que no tengo acceso a los reportes de actividad minera de los proyectos');
+        $I->wantTo('comprobar que no tengo proyectos asignados');
         
         // borro cualquier proyecto que tenga asociado el usuario
-        UserModel::find($this->user->id)->subCostCenters()->sync([]);
+        \sanoha\Models\User::find(1)->subCostCenters()->sync([]);
         
         // compruebo en la base de datos Beteitiva
         $I->dontSeeRecord('sub_cost_center_owner', [
-            'user_id'           =>  $this->user->id,
+            'user_id'           =>  1,
             'cost_center_id'    =>  1
             ]);
         
         // compruebo en la base de datos Sanoha
         $I->dontSeeRecord('sub_cost_center_owner', [
-            'user_id'           =>  $this->user->id,
+            'user_id'           =>  1,
             'cost_center_id'    =>  2
             ]);
         
@@ -157,14 +113,14 @@ class SecurityAccessActivityReportCest
     public function forceAccessToCostCenter(FunctionalTester $I)
     {
         $I->am('supervisor minero');
-        $I->wantTo('probar si puedo tener acceso a algún proyecto manipulando las variables de la url');
+        $I->wantTo('probar si puedo tener acceso a algun proyecto manipulando la url');
         
          // borro cualquier proyecto que tenga asociado el usuario
-        UserModel::find($this->user->id)->subCostCenters()->sync([]);
+        \sanoha\Models\User::find(1)->subCostCenters()->sync([]);
         
         // compruebo en la base de datos Beteitiva
         $I->dontSeeRecord('sub_cost_center_owner', [
-            'user_id'           =>  $this->user->id,
+            'user_id'           =>  1,
             'cost_center_id'    =>  1
             ]);
         

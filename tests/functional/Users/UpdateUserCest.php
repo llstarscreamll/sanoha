@@ -1,14 +1,7 @@
 <?php namespace Users;
 
 use \FunctionalTester;
-
-use \sanoha\Models\User     as UserModel;
-
-use \common\Permissions     as PermissionsCommons;
-use \common\Roles           as RolesCommons;
-use \common\SubCostCenters  as SubCostCentersCommons;
-use \common\CostCenters     as CostCentersCommons;
-use \common\User            as UserCommons;
+use \common\BaseTest;
 
 class UpdateUserCest
 {
@@ -30,27 +23,10 @@ class UpdateUserCest
      */
     public function _before(FunctionalTester $I)
     {
-        // creo sub centros de costo
-        $this->costCentersCommons = new CostCentersCommons;
-        $this->costCentersCommons->createCostCenters();
-        
-        // creo centros de costo
-        $this->subCostCentersCommons = new SubCostCentersCommons;
-        $this->subCostCentersCommons->createSubCostCenters();
-        
-        // creo los permisos para el módulo de usuarios
-        $this->permissionsCommons = new PermissionsCommons;
-        $this->permissionsCommons->createUsersModulePermissions();
-        
-        // creo los roles de usuario y añado todos los permisos al rol de administrador
-        $this->rolesCommons = new RolesCommons;
-        $this->rolesCommons->createBasicRoles();
-        
-        // creo el usuairo administrador
-        $this->userCommons = new UserCommons;
-        $this->userCommons->createAdminUser();
+        $this->base_test = new BaseTest;
+        $this->base_test->users();
 
-        $I->amLoggedAs($this->userCommons->adminUser);
+        $I->amLoggedAs($this->base_test->admin_user);
     }
 
     public function _after(FunctionalTester $I)
@@ -70,16 +46,16 @@ class UpdateUserCest
 
         $I->seeAuthentication();
 
-        $user = UserModel::create($this->userCommons->testUser);
-        $user->subCostCenters()->sync($this->userCommons->testUser['subCostCenter_id']);
+        $user = \sanoha\Models\User::create($this->base_test->userCommons->testUser);
+        $user->subCostCenters()->sync($this->base_test->userCommons->testUser['subCostCenter_id']);
 
-        $I->amOnPage($this->userCommons->usersIndexUrl);
+        $I->amOnPage($this->base_test->userCommons->usersIndexUrl);
         $I->see('Usuarios', 'h1');
 
-        $I->see($this->userCommons->testUser['name'], 'tr:first-child td:nth-child(2)');
-        $I->see($this->userCommons->testUser['email'], 'tr:first-child td:nth-child(4)');
+        $I->see($this->base_test->userCommons->testUser['name'], 'tr:first-child td:nth-child(2)');
+        $I->see($this->base_test->userCommons->testUser['email'], 'tr:first-child td:nth-child(4)');
         $I->see($user->getActivatedState(), 'tr:first-child td:nth-child(5)');
-        $I->click($this->userCommons->testUser['name'], 'td a');
+        $I->click($this->base_test->userCommons->testUser['name'], 'td a');
         
         $I->seeCurrentUrlEquals('/users/'. $user->id);
         $I->see('Detalles de Usuario', 'h1');
@@ -88,9 +64,9 @@ class UpdateUserCest
         $I->seeCurrentUrlEquals('/users/'. $user->id .'/edit');
         $I->see('Actualizar Usuario', 'h1');
         
-        $this->userCommons->testUser = ['password' => ''];
+        $this->base_test->userCommons->testUser = ['password' => ''];
 
-        $I->seeInFormFields('form', $this->userCommons->testUser);
+        $I->seeInFormFields('form', $this->base_test->userCommons->testUser);
         
         // nuevo requerimineto, debo ver la lista de centros de costo con los subcentros
         // anidados en el select
@@ -101,7 +77,7 @@ class UpdateUserCest
         $I->dontSeeCheckboxIsChecked('activated');
 
         // new user data
-        $this->userCommons->testUser = [
+        $this->base_test->userCommons->testUser = [
             'role_id'       =>    [1,2],
             'subCostCenter_id' =>    [1,2],
             'name'          =>    'Andrew Lorens',
@@ -112,7 +88,7 @@ class UpdateUserCest
             'password_confirmation'      =>    '654321'
         ];
 
-        $I->submitForm('form', $this->userCommons->testUser, 'Actualizar');
+        $I->submitForm('form', $this->base_test->userCommons->testUser, 'Actualizar');
         
         $I->seeRecord('sub_cost_center_owner', [
             'user_id'           =>  $user->id,
@@ -124,7 +100,7 @@ class UpdateUserCest
             'sub_cost_center_id'    =>  2
             ]);
 
-        $I->seeCurrentUrlEquals($this->userCommons->usersIndexUrl);
+        $I->seeCurrentUrlEquals($this->base_test->userCommons->usersIndexUrl);
         $I->see('Usuarios', 'h1');
         $I->see('Usuario actualizado correctamente.', '.alert-success');
         $I->see('Se ha actualizado el rol del usuario correctamente.', '.alert-success');
@@ -133,7 +109,7 @@ class UpdateUserCest
         /**
          * update user again after asign cost center
          */
-         $I->click($this->userCommons->testUser['name'], 'td a');
+         $I->click($this->base_test->userCommons->testUser['name'], 'td a');
         
         $I->seeCurrentUrlEquals('/users/'. $user->id);
         $I->see('Detalles de Usuario', 'h1');
@@ -142,7 +118,7 @@ class UpdateUserCest
         $I->seeCurrentUrlEquals('/users/'. $user->id .'/edit');
         $I->see('Actualizar Usuario', 'h1');
         
-        $this->userCommons->testUser = [
+        $this->base_test->userCommons->testUser = [
             'role_id[]'         =>    [1,2],
             'subCostCenter_id[]'   =>    [],
             'name'              =>    'Andrew Lorens',
@@ -153,13 +129,13 @@ class UpdateUserCest
             'password_confirmation'=>    ''
         ];
         
-        $I->seeInFormFields('form', $this->userCommons->testUser);
+        $I->seeInFormFields('form', $this->base_test->userCommons->testUser);
         
         $I->see('', 'input[type=checkbox][name=activated]');
         $I->seeCheckboxIsChecked('form input[type=checkbox]');
 
         // new user data
-        $this->userCommons->testUser = [
+        $this->base_test->userCommons->testUser = [
             'role_id'       =>    [1,2],
             'subCostCenter_id' =>    [],
             'name'          =>    'Andrew Lorens',
@@ -170,7 +146,7 @@ class UpdateUserCest
             'password_confirmation'      =>    '654321'
         ];
         
-        $I->submitForm('form', $this->userCommons->testUser, 'Actualizar');
+        $I->submitForm('form', $this->base_test->userCommons->testUser, 'Actualizar');
         
         $I->dontSeeCheckboxIsChecked('#activated');
         
@@ -189,7 +165,7 @@ class UpdateUserCest
             'sub_cost_center_id'    =>  2
             ]);
 
-        $I->seeCurrentUrlEquals($this->userCommons->usersIndexUrl);
+        $I->seeCurrentUrlEquals($this->base_test->userCommons->usersIndexUrl);
         $I->see('Usuarios', 'h1');
         $I->see('Usuario actualizado correctamente.', '.alert-success');
         $I->see('Se ha actualizado el rol del usuario correctamente.', '.alert-success');
@@ -198,9 +174,9 @@ class UpdateUserCest
         /**
          * Final check
          */ 
-        $I->see($this->userCommons->testUser['name'], 'tbody tr:first-child td:nth-child(2)');
+        $I->see($this->base_test->userCommons->testUser['name'], 'tbody tr:first-child td:nth-child(2)');
         $I->see('Usuario Administrador', 'tbody tr:first-child td:nth-child(3)');
-        $I->see($this->userCommons->testUser['email'], 'tbody tr:first-child td:nth-child(4)');
+        $I->see($this->base_test->userCommons->testUser['email'], 'tbody tr:first-child td:nth-child(4)');
         $I->see('Desactivado', 'tbody tr:first-child td:nth-child(5)');
 
     }
@@ -219,14 +195,14 @@ class UpdateUserCest
 
         $I->seeAuthentication();
 
-        $user = UserModel::create($this->userCommons->testUser);
+        $user = \sanoha\Models\User::create($this->base_test->userCommons->testUser);
 
-        $I->amOnPage($this->userCommons->usersIndexUrl);
+        $I->amOnPage($this->base_test->userCommons->usersIndexUrl);
         $I->see('Usuarios', 'h1');
 
-        $I->see($this->userCommons->testUser['name'], 'tr:first-child td:nth-child(2)');
-        $I->see($this->userCommons->testUser['email'], 'tr:first-child td:nth-child(4)');
-        $I->click($this->userCommons->testUser['name'], 'td a');
+        $I->see($this->base_test->userCommons->testUser['name'], 'tr:first-child td:nth-child(2)');
+        $I->see($this->base_test->userCommons->testUser['email'], 'tr:first-child td:nth-child(4)');
+        $I->click($this->base_test->userCommons->testUser['name'], 'td a');
 
         $I->seeCurrentUrlEquals('/users/'. $user->id);
         $I->see('Detalles de Usuario', 'h1');
@@ -235,15 +211,15 @@ class UpdateUserCest
         $I->seeCurrentUrlEquals('/users/'. $user->id .'/edit');
         $I->see('Actualizar Usuario', 'h1');
 
-        $this->userCommons->testUser = [
+        $this->base_test->userCommons->testUser = [
             'password'  =>  '',
             'password_confirmation'  =>  ''
         ];
 
-        $I->seeInFormFields('form', $this->userCommons->testUser);
+        $I->seeInFormFields('form', $this->base_test->userCommons->testUser);
 
         // new user data
-        $this->userCommons->testUser = [
+        $this->base_test->userCommons->testUser = [
             'role_id'       =>    999,
             'name'          =>    'Andrew"#"',
             'lastname'      =>    '#$gasP',
@@ -252,7 +228,7 @@ class UpdateUserCest
             'password_confirmation'      =>    '654'
         ];
 
-        $I->submitForm('form', $this->userCommons->testUser, 'Actualizar');
+        $I->submitForm('form', $this->base_test->userCommons->testUser, 'Actualizar');
 
         $I->seeCurrentUrlEquals('/users/'. $user->id .'/edit');
 

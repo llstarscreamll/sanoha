@@ -1,53 +1,16 @@
 <?php   namespace NoveltiesReports;
 
 use \FunctionalTester;
-
-use \common\ActivityReports     as ActivityReportsCommons;
-use \common\SubCostCenters      as SubCostCentersCommons;
-use \common\CostCenters         as CostCentersCommons;
-use \common\Employees           as EmployeesCommons;
-use \common\User                as UserCommons;
-use \common\Permissions         as PermissionsCommons;
-use \common\Roles               as RolesCommons;
-use \common\Novelties           as NoveltiesCommons;
+use \common\BaseTest;
 
 class ShowCest
 {
     public function _before(FunctionalTester $I)
     {
-        //creo centros de costo
-        $this->costCentersCommons = new CostCentersCommons;
-        $this->costCentersCommons->createCostCenters();
-        
-        // creo subcentros de costo
-        $this->subCostCentersCommons = new SubCostCentersCommons;
-        $this->subCostCentersCommons->createSubCostCenters();
-        
-        // creo los empleados
-        $this->employeeCommons = new EmployeesCommons;
-        $this->employeeCommons->createMiningEmployees();
-        
-        // creo los permisos para el módulo de reporte de actividades mineras
-        $this->permissionsCommons = new PermissionsCommons;
-        $this->permissionsCommons->createActivityReportsModulePermissions();
-        
-        // creo los roles de usuario y añado todos los permisos al rol de administrador
-        $this->rolesCommons = new RolesCommons;
-        $this->rolesCommons->createBasicRoles();
-        
-        // creo el usuairo administrador
-        $this->userCommons = new UserCommons;
-        $this->user = $this->userCommons->createAdminUser();
-        $this->userCommons->createUsers();
-        
-        // creo el usuairo administrador
-        $this->noveltiesCommons = new NoveltiesCommons;
-        $this->noveltiesCommons->createNoveltiesKinds();
-        
-        // le asigno los centros de costo al usuario administrador
-        $this->user->subCostCenters()->sync([1,2,3,4]); // estos son los id's de los subcentros de los primeros dos proyectos o centros de costo
-        
-        $I->amLoggedAs($this->userCommons->adminUser);
+        $base_test = new BaseTest;
+        $base_test->noveltyReports();
+
+        $I->amLoggedAs($base_test->admin_user);
     }
 
     public function _after(FunctionalTester $I)
@@ -59,9 +22,6 @@ class ShowCest
      */ 
     public function readOnlyNoveltyDetails(FunctionalTester $I)
     {
-        $I->am('un supervisor de proyecto');
-        $I->wantTo('ver detalle de solo lectura de una novedad reportada');
-        
         // datos de prueba
         $date = \Carbon\Carbon::now()->subDay();
         $data = [];
@@ -77,6 +37,9 @@ class ShowCest
         ];
         
         \DB::table('novelty_reports')->insert($data);
+        
+        $I->am('un supervisor de proyecto');
+        $I->wantTo('ver detalle de solo lectura de una novedad reportada');
         
         // estoy en el home
         $I->amOnPage('/home');

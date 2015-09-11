@@ -11,3 +11,4 @@ require_once '_common/Roles.php';
 require_once '_common/SubCostCenters.php';
 require_once '_common/User.php';
 require_once '_common/Novelties.php';
+require_once '_common/BaseTest.php';

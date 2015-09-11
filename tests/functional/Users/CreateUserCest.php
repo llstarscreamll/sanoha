@@ -1,12 +1,7 @@
 <?php namespace Users;
 
 use \FunctionalTester;
-
-use \sanoha\Models\User     as UserModel;
-
-use \common\User            as UserCommons;
-use \common\Permissions     as PermissionsCommons;
-use \common\Roles           as RolesCommons;
+use \common\BaseTest;
 
 class CreateUserCest
 {
@@ -17,23 +12,12 @@ class CreateUserCest
      */ 
     private $create_url = '/users/create';
     
-    private $rolesCommons;
-
     public function _before(FunctionalTester $I)
     {
-        // creo los permisos para el módulo de usuarios
-        $this->permissionsCommons = new PermissionsCommons;
-        $this->permissionsCommons->createUsersModulePermissions();
-        
-        // creo los roles de usuario y añado todos los permisos al rol de administrador
-        $this->rolesCommons = new RolesCommons;
-        $this->rolesCommons->createBasicRoles();
-        
-        // creo el usuairo administrador
-        $this->userCommons = new UserCommons;
-        $this->userCommons->createAdminUser();
+        $this->base_test = new BaseTest;
+        $this->base_test->users();
 
-        $I->amLoggedAs($this->userCommons->adminUser);
+        $I->amLoggedAs($this->base_test->admin_user);
     }
 
     public function _after(FunctionalTester $I)
@@ -166,7 +150,7 @@ class CreateUserCest
             'activated'         => $newUser['activated']
         ]);
         
-        $userRecord = UserModel::where('email', '=', $newUser['email'])->get()->first();
+        $userRecord = \sanoha\Models\User::where('email', '=', $newUser['email'])->get()->first();
         
         //dd($userRecord->id);
         

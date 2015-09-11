@@ -1,26 +1,10 @@
 <?php namespace Roles;
 
 use \FunctionalTester;
-
-use \sanoha\Models\User         as UserModel;
-use \sanoha\Models\Role         as RoleModel;
-use \sanoha\Models\Permission   as PermissionModel;
-
-use \common\User                as UserCommons;
-use \common\Permissions         as PermissionsCommons;
-use \common\Roles               as RolesCommons;
-
-use \sanoha\Http\Requests\RoleFormRequest;
+use \common\BaseTest;
 
 class ShowRoleCest
 {
-    /**
-     * The user commons actions
-     *
-     * @var \Users\_common\UserCommons
-     */
-    private $userCommons;
-
     /**
      * Role to test
      * 
@@ -41,19 +25,10 @@ class ShowRoleCest
      */
     public function _before(FunctionalTester $I)
     {
-        // creo los permisos para el módulo de roles
-        $this->permissionsCommons = new PermissionsCommons;
-        $this->permissionsCommons->createRolesModulePermissions();
-        
-        // creo los roles de usuario y añado todos los permisos al rol de administrador
-        $this->rolesCommons = new RolesCommons;
-        $this->rolesCommons->createBasicRoles();
-        
-        // creo el usuairo administrador
-        $this->userCommons = new UserCommons;
-        $this->userCommons->createAdminUser();
+        $this->base_test = new BaseTest;
+        $this->base_test->roles();
 
-        $I->amLoggedAs($this->userCommons->adminUser);
+        $I->amLoggedAs($this->base_test->admin_user);
     }
 
     public function _after(FunctionalTester $I)
@@ -71,13 +46,13 @@ class ShowRoleCest
         $I->seeAuthentication();
         
         // create the test role
-        $role = RoleModel::create($this->role);
+        $role = \sanoha\Models\Role::create($this->role);
         // attach some permissions to role
         $role->perms()->sync([1,2,3]); // have 6 permissions, only attach 3
         // get all permissions
-        $permissions = PermissionModel::select('name')->get();
+        $permissions = \sanoha\Models\Permission::select('name')->get();
         // get the role permissions
-        $rolePermissions = RoleModel::find($role->id)->perms()->orderBy('name', 'asc')->get();
+        $rolePermissions = \sanoha\Models\Role::find($role->id)->perms()->orderBy('name', 'asc')->get();
 
         $I->amOnPage('/roles');
         $I->click($role->display_name, 'a');

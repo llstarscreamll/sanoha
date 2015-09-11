@@ -69,6 +69,9 @@ class User
 
         $user->attachRole(2); // 2 es el id del rol admin
         
+        // le asigno los centros de costo al usuario administrador
+        $user->subCostCenters()->sync([1,2,3,4]); // estos son los id's de los subcentros de los primeros dos proyectos o centros de costo, sanoha y beteitiva
+        
         return $user;
     }
 
