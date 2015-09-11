@@ -3,7 +3,7 @@
 		<thead>
 			<tr>
 				<th class="vertical-align-middle" colspan=8>
-					<h3 class="vertical-align-middle">{{ $parameters['costCenter_name'] }}</h3>
+					<h3 class="vertical-align-middle">{{ $parameters['cost_center_name'] }}</h3>
 				</th>
 				
 				<th class="vertical-align-middle" colspan=6>

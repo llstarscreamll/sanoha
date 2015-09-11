@@ -39,7 +39,7 @@
     				
     				<div class="row">
         				<div class="col-xs-12">
-                		    <h3 style="display:inline;">{{$parameters['costCenter_name']}}</h3>
+                		    <h3 style="display:inline;">{{$parameters['cost_center_name']}}</h3>
   
                 			<div class="btn-group pull-right">
                 				<button class="btn btn-warning" data-calendar-view="year">Año</button>

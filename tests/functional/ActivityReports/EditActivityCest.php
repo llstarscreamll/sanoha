@@ -62,6 +62,13 @@ class EditActivityCest
         $I->seeElement('input', ['value' => '2015-08-07']);
         $I->see('test', 'textarea');
         
+        // la tabla donde se muestra lo que ha reportado en el día
+        $I->seeElement('table');
+        $I->dontSee('No hay actividades registradas... ', '.alert');
+        
+        $I->see('2', 'tbody tr td');
+        $I->see('10.000', 'tbody tr td');
+        
         $I->submitForm('form', [
             'employee_id'           =>  2,
             'mining_activity_id'    =>  2,
@@ -86,5 +93,11 @@ class EditActivityCest
         $I->seeElement('input', ['value' => '10000']);
         $I->seeElement('input', ['value' => $date->toDateString()]);
         $I->see('test', 'textarea');
+        
+        // la tabla donde se muestra lo que ha reportado en el día
+        $I->seeElement('table');
+        $I->dontSee('No hay actividades registradas... ', '.alert');
+        $I->see('4', 'tbody tr td');
+        $I->see('40.000', 'tbody tr td');
     }
 }

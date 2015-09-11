@@ -10,7 +10,7 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h1>
-					<a class="link-black" href="{{route('activityReport.individual')}}">Reporte de Labores Mineras</a> <small>{{$parameters['costCenter_name']}}</small>
+					<a class="link-black" href="{{route('activityReport.individual')}}">Reporte de Labores Mineras</a> <small>{{$parameters['cost_center_name']}}</small>
 				</h1>
 				
 			</div>

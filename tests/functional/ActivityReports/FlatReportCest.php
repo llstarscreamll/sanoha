@@ -74,12 +74,13 @@ class FlatReportCest
         $I->seeElement('a', ['class' => 'btn btn-default', 'title' => 'Reporte de Registros Individuales']);
         $I->click('Reporte de Registros Individuales', 'a');
         
-        // no veo el mensaje "No se encontraron registros..."
         $I->see('Reporte de Labores Mineras', 'h1');
-        $I->dontSee('No se encontraron registros...', '.alert-danger');
         
         // veo la tabla donde se muestran los datos
         $I->seeElement('table');
+        
+        // no veo el mensaje "No se encontraron registros..."
+        $I->dontSee('No se encontraron registros...', '.alert-danger');
         
         // veo que tipo de reporte y de que proyecto es el reporte
         $I->see('Proyecto Beteitiva', 'th');
@@ -108,6 +109,7 @@ class FlatReportCest
      */
     public function searchOnFlatReport(FunctionalTester $I)
     {
+        $date = \Carbon\Carbon::now();
         $data[] = [
             'sub_cost_center_id'    =>  1,
             'employee_id'           =>  1,
@@ -116,9 +118,9 @@ class FlatReportCest
             'price'                 =>  '5000',
             'comment'               =>  'test',
             'reported_by'           =>  1,
-            'reported_at'           =>  '2015-08-07 08:00:00',
-            'created_at'            =>  '2015-08-07 08:00:00',
-            'updated_at'            =>  '2015-08-07 08:00:00',
+            'reported_at'           =>  $date->copy()->subDay()->toDateTimeString(),
+            'created_at'            =>  $date->copy()->subDay()->toDateTimeString(),
+            'updated_at'            =>  $date->copy()->subDay()->toDateTimeString(),
             'deleted_at'            =>  null
         ];
         
@@ -130,9 +132,9 @@ class FlatReportCest
             'price'                 =>  '7000',
             'comment'               =>  '',
             'reported_by'           =>  1,
-            'reported_at'           =>  '2015-08-05 08:00:00',
-            'created_at'            =>  '2015-08-05 08:00:00',
-            'updated_at'            =>  '2015-08-05 08:00:00',
+            'reported_at'           =>  $date->copy()->subMonths(2)->toDateTimeString(),
+            'created_at'            =>  $date->copy()->subMonths(2)->toDateTimeString(),
+            'updated_at'            =>  $date->copy()->subMonths(2)->toDateTimeString(),
             'deleted_at'            =>  null
         ];
         
@@ -144,9 +146,9 @@ class FlatReportCest
             'price'                 =>  '1000',
             'comment'               =>  '',
             'reported_by'           =>  1,
-            'reported_at'           =>  '2015-08-06 08:00:00',
-            'created_at'            =>  '2015-08-06 08:00:00',
-            'updated_at'            =>  '2015-08-06 08:00:00',
+            'reported_at'           =>  $date->copy()->subMonths(2)->subDay()->toDateTimeString(),
+            'created_at'            =>  $date->copy()->subMonths(2)->subDay()->toDateTimeString(),
+            'updated_at'            =>  $date->copy()->subMonths(2)->subDay()->toDateTimeString(),
             'deleted_at'            =>  null
         ];
         
@@ -175,10 +177,24 @@ class FlatReportCest
         
         // veo le formulario de búsqueda
         $I->seeElement('form', ['name' => 'search']);
+        
+        // busco por fechas y nombre
         $I->submitForm('form[name=search]', [
             'find'  =>  'Trabajador 1',
-            'from'  =>  '2015-08-06',
-            'to'    =>  '2015-08-09'
+            'from'  =>  $date->startOfMonth()->toDateString(),
+            'to'    =>  $date->endOfMonth()->toDateString()
+        ], 'Buscar');
+        
+        // el resultado de la búsqueda me debe mostrar sólo lo de "Trabajador 1"
+        $I->see('Trabajador 1', 'tbody tr td');
+        $I->dontSee('Trabajador 2', 'tbody tr td');
+        $I->dontSee('Trabajador 3', 'tbody tr td');
+        
+        // busco sólo por fechas
+        $I->submitForm('form[name=search]', [
+            'find'  =>  '',
+            'from'  =>  $date->startOfMonth()->toDateString(),
+            'to'    =>  $date->endOfMonth()->toDateString()
         ], 'Buscar');
         
         // el resultado de la búsqueda me debe mostrar sólo lo de "Trabajador 1"

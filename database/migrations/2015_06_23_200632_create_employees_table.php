@@ -19,7 +19,7 @@ class CreateEmployeesTable extends Migration {
 			$table->integer('sub_cost_center_id')->unsigned(); // foreign key
 			$table->string('name');
 			$table->string('lastname');
-			$table->string('identification_number')->nullable();
+			$table->string('identification_number')->unique();
 			$table->timestamps();
 			$table->softDeletes();
 			

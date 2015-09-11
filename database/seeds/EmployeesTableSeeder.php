@@ -127,7 +127,7 @@ class EmployeesTableSeeder extends Seeder
             'sub_cost_center_id'    =>      2,
             'name'                  =>      'JOSE ANTONIO',
             'lastname'              =>      'AGUILAR',
-            'identification_number' =>      '4168332',
+            'identification_number' =>      '41683323',
             'created_at'            =>      $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
             'updated_at'            =>      $date->toDateTimeString(),
             'deleted_at'            =>      null

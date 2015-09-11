@@ -46,4 +46,26 @@ class SubCostCenter extends Model {
     {
         return $this->hasMany('sanoha\Models\Employee');
     }
+    
+    /**
+     * Obtiene los empleados relacionados al subcentro de costo
+     */
+    public static function getRelatedEmployees($cost_center_id)
+    {
+        $subCostCenterEmployees = \sanoha\Models\SubCostCenter::where('cost_center_id', $cost_center_id)->with('employees')->get();
+		
+		$employees = [];
+		
+		foreach ($subCostCenterEmployees as $key => $subCostCenter) {
+
+			$employees[$subCostCenter->name] = array();
+
+			foreach ($subCostCenter->employees as $key_employee => $employee) {
+				$employees[$subCostCenter->name][$employee->id] = $employee->fullname;
+			}
+			
+		}
+		
+		return $employees;
+    }
 }

@@ -90,7 +90,7 @@
 				    
 				    {!! Form::close() !!}
 				</div>
-				{!!$activities->render()!!}
+				{!!$activities->appends($search_input)->render()!!}
 
 			</div>
 		</div>
