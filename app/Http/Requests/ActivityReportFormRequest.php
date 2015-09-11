@@ -54,7 +54,7 @@ class ActivityReportFormRequest extends Request {
 		if($current_route == 'activityReport.index' || $current_route == 'activityReport.calendar' || $current_route == 'activityReport.individual'){
 			$rules = [
 				'from'		=>	'date',
-				'to'		=>	'date|after:from',
+				'to'		=>	'date',
 				'find'		=>	'alpha_numeric_spaces'
 			];
 		}
