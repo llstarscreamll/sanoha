@@ -18,14 +18,14 @@ class EditActivityCest
     }
 
     /**
-     * 
+     * Prueba la funcionalidad de editar una actividad minera reportada
      */ 
     public function editReportedActivity(FunctionalTester $I)
     {
         $I->am('soy un supervisor del Proyecto Beteitiva');
         $I->wantTo('editar una actividad minera de un trabajador de mi proyecto');
         
-        $date = \Carbon\Carbon::now();
+        $date = \Carbon\Carbon::now()->subMonth();
         $data[] = [
             'sub_cost_center_id'    =>  1,
             'employee_id'           =>  1,
@@ -35,9 +35,9 @@ class EditActivityCest
             'worked_hours'          =>  4,
             'comment'               =>  'test',
             'reported_by'           =>  1,
-            'reported_at'           =>  '2015-08-07 08:00:00',
-            'created_at'            =>  '2015-08-08 08:00:00',
-            'updated_at'            =>  '2015-08-08 08:00:00',
+            'reported_at'           =>  $date->toDateTimeString(),
+            'created_at'            =>  $date->toDateTimeString(),
+            'updated_at'            =>  $date->toDateTimeString(),
             'deleted_at'            =>  null
         ];
         
@@ -49,7 +49,6 @@ class EditActivityCest
         // hago clic en el proyecto que quiero trabajar
         $I->click('Proyecto Beteitiva', 'a');
         
-        
         $I->amOnPage('/activityReport/1/edit');
         $I->see('Actualizar Detalles de Labor Minera', 'legend');
         
@@ -59,12 +58,13 @@ class EditActivityCest
         $I->seeElement('input', ['value' => '2']);
         $I->seeElement('input', ['value' => '5000']);
         $I->seeElement('input', ['value' => '4']);
-        $I->seeElement('input', ['value' => '2015-08-07']);
+        $I->seeElement('input', ['value' => $date->toDateString()]);
         $I->see('test', 'textarea');
         
         // la tabla donde se muestra lo que ha reportado en el día
         $I->seeElement('table');
-        $I->dontSee('No hay actividades registradas... ', '.alert');
+        //dd(\sanoha\Models\ActivityReport::all()->toArray());
+        $I->dontSee('No hay actividades registradas...', '.alert-warning');
         
         $I->see('2', 'tbody tr td');
         $I->see('10.000', 'tbody tr td');

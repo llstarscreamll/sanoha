@@ -306,6 +306,54 @@ class ActivityReport extends Model
     }
     
     /**
+     * La consulta de donde se obtienen los datos a mostrar en la vista "Reporte
+     * individual de actividades mineras reportadas"....
+     * 
+     * @param   array   $parameters
+     * @return  Collection
+     */ 
+    public static function individualSearch($parameters)
+    {
+        return \sanoha\Models\ActivityReport::where('reported_at', '>=', $parameters['from'])
+            ->where('reported_at', '<=', $parameters['to'])
+            ->orderBy('updated_at', 'desc')
+            ->whereHas('employee', function($q) use ($parameters)
+                {
+                    $q->where(function($q) use ($parameters){
+                        $q->where('name', 'like', '%'.$parameters["employee"].'%')
+                            ->orWhere('lastname', 'like', '%'.$parameters["employee"].'%')
+                            ->orWhere('identification_number', 'like', '%'.$parameters["employee"].'%');
+                    });
+                })
+            ->whereHas('subCostCenter', function($q) use ($parameters){
+                $q->where('cost_center_id', $parameters['cost_center_id']);
+            })
+            ->paginate(15);
+    }
+    
+    /**
+     * Consulta si se ha reportado una actividad minera en determinada fecha, para
+     * evitar qu se reporten dos actividades mineras el mismo día.
+     * 
+     * @param   array   $data
+     * @return  mixed
+     */
+    public static function alreadyMiningActivityReported($data)
+    {
+        return \sanoha\Models\ActivityReport::where(function($q) use ($data){
+            $q->where('employee_id', $data['employee_id'])
+                ->where('mining_activity_id', $data['mining_activity_id'])
+                ->whereBetween(
+                    'reported_at',
+                    [
+                        $data['reported_at']->copy()->startOfDay()->toDateTimeString(),
+                        $data['reported_at']->copy()->endOfDay()->toDateTimeString()
+                    ]
+                );
+        })->first();
+    }
+    
+    /**
      * Configura los parámetros para los filtros o búsquedas en los reportes, por
      * defecto se hacen búsquedas de sólo el mes en curso, en el tercer parámetro
      * se puede definir fechas opcionales a las de

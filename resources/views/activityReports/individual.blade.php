@@ -76,7 +76,7 @@
 							@else
 							
 								<tr>
-									<td colspan=7>
+									<td colspan=8>
 										<div class="alert alert-danger">
 											No se encontraron registros...
 										</div>

@@ -372,7 +372,6 @@ class ReportCest
      */
     public function assignCosts(FunctionalTester $I)
     {
-        $employee = \sanoha\Models\Employee::find(1);
         // ------------------------------
         // ---- usuario CON permisos ----
         // ------------------------------
@@ -458,7 +457,6 @@ class ReportCest
         // y veo que todos los campos están presentes, menos el de asignar
         // costo a la actividad pues yo no tengo asignado tal permiso
         $I->dontSeeElement('input', ['name'  =>  'price']);
-
         
         // la info del reporte a enviar
         $data = [
@@ -479,6 +477,75 @@ class ReportCest
         // veo en la base de datos el nuevo registro
         $I->seeRecord('activity_reports', $data+['price' => 0]);
         
+        // como no se asignó precio por el usuario y porque no hay histórico, entonces
+        // debo ver un mensage de alerta donde me informe que no se ha asignado el precio
+        // automáticamente porque no hay históricos en que basar la selección del precio
+        $I->see('La actividad fue registrada, pero no se asignó el precio porque no hay históricos en que basar la selección.', '.alert-warning');
+        
+        // veo que estoy en la misma url
+        $I->seeCurrentUrlEquals('/activityReport/create?employee_id=1');
+        
+        // veo un mensaje de exito en la operación
+        $I->see('Actividad Registrada Correctamente.', '.alert-success');
+        
+        // veo que en la tabla de la vista previa está el registro que acabo de cargar
+        $I->see('1', 'tbody tr td');
+        $I->see('0', 'tbody tr td');
+    }
+    
+    /**
+     * Pruebo la seguridad al asignar los precios de las actividades mineras cuando
+     * un usuario no tiene permisos para hacerlo
+     */
+    public function forceAssignCost(FunctionalTester $I)
+    {
+        // quito los permisos para asignar costos
+        $permissions = \sanoha\Models\Permission::where('name', '!=', 'activityReport.assignCosts')->get()->lists('id'); // obtengo el permiso que quiero quitar
+        $admin_role = \sanoha\Models\Role::where('name', '=', 'admin')->first();
+        $admin_role->perms()->sync($permissions);
+        
+        $I->am('un usuario sin permiso para asignar costos a labores mineras');
+        $I->wantTo('reportar actividad y tratar de asignar el costo de la misma');
+        
+        // ya inicié sesión como un usuario con todos los privilejios
+        $I->seeAuthentication();
+        
+        // estoy en el home
+        $I->amOnPage('/home');
+
+        // selecciono el centro de costos con el que quiero trabajar
+        $I->click('Proyecto Beteitiva', 'a');
+        
+        // pulso el botón para reportar una nueva actividad
+        $I->click('Registrar Labor Minera', 'a');
+        
+        // selecciono un trabajador para ver los demás campos
+        $I->submitForm('form', ['employee_id' => 1]);
+        
+        // y veo que todos los campos están presentes, menos el de asignar
+        // costo a la actividad pues yo no tengo asignado tal permiso
+        $I->dontSeeElement('input', ['name'  =>  'price']);
+        
+        // la info del reporte a enviar
+        $date = \Carbon\Carbon::now();
+        $data = [
+            'employee_id'           =>      1,
+            'mining_activity_id'    =>      4,
+            'quantity'              =>      1,
+            'worked_hours'          =>      5,
+            'reported_at'           =>      $date->toDateString(),
+            'price'                 =>      15000, // no veo el input pero de todos modos envío el costo
+        ];
+        
+        // envío el formluario
+        $I->submitForm('form', $data);
+        
+        unset($data['reported_at']);
+        unset($data['price']);
+        
+        //dd(\sanoha\Models\ActivityReport::all()->toArray());
+        // veo en la base de datos el nuevo registro
+        $I->seeRecord('activity_reports', $data+['price' => 0]);
         
         // como no se asignó precio por el usuario y porque no hay histórico, entonces
         // debo ver un mensage de alerta donde me informe que no se ha asignado el precio

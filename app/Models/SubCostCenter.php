@@ -48,12 +48,19 @@ class SubCostCenter extends Model {
     }
     
     /**
-     * Obtiene los empleados relacionados al subcentro de costo
+     * Obtiene los empleados relacionados al centro de costo e incluye ($include)
+     * o excluye ($exclude) a un empleado si es que no se encuentra relacionado
+     * al centro de costo mediante el id según se expecifique en los parámetros...
+     * 
+     * @param   string  $cost_center_id
+     * @param   string  $include
+     * @param   string  $exclude
+     * @return  array
      */
-    public static function getRelatedEmployees($cost_center_id)
+    public static function getRelatedEmployees($cost_center_id, $include = null, $exclude = null)
     {
         $subCostCenterEmployees = \sanoha\Models\SubCostCenter::where('cost_center_id', $cost_center_id)->with('employees')->get();
-		
+		$found_include = false;
 		$employees = [];
 		
 		foreach ($subCostCenterEmployees as $key => $subCostCenter) {
@@ -61,11 +68,31 @@ class SubCostCenter extends Model {
 			$employees[$subCostCenter->name] = array();
 
 			foreach ($subCostCenter->employees as $key_employee => $employee) {
-				$employees[$subCostCenter->name][$employee->id] = $employee->fullname;
+			    
+			    // excluyo a un empleado si es especificado
+			    if($employee->id !== $exclude)
+				    $employees[$subCostCenter->name][$employee->id] = $employee->fullname;
+				
+				if($employee->id === $include)
+				    $found_include = true;
 			}
 			
 		}
 		
+		if(!$found_include && !is_null($include)){
+		    $employee_to_include = \sanoha\Models\Employee::withTrashed()->where('id', $include)->first();
+		    $employees = [$employee_to_include->id => $employee_to_include->fullname ] + $employees;
+		}
+		
 		return $employees;
+    }
+    
+    /**
+     * Devuelve un nombre mas completo del subcentro de costo al unirlo con el
+     * nombre del Centro de Costo al que pertenece
+     */
+    public function getNameWithCostCenterNameAttribute()
+    {
+        return $this->costCenter->name.' '.$this->name;
     }
 }

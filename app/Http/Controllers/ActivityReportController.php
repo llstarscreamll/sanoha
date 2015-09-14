@@ -39,7 +39,7 @@ class ActivityReportController extends Controller {
         
         // el id del centro de costo de trabajo elegido
         $this->cost_center_id = \Session::get('current_cost_center_id');
-        }
+    }
 
     /**
      * Vista para elegir el centro de costo con el que se quiere trabajar en caso
@@ -113,21 +113,7 @@ class ActivityReportController extends Controller {
         $search_input = $request->all();
         
         $parameters = ActivityReport::configureParameters($request, $this->cost_center_id, ['start' => Carbon::now()->startOfYear()]);
-        $activities = ActivityReport::where('reported_at', '>=', $parameters['from'])
-            ->where('reported_at', '<=', $parameters['to'])
-            ->orderBy('updated_at', 'desc')
-            ->whereHas('employee', function($q) use ($parameters)
-                {
-                    $q->where(function($q) use ($parameters){
-                        $q->where('name', 'like', '%'.$parameters["employee"].'%')
-                            ->orWhere('lastname', 'like', '%'.$parameters["employee"].'%')
-                            ->orWhere('identification_number', 'like', '%'.$parameters["employee"].'%');
-                    });
-                })
-            ->whereHas('subCostCenter', function($q) use ($parameters){
-                $q->where('cost_center_id', $parameters['cost_center_id']);
-            })
-            ->paginate(15);
+        $activities = ActivityReport::individualSearch($parameters);
 
         return view('activityReports.individual', compact('activities', 'search_input', 'parameters'));
     }
@@ -161,39 +147,21 @@ class ActivityReportController extends Controller {
         $data['reported_at'] = \Carbon\Carbon::createFromFormat('Y-m-d', $data['reported_at']);
         
         // debo saber si se ha reportado ya la actividad en el mismo día
-        if($reported_activity = \sanoha\Models\ActivityReport::where(function($q) use ($data){
-            $q->where('employee_id', $data['employee_id'])
-                ->where('mining_activity_id', $data['mining_activity_id'])
-                ->whereBetween(
-                    'reported_at',
-                    [
-                        $data['reported_at']->copy()->startOfDay()->toDateTimeString(),
-                        $data['reported_at']->copy()->endOfDay()->toDateTimeString()
-                    ]
-                );
-        })->first())
+        if($reported_activity = ActivityReport::alreadyMiningActivityReported($data))
             return redirect()
                 ->back()
                 ->with('error', 'El trabajador ya reportó '.$reported_activity->miningActivity->name.' el día '.$reported_activity->reported_at->toDateString().'.');
 
         $employee = \sanoha\Models\Employee::findOrFail($data['employee_id']);
         
-        $historical_price = \sanoha\Models\ActivityReport::getHistoricalActivityPrice($data['mining_activity_id'], $employee->sub_cost_center_id);
+        $historical_price = ActivityReport::getHistoricalActivityPrice($data['mining_activity_id'], $employee->sub_cost_center_id);
         
         $activity 						=	new ActivityReport;
         $activity->sub_cost_center_id	=	$employee->sub_cost_center_id;
         $activity->employee_id 			=	$data['employee_id'];
         $activity->mining_activity_id	=	$data['mining_activity_id'];
         $activity->quantity 			=	$data['quantity'];
-        /**
-         * ----------------------------------------
-         * ---------------- OJO AQUÍ --------------
-         * ----------------------------------------
-         * El precio no puede ser asignado por usuarios sin los permisos debidos, hay que
-         * controlar esta parte verificando primero si se tienen los permisos para
-         * asignar el precio, el valor por defecto en la base de datos es 0
-         */
-        $activity->price 				=	isset($data['price']) && !empty($data['price']) ? $data['price'] : $historical_price;
+        $activity->price 				=	!empty($data['price']) && \Auth::getUser()->can('activityReport.assignCosts') ? $data['price'] : $historical_price;
         $activity->worked_hours			=	$data['worked_hours'];
         $activity->comment 				=	$data['comment'];
         $activity->reported_by 			=	\Auth::getUser()->id;
@@ -202,7 +170,7 @@ class ActivityReportController extends Controller {
         if($activity->save()){
             \Session::flash('success', 'Actividad Registrada Correctamente.');
             
-            if(!isset($data['price']) && $historical_price == 0)
+            if(\Auth::getUser()->can('activityReport.assignCosts') == false && $historical_price == 0)
                 \Session::flash('warning', 'La actividad fue registrada, pero no se asignó el precio porque no hay históricos en que basar la selección.');
             
         }else
@@ -212,7 +180,7 @@ class ActivityReportController extends Controller {
     }
 
     /**
-     * Muestra el detalle de una actividad minera registrada en la DB.
+     * Muestra el detalle de una actividad minera registrada.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -221,54 +189,40 @@ class ActivityReportController extends Controller {
     {
         $activity = ActivityReport::findOrFail($id);
         
-        $start = Carbon::createFromFormat('Y-m-d', date('Y-m-d'))->startOfDay();
-        $end = Carbon::createFromFormat('Y-m-d', date('Y-m-d'))->endOfDay();
-        
-        // parametros de búsqueda de activiades del empleado
-        $parameters 					= [];
-        $parameters['employee_id'] 		= $activity->employee_id;
-        $parameters['from'] 			= $activity->created_at->startOfDay();
-        $parameters['to'] 				= $activity->created_at->endOfDay();
-        $parameters['cost_center_id'] 	= $this->cost_center_id;
-        $parameters['cost_center_name'] 	= \sanoha\Models\CostCenter::findOrFail($this->cost_center_id)->name;
-        
-        return view('activityReports.show', compact('activity', 'subCostCenterEmployees', 'parameters'));
+        return view('activityReports.show', compact('activity'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return Response
+     * @return \Illuminate\Http\Response
      */
-    public function edit($id, Request $request)
+    public function edit($id, ActivityReportFormRequest $request)
     {
         $activity = ActivityReport::findOrFail($id);
         
         $input = $request->all();
-        $activity->reported_at = $activity->reported_at->toDateString();
-
-        $start = $activity->reported_at->startOfDay();
-        $end = $activity->reported_at->endOfDay();
-        
         // parametros de búsqueda de activiades del empleado
-        $parameters 					= [];
+        $parameters = ActivityReport::configureParameters($request, $this->cost_center_id);
         $parameters['employee_id'] 		= $activity->employee_id;
-        $parameters['from'] 			= $start;
-        $parameters['to'] 				= $end;
         $parameters['cost_center_id'] 	= $activity->subCostCenter->costCenter->id;
-        $parameters['cost_center_name'] = \Session::get('current_cost_center_name');
-        
-        $employees = \sanoha\Models\SubCostCenter::getRelatedEmployees($this->cost_center_id);
-
-        if (array_key_exists($activity->employee_id, $employees) !== true)
-            $employees = [$activity->employee->id => $activity->employee->fullname]+$employees;
-        
-        // actividades mineras
-        $miningActivities = MiningActivity::customOrder();
+        $parameters['to'] 				= $activity->reported_at->endOfDay()->toDateTimeString();
+        $parameters['from'] 			= $activity->reported_at->startOfDay()->toDateTimeString();
         
         // actividades registradas del empleado ordenadas
         $orderedActivities = ActivityReport::sortedActivities($parameters);
+
+        // actividades mineras
+        $miningActivities = MiningActivity::customOrder();
+        
+        // obtengo la lista de empleados relacinados al centro de costo y doy la opción de incluir
+        // al empleado que hizo la labor minera si es que no se encuentra dentro de los empleados del
+        // centro de costo
+        $employees = \sanoha\Models\SubCostCenter::getRelatedEmployees($this->cost_center_id, $activity->employee_id);
+
+        //if (!array_key_exists($activity->employee_id, $employees))
+        //    $employees = [$activity->employee->id => $activity->employee->fullname]+$employees;
         
         return view('activityReports.edit', compact('activity', 'employees', 'miningActivities', 'orderedActivities', 'parameters', 'input'));
     }
@@ -291,7 +245,7 @@ class ActivityReportController extends Controller {
         $activity->comment				= $request->get('comment');
         $activity->save()
             ? \Session::flash('success', 'Actualización de Actividad Minera exitosa.')
-            : \Session::flash('error', 'Ocurrió un error actualizando la actividad.') ;
+            : \Session::flash('error', 'Ocurrió un error actualizando la actividad.');
     
         return redirect()->route('activityReport.show', $id);
     }

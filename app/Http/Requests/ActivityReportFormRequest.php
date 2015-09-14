@@ -27,14 +27,21 @@ class ActivityReportFormRequest extends Request {
 	 */
 	public function rules()
 	{
+		// la actividad minera elegida por el usuario
 		$mining_activity 	= \sanoha\Models\MiningActivity::where('id', '=', $this->input('mining_activity_id'))->get()->first();
 
-		/* Se alarga la restricción por unos días mientras mientras se ponen al tanto con los reportes */
+		/* Se alarga la restricción por unos días mientras se ponen al tanto con los reportes */
+		// las fechas entre las que se debe reportar la actividad minera
 		$date_after 	= \Carbon\Carbon::now()->subDays(30)->toDateString();
 		$date_before 	= \Carbon\Carbon::now()->addDays(5)->toDateString();
-		$current_route = $this->route()->getName();
+		
+		// el nombre de la ruta donde nos encontramos
+		$current_route 	= $this->route()->getName();
+		
+		// la reglas de validación
 		$rules = [];
 		
+		// si la ruta es para actualizar o crear un registro, las reglas serán unas
 		if($current_route == 'activityReport.store' || $current_route == 'activityReport.update'){
 			
 			$rules = [
@@ -49,8 +56,14 @@ class ActivityReportFormRequest extends Request {
 			if($mining_activity){
 				$rules['quantity']			=		'required|numeric|between:0.1,' . $mining_activity->maximum;
 			}
+			
+			// en la actualización de registros no se tiene en cuenta las restricciones de fecha
+			if($current_route == 'activityReport.update'){
+				$rules['reported_at']		=		'required|date';
+			}
 		}
 		
+		// si la ruta es para alguno de los reportes, las reglas serán otras
 		if($current_route == 'activityReport.index' || $current_route == 'activityReport.calendar' || $current_route == 'activityReport.individual'){
 			$rules = [
 				'from'		=>	'date',

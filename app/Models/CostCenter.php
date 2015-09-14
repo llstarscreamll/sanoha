@@ -38,5 +38,28 @@ class CostCenter extends Model
     {
         return $this->hasManyThrough('sanoha\Models\Employee', 'sanoha\Models\SubCostCenter');
     }
-
+    
+    /**
+     * Obtengo una array de los centros de costo ordenados alfabéticamente junto
+     * con sus respectivos sub centros de costo, para ser impresa en un select
+     * 
+     * @return  array
+     */
+    public static function getOrderListWithSubCostCenters()
+    {
+        $cost_centers = \sanoha\Models\CostCenter::orderBy('name')->get();
+        $data = [];
+        
+        foreach ($cost_centers as $key => $cost_center) {
+            
+            foreach ($cost_center->subCostCenter as $sub_cost_center) {
+                
+                $data[$cost_center->name.' - '.$cost_center->short_name][$sub_cost_center->id] = $sub_cost_center->name.' - '.$sub_cost_center->short_name;
+                
+            }
+            
+        }
+        
+        return $data;
+    }
 }
