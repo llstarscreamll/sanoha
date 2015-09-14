@@ -145,9 +145,6 @@ return [
         'sanoha\Providers\EventServiceProvider',
         'sanoha\Providers\RouteServiceProvider',
 
-        'sanoha\Providers\CustomValidatorServiceProvider',
-
-
         /**
          * Other service providers
          */

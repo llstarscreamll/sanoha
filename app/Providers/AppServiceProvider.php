@@ -1,5 +1,6 @@
 <?php namespace sanoha\Providers;
 
+use sanoha\Providers\CustomValidator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider {
@@ -11,7 +12,10 @@ class AppServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		//
+		\Validator::resolver(function($translator, $data, $rules, $messages)
+            {
+                return new CustomValidator($translator, $data, $rules, $messages);
+            });
 	}
 
 	/**
