@@ -218,6 +218,50 @@ class PermissionTableSeeder extends Seeder
             'updated_at'    =>  $date->toDateTimeString()
         ];
         
+        // -----------------------------------------------------
+        // Permisos para el módulo de reporte de Novedades
+        // -----------------------------------------------------
+        
+        $data[] = [
+            'name'           => 'employee.index',
+            'display_name'   => 'Listar empleados',
+            'description'    => 'Ver una lista de todos empleados del sistema',
+            'created_at'    => $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'    => $date->toDateTimeString()
+        ];
+        
+        $data[] = [
+            'name'           => 'employee.create',
+            'display_name'   => 'Crear empleado',
+            'description'    => 'Crear empleados del sistema',
+            'created_at'    => $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'    => $date->toDateTimeString()
+        ];
+            
+        $data[] = [
+            'name'           => 'employee.show',
+            'display_name'   => 'Ver empleado',
+            'description'    => 'Visualizar la información de un empleado (sólo lectura)',
+            'created_at'    => $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'    => $date->toDateTimeString()
+        ];
+            
+        $data[] = [
+            'name'           => 'employee.edit',
+            'display_name'   => 'Editar empleado',
+            'description'    => 'Editar la información de un empleado',
+            'created_at'    => $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'    => $date->toDateTimeString()
+        ];
+            
+        $data[] = [
+            'name'           => 'employee.destroy',
+            'display_name'   => 'Eliminar empleado',
+            'description'    => 'Eliminar empleados del sistema',
+            'created_at'    => $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'    => $date->toDateTimeString()
+        ];
+        
         DB::table('permissions')->insert($data);
     }
 }

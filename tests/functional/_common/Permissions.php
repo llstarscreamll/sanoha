@@ -63,6 +63,55 @@ class Permissions
         \DB::table('permissions')->insert($this->data);
     }
     
+        /**
+     * Creo los permisos para el módulo de empleados
+     */
+    public function createEmployeesModulePermissions()
+    {
+        $this->data[] = [
+            'name'           => 'employee.index',
+            'display_name'   => 'Listar empleados',
+            'description'    => 'Ver una lista de todos empleados del sistema',
+            'created_at'    =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'    =>  $this->date->toDateTimeString()
+        ];
+        
+        $this->data[] = [
+            'name'           => 'employee.create',
+            'display_name'   => 'Crear empleado',
+            'description'    => 'Crear empleados del sistema',
+            'created_at'    =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'    =>  $this->date->toDateTimeString()
+        ];
+            
+        $this->data[] = [
+            'name'           => 'employee.show',
+            'display_name'   => 'Ver empleado',
+            'description'    => 'Visualizar la información de un empleado (sólo lectura)',
+            'created_at'    =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'    =>  $this->date->toDateTimeString()
+        ];
+            
+        $this->data[] = [
+            'name'           => 'employee.edit',
+            'display_name'   => 'Editar empleado',
+            'description'    => 'Editar la información de un empleado',
+            'created_at'    =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'    =>  $this->date->toDateTimeString()
+        ];
+            
+        $this->data[] = [
+            'name'           => 'employee.destroy',
+            'display_name'   => 'Eliminar empleado',
+            'description'    => 'Eliminar empleados del sistema',
+            'created_at'    =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'    =>  $this->date->toDateTimeString()
+        ];
+        
+        \DB::table('permissions')->insert($this->data);
+    }
+    
+    
     /**
      * Crea los permisos para el módulo de usuarios
      */ 

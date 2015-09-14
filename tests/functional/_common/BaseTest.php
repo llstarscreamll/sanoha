@@ -29,6 +29,25 @@ class BaseTest
     public $admin_user;
     
     /**
+     * Dependencias de los test del módulo de empleados
+     */
+    public function employees()
+    {
+        // creo los permisos para el módulo de reporte de novedad
+        $this->permissionsCommons = new PermissionsCommons;
+        $this->permissionsCommons->createEmployeesModulePermissions();
+        
+        // cargo los datos base
+        $this->createBasicData();
+        
+        // creo los empleados
+        $this->employeeCommons = new EmployeesCommons;
+        $this->employeeCommons->createMiningEmployees();
+        
+        $this->admin_user = $this->userCommons->adminUser;
+    }
+    
+    /**
      * Dependencias de los test de reporte de novedades
      */
     public function noveltyReports()
@@ -44,7 +63,7 @@ class BaseTest
         $this->employeeCommons = new EmployeesCommons;
         $this->employeeCommons->createMiningEmployees();
         
-        // creo el usuairo administrador
+        // creo las novedades
         $this->noveltiesCommons = new NoveltiesCommons;
         $this->noveltiesCommons->createNoveltiesKinds();
         

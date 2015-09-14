@@ -33,6 +33,15 @@
 						
 						{{--
 							*******************************************
+							Múdulo de Empleados
+							*******************************************
+						--}}
+						@if(\Auth::getUser()->can('roles.index'))
+							<li class="{{ \Request::is('employee*') ? 'active' : '' }}"><a href="{{ url('/employee') }}">Empleados</a></li>
+						@endif
+						
+						{{--
+							*******************************************
 							Múdulo de Reporte de Labores Mineras
 							*******************************************
 						--}}

@@ -32,9 +32,10 @@ class Employees
             $data[] = [
                 'position_id'           =>      1,
                 'sub_cost_center_id'    =>      $subCostCenter->id,
-                'name'                  =>      'Trabajador ' . $count++,
+                'name'                  =>      'Trabajador ' . $count,
                 'lastname'              =>      $subCostCenter->short_name,
-                'identification_number' =>      '123456789',
+                'identification_number' =>      '1'.$count,
+                'email'                 =>      'trabajador'.$count++.'@example.com',
                 'created_at'            =>      $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
                 'updated_at'            =>      $date->toDateTimeString(),
                 'deleted_at'            =>      null
