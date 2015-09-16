@@ -288,11 +288,12 @@ class ActivityReport extends Model
      * 
      * @return  int
      */
-    public static function getHistoricalActivityPrice($mining_activity_id, $sub_cost_center_id)
+    public static function getHistoricalActivityPrice($mining_activity_id, $sub_cost_center_id, $employee_id)
     {
         $historical_activity = \sanoha\Models\ActivityReport::where('mining_activity_id', $mining_activity_id)
             ->where('sub_cost_center_id', $sub_cost_center_id)
             ->where('price', '!=', 0)
+            ->where('employee_id', $employee_id)
             ->orderBy('reported_at', 'desc')
             ->first();
 

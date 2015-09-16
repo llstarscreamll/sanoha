@@ -223,8 +223,9 @@ class ReportCest
         $labors = \sanoha\Models\MiningActivity::all();
         $date = \Carbon\Carbon::now();
         
-        // creo un registro antiguo para que tenga referencia para asígnar el precio
-        // de la actividad que voy a registrar
+        // creo dos registros antiguos para que tenga referencia para asígnar el precio
+        // de la actividad que voy a registrar, los parametros para resolver el precio
+        // de la actividad son la bocamina y el empleado.
         \sanoha\Models\ActivityReport::create([
             'sub_cost_center_id'    =>  1,
             'employee_id'           =>  1,
@@ -235,6 +236,18 @@ class ReportCest
             'comment'               =>  'test comment',
             'reported_by'           =>  1,
             'reported_at'           =>  '2015-01-01 01:01:01'
+        ]);
+        
+        \sanoha\Models\ActivityReport::create([
+            'sub_cost_center_id'    =>  1,
+            'employee_id'           =>  2,
+            'mining_activity_id'    =>  2,
+            'quantity'              =>  4,
+            'price'                 =>  '7000',
+            'worked_hours'          =>  4,
+            'comment'               =>  'comentario para actividad',
+            'reported_by'           =>  1,
+            'reported_at'           =>  '2015-01-02 01:01:01'
         ]);
         
         // -----------------------
@@ -362,8 +375,8 @@ class ReportCest
         
         // veo que en la tabla de la vista previa está el registro que acabo de cargar, con el precio histórico que se ha asignado en ese centro de costo a esa actividad
         $I->see('2.5', 'tbody tr td');
-        $I->see('12.500', 'tbody tr td'); // 2.5 a $5.000 cada actividad que fue lo que se ha pagado antes
-        
+        $I->dontSee('17.500', 'tbody tr td'); // no veo 17.500 porque los 7 mil se le han pagado a otro minero, 2.5 * 7000 = 17.500
+        $I->see('12.500', 'tbody tr td'); // 2.5 a $5.000 cada actividad que fue lo que se ha pagado antes a "este empelado"
     }
     
     /**

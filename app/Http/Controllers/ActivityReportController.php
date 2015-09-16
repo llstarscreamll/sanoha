@@ -154,7 +154,7 @@ class ActivityReportController extends Controller {
 
         $employee = \sanoha\Models\Employee::findOrFail($data['employee_id']);
         
-        $historical_price = ActivityReport::getHistoricalActivityPrice($data['mining_activity_id'], $employee->sub_cost_center_id);
+        $historical_price = ActivityReport::getHistoricalActivityPrice($data['mining_activity_id'], $employee->sub_cost_center_id, $employee->id);
         
         $activity 						=	new ActivityReport;
         $activity->sub_cost_center_id	=	$employee->sub_cost_center_id;
