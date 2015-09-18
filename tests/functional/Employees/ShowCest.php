@@ -32,7 +32,7 @@ class ShowCest
             ]);
         
         $I->am('admin de recurso humano');
-        $I->wantTo('ediat la info de un empleado');
+        $I->wantTo('ver la info de un empleado');
         
         $I->amOnPage('/employee');
         $I->see('Alan Silvestri', 'tbody tr td a');

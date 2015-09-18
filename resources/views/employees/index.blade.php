@@ -37,6 +37,10 @@
 				
 				@include ('layout.notifications')
 				
+				<div class="row hidden-print">
+				    @include ('employees.partials.searchForm')
+				</div>
+				
 				@include ('employees.partials.index-table')
 				
             </div>
