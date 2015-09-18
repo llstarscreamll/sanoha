@@ -54,7 +54,7 @@ return [
 	|
 	*/
 
-	'from' => ['address' => null, 'name' => null],
+	'from' => ['address' => 'jalvarez@sanoha.com', 'name' => 'Sanoha Web System'],
 
 	/*
 	|--------------------------------------------------------------------------

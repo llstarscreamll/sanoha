@@ -74,7 +74,9 @@ class UserController extends Controller
         // to flash messages
         $success = array();
         $error = array();
-
+        
+        $user->password = bcrypt($request->get('password'));
+        
         // create user
         ($user->save()) ? $success[] = 'Usuario creado correctamente.' : $error[] = 'Ocurrió un error creando el usuario.';
         
@@ -139,6 +141,8 @@ class UserController extends Controller
         $data['activated'] = $request->has('activated') ? true : false;
         
         $user->fill($data);
+        
+        $user->password = bcrypt($request->get('password'));
         
         $role_names = $role_keys = array();
         

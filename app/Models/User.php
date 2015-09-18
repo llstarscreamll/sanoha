@@ -94,18 +94,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     /**
-     * Hashing password
-     * 
-     * @param {string} $value
-     * 
-     * @return {string}
-     */
-    public function setPasswordAttribute($value)
-    {
-        return $this->attributes['password'] = \Hash::make($value);
-    }
-
-    /**
      * Get the user roles display_name attribute
      * 
      * @return {string}
