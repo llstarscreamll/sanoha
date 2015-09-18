@@ -65,8 +65,7 @@ class User
      */
     public function createAdminUser()
     {
-        $user = UserModel::firstOrCreate($this->adminUser);
-
+        $user = UserModel::firstOrCreate(array_merge($this->adminUser, ['password' => bcrypt($this->adminUser['password'])]));
         $user->attachRole(2); // 2 es el id del rol admin
         
         // le asigno los centros de costo al usuario administrador
