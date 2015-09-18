@@ -54,13 +54,18 @@ class CreateCest
      */ 
     public function createWithoutEamil(FunctionalTester $I)
     {
-        \sanoha\Models\Employee::create([
+        $date = \Carbon\Carbon::now()->subMonth();
+        
+        \DB::table('employees')->insert([
             'name'                  =>  'Chris',
             'lastname'              =>  'Coleman',
             'identification_number' =>  '123456',
             'email'                 =>  '',
             'sub_cost_center_id'    =>  1,
-            'position_id'           =>  1
+            'position_id'           =>  1,
+            'created_at'            =>  $date->toDateTimeString(),
+            'updated_at'            =>  $date->toDateTimeString(),
+            'deleted_at'            =>  null
         ]);
         
         $I->am('admin de recurso humano');
