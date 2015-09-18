@@ -20,7 +20,6 @@ class CreateEmployeesTable extends Migration {
 			$table->string('identification_number')->unique();
 			$table->string('name');
 			$table->string('lastname');
-			$table->string('email')->unique()->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 			
