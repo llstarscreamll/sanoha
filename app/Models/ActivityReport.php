@@ -368,25 +368,21 @@ class ActivityReport extends Model
     {
         $parameters = [];
 
-        $start = \Carbon\Carbon::createFromFormat('Y-m-d', $request->has('from')
-            ? $request->get('from')
-            : \Carbon\Carbon::now()->startOfMonth()->toDateString())->startOfDay();
-        // en caso de que se quiera una fecha diferente a la predeterminada (inicio de este mes)
-        $start = isset($options['start']) && empty($request->get('from')) ? $options['start'] : $start;
+        $start = $request->has('from')
+            ? \Carbon\Carbon::createFromFormat('Y-m-d', $request->get('from'))->startOfDay()
+            : \Carbon\Carbon::now()->startOfMonth()->startOfDay();
 
-        $end = \Carbon\Carbon::createFromFormat('Y-m-d', $request->has('to')
-            ? $request->get('to')
-            : \Carbon\Carbon::now()->toDateString())->endOfDay();
-        
-        // en caso de que se quiera una fecha diferente a la predeterminada (hoy)
-        $end = isset($options['end']) && empty($request->get('to')) ? $options['end'] : $end;
+        $end = $request->has('to')
+            ? \Carbon\Carbon::createFromFormat('Y-m-d', $request->get('to'))->endOfDay()
+            : \Carbon\Carbon::now()->endOfDay();
         
         $parameters['employee'] 		= !empty($request->get('find')) ? $request->get('find') : null;
         $parameters['employee_id'] 		= $request->get('employee_id', null);
-        $parameters['from'] 			= $start;
-        $parameters['to'] 				= $end;
+        // en caso de que se quiera fechas diferentes a la predeterminadas
+        $parameters['from'] 			= isset($options['start']) && empty($request->get('to')) ? $options['start'] : $start;
+        $parameters['to'] 				= isset($options['end']) && empty($request->get('to')) ? $options['end'] : $end;
         $parameters['cost_center_id'] 	= $cost_center_id;
-        $parameters['cost_center_name'] = \sanoha\Models\CostCenter::findOrFail($cost_center_id)->name;
+        $parameters['cost_center_name'] = \Session::get('current_cost_center_name');
         
         return $parameters;
     }

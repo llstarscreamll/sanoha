@@ -75,32 +75,7 @@ class NoveltyReportController extends Controller
 	public function index(NovletyReportFormRequest $request)
 	{
 		$search_input = $request->all();
-		
-		$start = Carbon::createFromFormat('Y-m-d', $request->has('from') ? $request->get('from') : \Carbon\Carbon::now()->startOfYear()->toDateString())->startOfDay();
-        $end = Carbon::createFromFormat('Y-m-d', $request->has('to') ? $request->get('to') : \Carbon\Carbon::now()->toDateString())->endOfDay();
-
-        $parameters['employee'] 		= !empty($request->get('find')) ? $request->get('find') : null;
-		$parameters['from'] 			= $start;
-		$parameters['to'] 				= $end;
-		$parameters['cost_center_id'] 	= $this->cost_center_id;
-		$parameters['cost_center_name'] = \sanoha\Models\CostCenter::findOrFail($this->cost_center_id)->name;
-		
-		$novelties = NoveltyReport::where('reported_at', '>=', $parameters['from'])
-			->where('reported_at', '<=', $parameters['to'])
-			->orderBy('updated_at', 'desc')
-			->whereHas('employee', function($q) use ($parameters)
-				{
-				    $q->where(function($q) use ($parameters){
-				    	$q->where('name', 'like', '%'.$parameters["employee"].'%')
-				    		->orWhere('lastname', 'like', '%'.$parameters["employee"].'%')
-				    		->orWhere('identification_number', 'like', '%'.$parameters["employee"].'%');
-				    });
-				
-				})
-			->whereHas('subCostCenter', function($q) use ($parameters){
-				$q->where('cost_center_id', $parameters['cost_center_id']);
-			})
-			->paginate(15);
+		$novelties = NoveltyReport::individualNovelties($parameters = NoveltyReport::configureParameters($request, $this->cost_center_id));
 		
 		return view('noveltyReports.index', compact('novelties', 'search_input', 'parameters'));
 	}
@@ -111,17 +86,7 @@ class NoveltyReportController extends Controller
 	public function calendar(NovletyReportFormRequest $request)
 	{
 		$search_input = $request->all();
-		
-		$start = Carbon::createFromFormat('Y-m-d', $request->has('from') ? $request->get('from') : \Carbon\Carbon::now()->startOfMonth()->toDateString())->startOfDay();
-        $end = Carbon::createFromFormat('Y-m-d', $request->has('to') ? $request->get('to') : \Carbon\Carbon::now()->toDateString())->endOfDay();
-		
-        $parameters['employee'] 		= !empty($request->get('find')) ? $request->get('find') : null;
-		$parameters['from'] 			= $start;
-		$parameters['to'] 				= $end;
-		$parameters['cost_center_id'] 	= $this->cost_center_id;
-		$parameters['cost_center_name'] = \sanoha\Models\CostCenter::findOrFail($this->cost_center_id)->name;
-		
-		$json_novelties = \sanoha\Models\NoveltyReport::getCalendarNovelties($parameters);
+		$json_novelties = \sanoha\Models\NoveltyReport::getCalendarNovelties($parameters = NoveltyReport::configureParameters($request, $this->cost_center_id, ['start' => \Carbon\Carbon::now()->startOfMonth()->startOfDay()]));
 
 		return view('noveltyReports.calendar', compact('json_novelties', 'search_input', 'parameters'));
 	}
@@ -134,21 +99,9 @@ class NoveltyReportController extends Controller
 	public function create()
 	{
 		$novelties = Novelty::all()->lists('name', 'id');
-
 		$subCostCenterEmployees = \sanoha\Models\SubCostCenter::where('cost_center_id', $this->cost_center_id)->with('employees')->get();
-		
-		$employees = [];
-		
-		foreach ($subCostCenterEmployees as $key => $subCostCenter) {
-			//$employees[$subCostCenter->name] = [];
-			$employees[$subCostCenter->name] = array();
-			foreach ($subCostCenter->employees as $key_employee => $employee) {
-				$employees[$subCostCenter->name][$employee->id] = $employee->fullname;
-			}
-			
-		}
-		
-		$employee_id = \Request::get('employee_id') or old('employee_id');
+		$employees = \sanoha\Models\SubCostCenter::getRelatedEmployees($this->cost_center_id);
+		$employee_id = \Request::get('employee_id', old('employee_id'));
 
 		return view('noveltyReports.create', compact('employees', 'novelties', 'employee_id'));
 	}
@@ -163,14 +116,16 @@ class NoveltyReportController extends Controller
 		$request = $request->all();
 		$sub_cost_center_id = Employee::findOrFail($request['employee_id'])->sub_cost_center_id;
 		
-		$novelty = new NoveltyReport;
+		$novelty						= new NoveltyReport;
 		$novelty->sub_cost_center_id	= $sub_cost_center_id;
 		$novelty->employee_id			= $request['employee_id'];
 		$novelty->novelty_id			= $request['novelty_id'];
 		$novelty->comment				= $request['comment'] or null;
 		$novelty->reported_at			= $request['reported_at'];
 		
-		$novelty->save() ? \Session::flash('success', 'Novedad reportada exitosamente.') : \Session::flash('error', 'Ocurrió un error reportando la novedad.');
+		$novelty->save()
+			? \Session::flash('success', 'Novedad reportada exitosamente.')
+			: \Session::flash('error', 'Ocurrió un error reportando la novedad.');
 		
 		return redirect(route('noveltyReport.create'));
 	}
@@ -199,24 +154,12 @@ class NoveltyReportController extends Controller
 		$novelty = NoveltyReport::findOrFail($id);
 		
 		$novelties = Novelty::all()->lists('name', 'id');
-
 		$subCostCenterEmployees = \sanoha\Models\SubCostCenter::where('cost_center_id', $this->cost_center_id)->with('employees')->get();
-		
-		$employees = [];
-		
-		foreach ($subCostCenterEmployees as $key => $subCostCenter) {
-			
-			$employees[$subCostCenter->name] = array();
-			foreach ($subCostCenter->employees as $key_employee => $employee) {
-				$employees[$subCostCenter->name][$employee->id] = $employee->fullname;
-			}
-			
-		}
+		$employees = \sanoha\Models\SubCostCenter::getRelatedEmployees($this->cost_center_id);
 		
 		if (array_key_exists($novelty->employee_id, $employees) !== true){
 			$employees = [$novelty->employee->id => $novelty->employee->fullname]+$employees;
 		}
-		
 
 		$employee_id = null;
 		
@@ -242,7 +185,9 @@ class NoveltyReportController extends Controller
 		$novelty->comment				= $request['comment'] or null;
 		$novelty->reported_at			= $request['reported_at'];
 		
-		$novelty->save() ? \Session::flash('success', 'Novedad actualizada exitosamente.') : \Session::flash('error', 'Ocurrió un error actualizando la novedad.');
+		$novelty->save()
+			? \Session::flash('success', 'Novedad actualizada exitosamente.')
+			: \Session::flash('error', 'Ocurrió un error actualizando la novedad.');
 		
 		return redirect()->route('noveltyReport.show', $id);
 	}
@@ -257,7 +202,13 @@ class NoveltyReportController extends Controller
 	{
 		$id = \Request::has('id') ? \Request::only('id')['id'] : $id;
         
-        (NoveltyReport::destroy($id)) ? \Session::flash('success', [is_array($id) && count($id) > 1 ? 'Las novedades han sido movidos a la papelera correctamente.' : 'La novedad ha sido movida a la papelera correctamente.']) : \Session::flash('error', [is_array($id) ? 'Ocurrió un error moviendo las novedades a la papelera.' : 'Ocurrió un problema moviendo la novedades a la papelera.']) ;
+        (NoveltyReport::destroy($id))
+        	? \Session::flash('success', [is_array($id) && count($id) > 1
+        		? 'Las novedades han sido movidos a la papelera correctamente.'
+        		: 'La novedad ha sido movida a la papelera correctamente.'])
+        	: \Session::flash('error', [is_array($id)
+        		? 'Ocurrió un error moviendo las novedades a la papelera.'
+        		: 'Ocurrió un problema moviendo la novedades a la papelera.']) ;
 
         return redirect()->route('noveltyReport.index');
 	}
