@@ -56,7 +56,7 @@ class EmployeeController extends Controller
         $employee->name                 =   $request->get('name');
         $employee->lastname             =   $request->get('lastname');
         $employee->identification_number=   $request->get('identification_number');
-        $employee->email                =   $request->get('email');
+        $employee->email                =   !empty(trim($request->get('email'))) ? $request->get('email') : null;
         
         $employee->save() ? \Session::flash('success', 'Empleado creado correctamente.') : \Session::flash('error', 'Ocurrió un error creando el empleado.');
         

@@ -48,4 +48,45 @@ class CreateCest
         $I->see('Minero', 'tbody tr:first-child td');
         $I->see('alan.silvestri@example.com', 'tbody tr:first-child td');
     }
+    
+    /**
+     * Pruebo la funcionalidad para crear empleado, sin digitar el email
+     */ 
+    public function createWithoutEamil(FunctionalTester $I)
+    {
+        \sanoha\Models\Employee::create([
+            'name'                  =>  'Chris',
+            'lastname'              =>  'Coleman',
+            'identification_number' =>  '123456',
+            'email'                 =>  '',
+            'sub_cost_center_id'    =>  1,
+            'position_id'           =>  1
+        ]);
+        
+        $I->am('admin de recurso humano');
+        $I->wantTo('crear nuevo empleado sin digitar email');
+        
+        $I->amOnPage('/employee');
+        $I->click('Crear Empleado', 'a');
+        
+        $I->seeCurrentUrlEquals('/employee/create');
+        $I->see('Crear Empleado', 'h2');
+        
+        $I->submitForm('form', [
+            'name'                  =>  'Alan',
+            'lastname'              =>  'Silvestri',
+            'identification_number' =>  '7895',
+            'email'                 =>  '',
+            'sub_cost_center_id'    =>  1,
+            'position_id'           =>  1
+        ], 'Crear');
+        
+        $I->seeCurrentUrlEquals('/employee');
+        $I->see('Empleado creado correctamente.', '.alert-success');
+        
+        $I->see('Alan Silvestri', 'tbody tr:first-child td');
+        $I->see('Proyecto Beteitiva Bocamina 1', 'tbody tr:first-child td');
+        $I->see('Minero', 'tbody tr:first-child td');
+        $I->see('', 'tbody tr:first-child td');
+    }
 }
