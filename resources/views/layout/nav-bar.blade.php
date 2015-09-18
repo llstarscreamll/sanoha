@@ -36,7 +36,7 @@
 							Múdulo de Empleados
 							*******************************************
 						--}}
-						@if(\Auth::getUser()->can('roles.index'))
+						@if(\Auth::getUser()->can('employee.index'))
 							<li class="{{ \Request::is('employee*') ? 'active' : '' }}"><a href="{{ url('/employee') }}">Empleados</a></li>
 						@endif
 						
