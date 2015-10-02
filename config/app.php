@@ -151,6 +151,7 @@ return [
         'Collective\Html\HtmlServiceProvider',
         'Zizaco\Entrust\EntrustServiceProvider',
         'Barryvdh\Debugbar\ServiceProvider',
+        'Spatie\Activitylog\ActivitylogServiceProvider',
         Mews\Purifier\PurifierServiceProvider::class,
     ],
 
@@ -208,6 +209,7 @@ return [
         'Entrust'   => 'Zizaco\Entrust\EntrustFacade',
         'Debugbar'  => 'Barryvdh\Debugbar\Facade',
         'Purifier'  => Mews\Purifier\Facades\Purifier::class,
+        'Activity'  => 'Spatie\Activitylog\ActivitylogFacade',
     ],
 
 ];

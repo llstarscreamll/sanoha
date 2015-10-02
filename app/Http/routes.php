@@ -17,6 +17,11 @@ Route::get('home', [
         'as'    =>  'home',
         'uses'  =>  'HomeController@index'
     ]);
+    
+Route::get('logs', [
+        'as'    =>  'logs',
+        'uses'  =>  'LogController@index'
+    ]);
 
 Route::controllers([
     'auth' => 'Auth\AuthController',

@@ -3,9 +3,13 @@
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class NoveltyReport extends Model
+use Spatie\Activitylog\LogsActivityInterface;
+use Spatie\Activitylog\LogsActivity;
+
+class NoveltyReport extends Model implements LogsActivityInterface
 {
 	use SoftDeletes;
+	use LogsActivity;
 
     protected $dates = ['reported_at', 'created_at', 'updated_at', 'deleted_at'];
 
@@ -22,6 +26,68 @@ class NoveltyReport extends Model
      * @var array
      */
     protected $fillable = ['sub_cost_center_id', 'employee_id', 'novelty_id', 'comment', 'reported_at'];
+    
+     /**
+     * Get the message that needs to be logged for the given event name.
+     *
+     * @param string $eventName
+     * @return string
+     */
+    public function getActivityDescriptionForEvent($eventName)
+    {
+        $data = [
+            'nombre_centro_costo'       =>  $this->subCostCenter->costCenter->name,
+            'nombre_sub_centro_costo'   =>  $this->subCostCenter->name,
+            'nombres_empleado'          =>  $this->employee->fullname,
+            'nombre_novedad'            =>  $this->novelty->name,
+            
+            'comentario'                =>  $this->comment,
+
+            'id_reporte'                =>  $this->id,
+            'id_centro_costo'           =>  $this->subCostCenter->costCenter->id,
+            'id_sub_centro_costo'       =>  $this->sub_cost_center_id,
+            'id_empleado'               =>  $this->employee_id,
+            'id_novedad'                =>  $this->novelty_id,
+        ];
+        
+        if ($eventName == 'created')
+        {
+            return '<strong>@user</strong> reportó una actividad minera, código "<strong>'.$this->id.'</strong>"' // lo que se hizo
+                    .'|NoveltyReport' // de qué modulo
+                    .'|create' // la acción
+                    .'|noveltyReport.show' // link de acceso a los detalles
+                    .'|'.$this->id // el id del registro
+                    .'|'.json_encode($data, JSON_PRETTY_PRINT) // los datos
+                    .'|success' // la clase css que tendrá este registro
+                    ;
+        }
+    
+        if ($eventName == 'updated')
+        {
+            return '<strong>@user</strong> actualizó una novedad, código "<strong>'.$this->id.'</strong>"' // lo que se hizo
+                    .'|NoveltyReport' // de qué modulo
+                    .'|update' // la acción
+                    .'|noveltyReport.show' // link de acceso a los detalles
+                    .'|'.$this->id // el id del registro
+                    .'|'.json_encode($data, JSON_PRETTY_PRINT) // los datos
+                    .'|warning' // la clase css que tendrá este registro
+                    ;
+        }
+    
+        if ($eventName == 'deleted')
+        {
+            return '<strong>@user</strong> eliminó una novedad, código "<strong>'.$this->id.'</strong>"' // lo que se hizo
+                    .'|NoveltyReport' // de qué modulo
+                    .'|delete' // la acción
+                    .'|noveltyReport.show' // link de acceso a los detalles
+                    .'|'.$this->id // el id del registro
+                    .'|'.json_encode($data, JSON_PRETTY_PRINT) // los datos
+                    .'|danger' // la clase css que tendrá este registro
+                    ;
+        }
+    
+        return '';
+    }
     
     /**
      * 

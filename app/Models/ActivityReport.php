@@ -3,9 +3,14 @@
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ActivityReport extends Model
+use Spatie\Activitylog\LogsActivityInterface;
+use Spatie\Activitylog\LogsActivity;
+
+
+class ActivityReport extends Model implements LogsActivityInterface
 {
     use SoftDeletes;
+    use LogsActivity;
 
     /**
      * The timestamps.
@@ -27,6 +32,72 @@ class ActivityReport extends Model
      * @var array
      */
     protected $fillable = ['employee_id', 'sub_cost_center_id', 'mining_activity_id', 'quantity', 'price', 'comment', 'reported_by', 'reported_at'];
+    
+    /**
+     * Get the message that needs to be logged for the given event name.
+     *
+     * @param string $eventName
+     * @return string
+     */
+    public function getActivityDescriptionForEvent($eventName)
+    {
+        $data = [
+            'nombre_centro_costo'   =>  $this->subCostCenter->costCenter->name,
+            'nombre_sub_centro'     =>  $this->subCostCenter->name,
+            'nombres_empleado'      =>  $this->employee->fullname,
+            'nombre_actividad'      =>  $this->miningActivity->name,
+            
+            'cantidad'              =>  $this->quantity,
+            'precio'                =>  $this->price,
+            'comentario'            =>  $this->comment,
+            'nombre_quien_reporta'  =>  $this->user->fullname,
+            
+            'id_reporte'            =>  $this->id,
+            'id_centro_costo'       =>  $this->subCostCenter->costCenter->id,
+            'id_sub_centro_costo'   =>  $this->sub_cost_center_id,
+            'id_empleado'           =>  $this->employee_id,
+            'id_actividad'          =>  $this->mining_activity_id,
+            'id_quien_reporta'      =>  $this->reported_by,
+        ];
+        
+        if ($eventName == 'created')
+        {
+            return '<strong>@user</strong> reportó una actividad minera, código "<strong>'.$this->id.'</strong>"' // lo que se hizo
+                    .'|ActivityReport' // de qué modulo
+                    .'|create' // la acción
+                    .'|activityReport.show' // link de acceso a los detalles
+                    .'|'.$this->id // el id del registro
+                    .'|'.json_encode($data, JSON_PRETTY_PRINT) // los datos
+                    .'|success' // la clase css que tendrá este registro
+                    ;
+        }
+    
+        if ($eventName == 'updated')
+        {
+            return '<strong>@user</strong> actualizó el reporte una actividad minera, código "<strong>'.$this->id.'</strong>"' // lo que se hizo
+                    .'|ActivityReport' // de qué modulo
+                    .'|update' // la acción
+                    .'|activityReport.show' // link de acceso a los detalles
+                    .'|'.$this->id // el id del registro
+                    .'|'.json_encode($data, JSON_PRETTY_PRINT) // los datos
+                    .'|warning' // la clase css que tendrá este registro
+                    ;
+        }
+    
+        if ($eventName == 'deleted')
+        {
+            return '<strong>@user</strong> eliminó el reporte una actividad minera, código "<strong>'.$this->id.'</strong>"' // lo que se hizo
+                    .'|ActivityReport' // de qué modulo
+                    .'|delete' // la acción
+                    .'|activityReport.show' // link de acceso a los detalles
+                    .'|'.$this->id // el id del registro
+                    .'|'.json_encode($data, JSON_PRETTY_PRINT) // los datos
+                    .'|danger' // la clase css que tendrá este registro
+                    ;
+        }
+    
+        return '';
+    }
     
     /**
      * Relación de Uno a Muchos.
