@@ -9,7 +9,7 @@
                         @endif
                     </div>
                     
-                    <div class="clear-fix"></div>
+                    <div class="clearfix"></div>
                     
                     @if(!is_null($parameters['employee_id']))
                     
@@ -41,7 +41,7 @@
                             </div>
                         @endif
                         
-                            <div class="clear-fix"></div>
+                            <div class="clearfix"></div>
                             
                             <div class="form-group col-md-6 col-md-offset-3">
                                 {!! Form::label('mining_activity_id', 'Labor Minera') !!}
@@ -66,7 +66,7 @@
                                 
                             </div>
                             
-                            <div class="clear-fix"></div>
+                            <div class="clearfix"></div>
                             
                             <div class="col-md-3 col-md-offset-3">
                                 <div class="form-group">
@@ -95,7 +95,7 @@
                             </div>
                             @endif
                             
-                            <div class="clear-fix"></div>
+                            <div class="clearfix"></div>
                             
                             <div class="col-md-3 col-md-offset-3 form-group">
                                 {!! Form::label('worked_hours', 'Horas Trabajadas') !!}
@@ -127,7 +127,7 @@
                                 </div>
                             </div>
                             
-                            <div class="clear-fix"></div>
+                            <div class="clearfix"></div>
                             
                             <div class="col-md-6 col-md-offset-3">
                                 <div class="form-group">
@@ -142,7 +142,7 @@
                                 </div>
                             </div>
                             
-                            <div class="clear-fix"></div>
+                            <div class="clearfix"></div>
                             
                             <div class="col-md-6 col-md-offset-3">
                                 <button type="submit" class="{{$btn_options['class']}}">
