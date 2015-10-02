@@ -43,7 +43,7 @@ class CreateCest
         $I->seeCurrentUrlEquals('/employee');
         $I->see('Empleado creado correctamente.', '.alert-success');
         
-        $I->see('Alan Silvestri', 'tbody tr:first-child td');
+        $I->see('Silvestri Alan', 'tbody tr:first-child td');
         $I->see('Proyecto Beteitiva Bocamina 1', 'tbody tr:first-child td');
         $I->see('Minero', 'tbody tr:first-child td');
         $I->see('alan.silvestri@example.com', 'tbody tr:first-child td');
@@ -89,7 +89,7 @@ class CreateCest
         $I->seeCurrentUrlEquals('/employee');
         $I->see('Empleado creado correctamente.', '.alert-success');
         
-        $I->see('Alan Silvestri', 'tbody tr:first-child td');
+        $I->see('Silvestri Alan', 'tbody tr:first-child td');
         $I->see('Proyecto Beteitiva Bocamina 1', 'tbody tr:first-child td');
         $I->see('Minero', 'tbody tr:first-child td');
         $I->see('', 'tbody tr:first-child td');

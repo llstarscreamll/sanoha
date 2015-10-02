@@ -25,7 +25,7 @@ class AddEmailColumnToEmployessTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::table('employess', function(Blueprint $table)
+		Schema::table('employees', function(Blueprint $table)
 		{
 			$table->dropColumn('email');
 		});

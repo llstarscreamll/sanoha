@@ -57,21 +57,23 @@ class SubCostCenter extends Model {
      * @param   string  $exclude
      * @return  array
      */
-    public static function getRelatedEmployees($cost_center_id, $include = null, $exclude = null)
+    public static function getRelatedEmployees($cost_center_id = null, $include = null, $exclude = null)
     {
-        $subCostCenterEmployees = \sanoha\Models\SubCostCenter::where('cost_center_id', $cost_center_id)->with('employees')->get();
+        $centerEmployees = is_null($cost_center_id)
+            ? \sanoha\Models\CostCenter::with('employees')->get()
+            : \sanoha\Models\SubCostCenter::where('cost_center_id', $cost_center_id)->with('employees')->get();
 		$found_include = false;
 		$employees = [];
 		
-		foreach ($subCostCenterEmployees as $key => $subCostCenter) {
+		foreach ($centerEmployees as $key => $center) {
 
-			$employees[$subCostCenter->name] = array();
+			$employees[$center->name] = array();
 
-			foreach ($subCostCenter->employees as $key_employee => $employee) {
+			foreach ($center->employees as $key_employee => $employee) {
 			    
 			    // excluyo a un empleado si es especificado
 			    if($employee->id !== $exclude)
-				    $employees[$subCostCenter->name][$employee->id] = $employee->fullname;
+				    $employees[$center->name][$employee->id] = $employee->fullname;
 				
 				if($employee->id === $include)
 				    $found_include = true;

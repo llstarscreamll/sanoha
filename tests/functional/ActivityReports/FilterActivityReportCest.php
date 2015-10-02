@@ -71,23 +71,23 @@ class FilterActivityReportCest
         $I->seeElement('th span', ['title' => 'Total Empleado', 'data-toggle' => 'tooltip']);
         
         // veo las actividades registradas, los datos de prueba están creados en _common/ActivityReports.php
-        $I->see('Trabajador 1 B1', 'tbody tr:nth-child(1) td');
+        $I->see('B1 Trabajador 1', 'tbody tr:nth-child(1) td');
         $I->see('5', 'tbody tr:nth-child(1) td'); // la cantidad
         $I->see('125.000', 'tbody tr:nth-child(1) td'); // el valor de la actividad 5 * 25000 = 125000
         $I->see('5', 'tbody tr:nth-child(1) td:last-child'); // total actividades de empleado
         $I->see('125.000', 'tbody tr:nth-child(1) td:last-child'); // precio total de actividades de empleado
-        $I->seeElement('tbody tr:nth-child(1) td:last-child span', ['title' => 'Total Actividades Trabajador 1 B1', 'data-toggle' => 'tooltip']);
-        $I->seeElement('tbody tr:nth-child(1) td:last-child span', ['title' => 'Precio Total Trabajador 1 B1', 'data-toggle' => 'tooltip']);
+        $I->seeElement('tbody tr:nth-child(1) td:last-child span', ['title' => 'Total Actividades B1 Trabajador 1', 'data-toggle' => 'tooltip']);
+        $I->seeElement('tbody tr:nth-child(1) td:last-child span', ['title' => 'Precio Total B1 Trabajador 1', 'data-toggle' => 'tooltip']);
         
-        $I->see('Trabajador 2 B2', 'tbody tr:nth-child(2) td');
+        $I->see('B2 Trabajador 2', 'tbody tr:nth-child(2) td');
         $I->see('2', 'tbody tr:nth-child(2) td'); // cantidad actividad
         $I->see('20.000', 'tbody tr:nth-child(2) td'); // 2 * 10000 = 20000
         $I->see('4', 'tbody tr:nth-child(2) td'); // cantidad segunda actividad en la misma fila porque es el mismo trabajador
         $I->see('48.000', 'tbody tr:nth-child(2) td'); // valor segunda actividad 4 * 12000 = 48000
         $I->see('6', 'tbody tr:nth-child(2) td:last-child'); // total actividades de empleado
         $I->see('68.000', 'tbody tr:nth-child(2) td:last-child'); // precio total de actividades de empleado, 20.000 + 48.000 = 68.000
-        $I->seeElement('tbody tr:nth-child(2) td:last-child span', ['title' => 'Total Actividades Trabajador 2 B2', 'data-toggle' => 'tooltip']);
-        $I->seeElement('tbody tr:nth-child(2) td:last-child span', ['title' => 'Precio Total Trabajador 2 B2', 'data-toggle' => 'tooltip']);
+        $I->seeElement('tbody tr:nth-child(2) td:last-child span', ['title' => 'Total Actividades B2 Trabajador 2', 'data-toggle' => 'tooltip']);
+        $I->seeElement('tbody tr:nth-child(2) td:last-child span', ['title' => 'Precio Total B2 Trabajador 2', 'data-toggle' => 'tooltip']);
         
         // los totales de cada labor minera
         // --- actividad uno

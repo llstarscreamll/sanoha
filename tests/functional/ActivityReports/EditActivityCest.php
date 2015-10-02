@@ -53,7 +53,7 @@ class EditActivityCest
         $I->see('Actualizar Detalles de Labor Minera', 'legend');
         
         // veo los campos del formulario con los datos del registro
-        $I->seeOptionIsSelected('employee_id', 'Trabajador 1 B1');
+        $I->seeOptionIsSelected('employee_id', 'B1 Trabajador 1');
         $I->seeOptionIsSelected('mining_activity_id', 'Vagoneta de Carbón | VC');
         $I->seeElement('input', ['value' => '2']);
         $I->seeElement('input', ['value' => '5000']);
@@ -87,7 +87,7 @@ class EditActivityCest
         $I->see('Actualizar Detalles de Labor Minera', 'legend');
         
         // veo los campos del formulario con los datos del registro
-        $I->seeOptionIsSelected('employee_id', 'Trabajador 2 B2');
+        $I->seeOptionIsSelected('employee_id', 'B2 Trabajador 2');
         $I->seeOptionIsSelected('mining_activity_id', 'Vagoneta de Roca | VR');
         $I->seeElement('input', ['value' => '4']);
         $I->seeElement('input', ['value' => '10000']);

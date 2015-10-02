@@ -28,7 +28,7 @@ class NoveltyReport extends Model
      */ 
     public function subCostCenter()
     {
-        return $this->belongsTo('\sanoha\Models\SubCostCenter');
+        return $this->belongsTo('\sanoha\Models\SubCostCenter')->withTrashed();
     }
     
     /**
@@ -36,7 +36,7 @@ class NoveltyReport extends Model
      */ 
     public function novelty()
     {
-        return $this->belongsTo('\sanoha\Models\Novelty');
+        return $this->belongsTo('\sanoha\Models\Novelty')->withTrashed();
     }
     
     /**
@@ -44,7 +44,7 @@ class NoveltyReport extends Model
      */
     public function employee()
     {
-        return $this->belongsTo('\sanoha\Models\Employee');
+        return $this->belongsTo('\sanoha\Models\Employee')->withTrashed();
     }
     
     /**

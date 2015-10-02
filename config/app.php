@@ -151,6 +151,7 @@ return [
         'Collective\Html\HtmlServiceProvider',
         'Zizaco\Entrust\EntrustServiceProvider',
         'Barryvdh\Debugbar\ServiceProvider',
+        Mews\Purifier\PurifierServiceProvider::class,
     ],
 
     /*
@@ -205,7 +206,8 @@ return [
         'Form'      => 'Collective\Html\FormFacade',
         'Html'      => 'Collective\Html\HtmlFacade',
         'Entrust'   => 'Zizaco\Entrust\EntrustFacade',
-        'Debugbar' => 'Barryvdh\Debugbar\Facade',
+        'Debugbar'  => 'Barryvdh\Debugbar\Facade',
+        'Purifier'  => Mews\Purifier\Facades\Purifier::class,
     ],
 
 ];

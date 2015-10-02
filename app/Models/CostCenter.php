@@ -34,7 +34,7 @@ class CostCenter extends Model
     /**
      * 
      */
-    public function employee()
+    public function employees()
     {
         return $this->hasManyThrough('sanoha\Models\Employee', 'sanoha\Models\SubCostCenter');
     }

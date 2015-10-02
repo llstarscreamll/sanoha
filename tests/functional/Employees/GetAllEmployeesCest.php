@@ -31,12 +31,12 @@ class GetAllEmployeesCest
         $I->seeElement('table');
         
         // veo en la tabla los empleados registrados
-        $I->see('Trabajador 1 B1', 'tbody tr:last-child td a');
+        $I->see('B1 Trabajador 1', 'tbody tr:last-child td a');
         $I->see('Trabajador1@example.com', 'tbody tr:last-child td');
         $I->see('Minero', 'tbody tr:last-child td');
         $I->see('Proyecto Beteitiva Bocamina 1', 'tbody tr:last-child td');
-        $I->see('Trabajador 2 B2', 'tbody tr td a');
-        $I->see('Trabajador 3 B1', 'tbody tr td a');
-        $I->see('Trabajador 4 B2', 'tbody tr td a');
+        $I->see('B2 Trabajador 2', 'tbody tr td a');
+        $I->see('B1 Trabajador 3', 'tbody tr td a');
+        $I->see('B2 Trabajador 4', 'tbody tr td a');
     }
 }

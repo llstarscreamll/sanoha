@@ -24,7 +24,7 @@ class NoveltyReportsTableSeeder extends Seeder
         
         for ($i=0; $i<$days; $i++) {
             
-            for($j=0; $j<50; $j++){
+            for($j=0; $j<10; $j++){
                 
                 $data[] = [
                     'sub_cost_center_id'    =>      $faker->numberBetween(1,$sub_cost_centers),

@@ -33,10 +33,7 @@ class CreateEmployeeSubCostCenterTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('employee_sub_cost_center', function(Blueprint $table)
-		{
-			//
-		});
+		Schema::drop('employee_sub_cost_center');
 	}
 
 }

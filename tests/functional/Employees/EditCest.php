@@ -41,8 +41,8 @@ class EditCest
         $I->wantTo('ediat la info de un empleado');
         
         $I->amOnPage('/employee');
-        $I->see('Alan Silvestri', 'tbody tr td a');
-        $I->click('Alan Silvestri', 'tbody tr td a');
+        $I->see('Silvestri Alan', 'tbody tr td a');
+        $I->click('Silvestri Alan', 'tbody tr td a');
         
         // el 9 es porque ya hay 8 empleados creados
         $I->seeCurrentUrlEquals('/employee/13');

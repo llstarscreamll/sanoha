@@ -16,15 +16,16 @@
 						
 						{{--
 							*******************************************
-							Módulo de Usuarios
+										Módulo de Usuarios
 							*******************************************
 						--}}
 						@if(\Auth::getUser()->can('users.index'))
 							<li class="{{ \Request::is('user*') ? 'active' : '' }}"><a href="{{ url('/users') }}">Usarios</a></li>
 						@endif
+						
 						{{--
 							*******************************************
-							Múdulo de Roles
+										Múdulo de Roles
 							*******************************************
 						--}}
 						@if(\Auth::getUser()->can('roles.index'))
@@ -33,7 +34,7 @@
 						
 						{{--
 							*******************************************
-							Múdulo de Empleados
+										Múdulo de Empleados
 							*******************************************
 						--}}
 						@if(\Auth::getUser()->can('employee.index'))
@@ -42,7 +43,7 @@
 						
 						{{--
 							*******************************************
-							Múdulo de Reporte de Labores Mineras
+								Múdulo de Reporte de Labores Mineras
 							*******************************************
 						--}}
 						@if(\Auth::getUser()->can('activityReport.index'))
@@ -71,7 +72,7 @@
 						@endif
 						{{--
 							*******************************************
-							Múdulo de Reporte de Novedades
+								Múdulo de Reporte de Novedades
 							*******************************************
 						--}}
 						@if(\Auth::getUser()->can('noveltyReport.index'))
@@ -98,6 +99,16 @@
 								</ul>
 							</li>
 						@endif
+						
+						{{--
+							*******************************************
+										Módulo de Usuarios
+							*******************************************
+						--}}
+						@if(\Auth::getUser()->can('workOrder.index'))
+							<li class="{{ \Request::is('workOrder*') ? 'active' : '' }}"><a href="{{ url('/workOrder') }}">Ordenes de Trabajo</a></li>
+						@endif
+						
 					@endif
 				</ul>
 

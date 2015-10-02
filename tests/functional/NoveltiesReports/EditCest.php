@@ -70,7 +70,7 @@ class EditCest
         
         // veo que la información mostrada corresponde con lo que hay en BD
         $I->seeElement('form', ['method' => 'POST']);
-        $I->seeOptionIsSelected('employee_id', 'Trabajador 1 B1');
+        $I->seeOptionIsSelected('employee_id', 'B1 Trabajador 1');
         $I->seeOptionIsSelected('novelty_id', 'Licencia No Remunerada');
         $I->seeElement('input', ['value' => $date->toDateString()]);
         $I->see('prueba', 'textarea');
@@ -91,7 +91,7 @@ class EditCest
         
         // veo que la información mostrada corresponde con la que actualizé
         $I->seeElement('input', ['value' => 'Proyecto Beteitiva - Bocamina 2', 'disabled' => 'disabled']);
-        $I->seeElement('input', ['value' => 'Trabajador 2 B2', 'disabled' => 'disabled']);
+        $I->seeElement('input', ['value' => 'B2 Trabajador 2', 'disabled' => 'disabled']);
         $I->seeElement('input', ['value' => 'Permiso No Remunerado', 'disabled' => 'disabled']);
         $I->seeElement('input', ['value' => $date, 'disabled' => 'disabled']);
         $I->see('Comentario de prueba', 'textarea:disabled');

@@ -124,7 +124,7 @@ class MoveToTrashCest
         
         // veo que la información mostrada corresponde con lo que hay en BD
         $I->seeElement('input', ['value' => 'Proyecto Beteitiva - Bocamina 1', 'disabled' => 'disabled']);
-        $I->seeElement('input', ['value' => 'Trabajador 1 B1', 'disabled' => 'disabled']);
+        $I->seeElement('input', ['value' => 'B1 Trabajador 1', 'disabled' => 'disabled']);
         
         $I->click('Confirmar', 'button');
         

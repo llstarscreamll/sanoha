@@ -24,9 +24,9 @@ class Novelty extends Model {
     protected $fillable = ['name', 'short_name'];
     
     /**
-     * 
+     * La relación entre tipos novedade y reporte de novedades, uno a muchos
      */ 
-    public function noveltyReport()
+    public function noveltyReports()
     {
         return $this->hasMany('sanoha\Models\NoveltyReport');
     }

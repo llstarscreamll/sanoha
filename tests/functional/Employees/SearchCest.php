@@ -35,7 +35,7 @@ class SearchCest
         $I->wantTo('buscar un empleado por su nombre');
         
         $I->amOnPage('/employee');
-        $I->see('Alan Silvestri', 'tbody tr td a');
+        $I->see('Silvestri Alan', 'tbody tr td a');
         $I->see('Trabajador 1', 'tbody tr td a');
         $I->see('Trabajador 2', 'tbody tr td a');
         $I->see('Trabajador 3', 'tbody tr td a');
@@ -49,7 +49,7 @@ class SearchCest
         
         $I->seeCurrentUrlEquals('/employee?find=Alan');
         
-        $I->see('Alan Silvestri', 'tbody tr td a');
+        $I->see('Silvestri Alan', 'tbody tr td a');
         $I->dontSee('Trabajador 1', 'tbody tr td a');
         $I->dontSee('Trabajador 2', 'tbody tr td a');
         $I->dontSee('Trabajador 3', 'tbody tr td a');
@@ -67,7 +67,7 @@ class SearchCest
         $I->wantTo('buscar un empleado por su nombre');
         
         $I->amOnPage('/employee');
-        $I->see('Alan Silvestri', 'tbody tr td a');
+        $I->see('Silvestri Alan', 'tbody tr td a');
         $I->see('Trabajador 1', 'tbody tr td a');
         $I->see('Trabajador 2', 'tbody tr td a');
         $I->see('Trabajador 3', 'tbody tr td a');
@@ -81,7 +81,7 @@ class SearchCest
         
         $I->seeCurrentUrlEquals('/employee?find=Silves');
         
-        $I->see('Alan Silvestri', 'tbody tr td a');
+        $I->see('Silvestri Alan', 'tbody tr td a');
         $I->dontSee('Trabajador 1', 'tbody tr td a');
         $I->dontSee('Trabajador 2', 'tbody tr td a');
         $I->dontSee('Trabajador 3', 'tbody tr td a');
@@ -99,7 +99,7 @@ class SearchCest
         $I->wantTo('buscar un empleado por su nombre');
         
         $I->amOnPage('/employee');
-        $I->see('Alan Silvestri', 'tbody tr td a');
+        $I->see('Silvestri Alan', 'tbody tr td a');
         $I->see('Trabajador 1', 'tbody tr td a');
         $I->see('Trabajador 2', 'tbody tr td a');
         $I->see('Trabajador 3', 'tbody tr td a');
@@ -113,7 +113,7 @@ class SearchCest
         
         $I->seeCurrentUrlEquals('/employee?find=74265');
         
-        $I->see('Alan Silvestri', 'tbody tr td a');
+        $I->see('Silvestri Alan', 'tbody tr td a');
         $I->dontSee('Trabajador 1', 'tbody tr td a');
         $I->dontSee('Trabajador 2', 'tbody tr td a');
         $I->dontSee('Trabajador 3', 'tbody tr td a');

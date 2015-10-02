@@ -2,6 +2,7 @@
 
 use \common\User                as UserCommons;
 use \common\Roles               as RolesCommons;
+use \common\Vehicles            as VehiclesCommons;
 use \common\Employees           as EmployeesCommons;
 use \common\Novelties           as NoveltiesCommons;
 use \common\CostCenters         as CostCentersCommons;
@@ -17,6 +18,7 @@ class BaseTest
     public $userCommons;
     public $rolesCommons;
     public $employeeCommons;
+    public $vehiclesCommons;
     public $roleFormRequest;
     public $noveltiesCommons;
     public $roleFormMessages;
@@ -28,20 +30,45 @@ class BaseTest
     
     public $admin_user;
     
+    public function __construct()
+    {
+        $this->employeeCommons = new EmployeesCommons;
+        $this->permissionsCommons = new PermissionsCommons;
+    }
+    
+    /**
+     * Dependencias de los test del módulo de ordenes de trabajo
+     */
+    public function workOrders()
+    {
+        // creo los permisos para el módulo de reporte de novedad
+        $this->permissionsCommons->createWorkOrdersModulePermissions();
+        
+        // cargo los datos base
+        $this->createBasicData();
+        
+        // creo los empleados
+        $this->employeeCommons->createMiningEmployees();
+        
+        // creo vehículos
+        $this->vehiclesCommons = new VehiclesCommons;
+        $this->vehiclesCommons->createVehicles();
+        
+        $this->admin_user = $this->userCommons->adminUser;
+    }
+    
     /**
      * Dependencias de los test del módulo de empleados
      */
     public function employees()
     {
         // creo los permisos para el módulo de reporte de novedad
-        $this->permissionsCommons = new PermissionsCommons;
         $this->permissionsCommons->createEmployeesModulePermissions();
         
         // cargo los datos base
         $this->createBasicData();
         
         // creo los empleados
-        $this->employeeCommons = new EmployeesCommons;
         $this->employeeCommons->createMiningEmployees();
         
         $this->admin_user = $this->userCommons->adminUser;
@@ -53,14 +80,12 @@ class BaseTest
     public function noveltyReports()
     {
         // creo los permisos para el módulo de reporte de novedad
-        $this->permissionsCommons = new PermissionsCommons;
         $this->permissionsCommons->createNoveltyReportModulePermissions();
         
         // cargo los datos base
         $this->createBasicData();
         
         // creo los empleados
-        $this->employeeCommons = new EmployeesCommons;
         $this->employeeCommons->createMiningEmployees();
         
         // creo las novedades
@@ -76,7 +101,6 @@ class BaseTest
     public function users()
     {
         // creo los permisos para el módulo de usuarios
-        $this->permissionsCommons = new PermissionsCommons;
         $this->permissionsCommons->createUsersModulePermissions();
         
         // cargo los datos base
@@ -91,7 +115,6 @@ class BaseTest
     public function activityReports()
     {
         // creo los permisos para el módulo de reporte de novedad
-        $this->permissionsCommons = new PermissionsCommons;
         $this->permissionsCommons->createActivityReportsModulePermissions();
         
         $this->activityReportsCommons = new ActivityReportsCommons;
@@ -100,7 +123,6 @@ class BaseTest
         $this->createBasicData();
         
         // creo los empleados
-        $this->employeeCommons = new EmployeesCommons;
         $this->employeeCommons->createMiningEmployees();
         
         // creo actividades mineras
@@ -116,7 +138,6 @@ class BaseTest
         $this->roleFormMessages = $this->roleFormRequest->messages();
         
         // creo los permisos para el módulo de roles
-        $this->permissionsCommons = new PermissionsCommons;
         $this->permissionsCommons->createRolesModulePermissions();
         
         // cargo los datos base

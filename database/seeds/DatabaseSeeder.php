@@ -27,14 +27,15 @@ class DatabaseSeeder extends Seeder
         $this->call('NoveltiesTableSeeder');
         
         // lista real de los empleados mineros de la empresa
-        //$this->call('EmployeesTableSeeder');
-        //$this->call('UserTableSeeder'); // el usuario por defecto de la base de datos
+        $this->call('EmployeesTableSeeder');
+        $this->call('UserTableSeeder'); // el usuario por defecto de la base de datos
         
         /**
          * Test data
          */
-        //$this->call('ActivityReportsTableSeeder');
-        //$this->call('NoveltyReportsTableSeeder');
+        $this->call('ActivityReportsTableSeeder');
+        $this->call('NoveltyReportsTableSeeder');
+        $this->call('VehiclesTableSeeder');
         
     }
 

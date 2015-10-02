@@ -47,14 +47,14 @@ class ReportCest
         $I->seeElement('button', ['type' => 'submit']);
             
         // veo que el usuario que venía en la url está ya seleccionado
-        $I->seeOptionIsSelected('#employee_id', 'Trabajador 1 B1');
+        $I->seeOptionIsSelected('#employee_id', 'B1 Trabajador 1');
         
         // veo una lista con los empleados del proyecto
-        $I->see('Trabajador 1 B1', 'option');
-        $I->see('Trabajador 2 B2', 'option');
+        $I->see('B1 Trabajador 1', 'option');
+        $I->see('B2 Trabajador 2', 'option');
         
         // pero  no veo los trabajadores de otros proyectos
-        $I->dontSee('Trabajador 3 B1', 'option');
+        $I->dontSee('B1 Trabajador 3', 'option');
         $I->dontSee('Trabajador 4 B2', 'option');
         
         // veo en un select los tipos de novedades

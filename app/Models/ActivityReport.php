@@ -35,7 +35,7 @@ class ActivityReport extends Model
      */
     public function miningActivity()
     {
-        return $this->belongsTo('sanoha\Models\MiningActivity');
+        return $this->belongsTo('sanoha\Models\MiningActivity')->withTrashed();
     }
     
     /**
@@ -45,7 +45,7 @@ class ActivityReport extends Model
      */
     public function subCostCenter()
     {
-        return $this->belongsTo('\sanoha\Models\SubCostCenter');
+        return $this->belongsTo('\sanoha\Models\SubCostCenter')->withTrashed();
     }
     
     /**
@@ -55,7 +55,7 @@ class ActivityReport extends Model
      */
     public function employee()
     {
-        return $this->belongsTo('sanoha\Models\Employee');
+        return $this->belongsTo('sanoha\Models\Employee')->withTrashed();
     }
     
     /**
@@ -65,7 +65,7 @@ class ActivityReport extends Model
      */
     public function user()
     {
-        return $this->belongsTo('sanoha\Models\User', 'reported_by');
+        return $this->belongsTo('sanoha\Models\User', 'reported_by')->withTrashed();
     }
     
     /**
@@ -132,8 +132,7 @@ class ActivityReport extends Model
                 'cost_centers.name as costCenter_name')
                 
             // solo los empleados de cierto centro de costo deben aparecer
-            ->where('cost_centers.id', '=', $parameters['cost_center_id'])
-            ->whereNull('activity_reports.deleted_at');
+            ->where('cost_centers.id', '=', $parameters['cost_center_id']);
         
         if(isset($parameters['employee']) && !empty($parameters['employee']))
             $data = self::addSearchByEmployee($data, $parameters['employee']);
@@ -179,8 +178,7 @@ class ActivityReport extends Model
                     )
                 )
             // solo los empleados de cierto centro de costo deben aparecer
-            ->where('cost_centers.id', '=', $parameters['cost_center_id'])
-            ->whereNull('activity_reports.deleted_at');
+            ->where('cost_centers.id', '=', $parameters['cost_center_id']);
         
         if(isset($parameters['employee']) && !empty($parameters['employee']))
             $data = self::addSearchByEmployee($data, $parameters['employee']);
@@ -219,7 +217,7 @@ class ActivityReport extends Model
             
             // creating indexes (columns)
             foreach ($miningActivities as $keyMiningActivity => $valueMiningActivity) {
-                $ordered_activities[$value->employee_id]['employee_fullname'] = ucwords(strtolower($value->employee_name)) . ' ' . ucwords(strtolower($value->employee_lastname));
+                $ordered_activities[$value->employee_id]['employee_fullname'] = ucwords(strtolower($value->employee_lastname . ' ' . $value->employee_name));
                 $ordered_activities[$value->employee_id][$valueMiningActivity['short_name']]['quantity'] = 0;
                 $ordered_activities[$value->employee_id][$valueMiningActivity['short_name']]['price'] = 0;
 
@@ -244,7 +242,7 @@ class ActivityReport extends Model
                     
                     $ordered_activities[$value2->employee_id]['employee_total']['quantity'] += floatval($value2->activity_quantity);
                     $ordered_activities[$value2->employee_id]['employee_total']['price'] += floatval($value2->activity_quantity) * floatval($value2->activity_price);
-                    $ordered_activities[$value2->employee_id]['employee_total']['employee'] = ucwords(strtolower($value2->employee_name) . ' ' . strtolower($value2->employee_lastname));
+                    $ordered_activities[$value2->employee_id]['employee_total']['employee'] = ucwords(strtolower($value2->employee_lastname . ' ' . $value2->employee_name));
                     
                     // calculing totals
                     $totals['totals'][$value['short_name']]['quantity'] += $value2->activity_quantity;

@@ -18,6 +18,54 @@ class Permissions
     /**
      * Crea permisos para el módulo de roles
      */
+    public function createWorkOrdersModulePermissions()
+    {
+        $this->data[] = [
+            'name'           => 'workOrder.index',
+            'display_name'   => 'Listar Ordenes de Trabajo',
+            'description'    => 'Ver en una lista de todas las ordenes de trabajo registradas',
+            'created_at'     =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'     =>  $this->date->toDateTimeString()
+        ];
+            
+        $this->data[] = [
+            'name'           => 'workOrder.create',
+            'display_name'   => 'Crear Orden de Trabajo',
+            'description'    => 'Crear nuevas ordenes de trabajo',
+            'created_at'     =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'     =>  $this->date->toDateTimeString()
+        ];
+            
+        $this->data[] = [
+            'name'           => 'workOrder.show',
+            'display_name'   => 'Ver Orden de Trabajo',
+            'description'    => 'Visalizar la información de ordenes de trabajo (sólo lectura)',
+            'created_at'     =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'     =>  $this->date->toDateTimeString()
+        ];
+            
+        $this->data[] = [
+            'name'           => 'workOrder.edit',
+            'display_name'   => 'Actualizar Orden de Trabajo',
+            'description'    => 'Actualiza la información de las ordenes de trabajo registradas',
+            'created_at'     =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'     =>  $this->date->toDateTimeString()
+        ];
+        
+        $this->data[] = [
+            'name'           => 'workOrder.destroy',
+            'display_name'   => 'Eliminar Orden de Trabajo',
+            'description'    => 'Eliminar las ordenes de trabajo registradas',
+            'created_at'     =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'     =>  $this->date->toDateTimeString()
+        ];
+        
+        \DB::table('permissions')->insert($this->data);
+    }
+    
+    /**
+     * Crea permisos para el módulo de roles
+     */
     public function createRolesModulePermissions()
     {
         $this->data[] = [
@@ -45,19 +93,19 @@ class Permissions
         ];
             
         $this->data[] = [
-        'name'           => 'roles.edit',
-        'display_name'   => 'Actualizar Rol',
-        'description'    => 'Actualiza la información de los roles del sistema',
-        'created_at'    =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
-        'updated_at'    =>  $this->date->toDateTimeString()
+            'name'           => 'roles.edit',
+            'display_name'   => 'Actualizar Rol',
+            'description'    => 'Actualiza la información de los roles del sistema',
+            'created_at'     =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'     =>  $this->date->toDateTimeString()
         ];
         
         $this->data[] = [
             'name'           => 'roles.destroy',
             'display_name'   => 'Eliminar Rol',
             'description'    => 'Eliminar roles del sistema',
-            'created_at'    =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
-            'updated_at'    =>  $this->date->toDateTimeString()
+            'created_at'     =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'     =>  $this->date->toDateTimeString()
         ];
         
         \DB::table('permissions')->insert($this->data);

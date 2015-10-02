@@ -22,7 +22,7 @@
 					
 					{{-- El usuario que está imprimiendo el reporte --}}
 					<h4 class="vertical-align-middle visible-print-block">
-						<small>Impreso por:</small> {{\Auth::getUser()->getFullName()}}
+						<small>Impreso por:</small> {{\Auth::getUser()->fullname}}
 					</h4>
 				</th>
 				

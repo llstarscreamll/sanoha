@@ -22,7 +22,16 @@ class Employee extends Model
      * @var array
      */
     protected $fillable = ['sub_cost_center_id', 'position_id', 'name', 'lastname', 'identification_number', 'email'];
-
+    
+    /**
+     * La relación entre un empledo y las ordenes de trabajo, muchos a muchos
+     */
+    public function internalAccompanists()
+    {
+        return $this->belongsToMany('sanoha\Models\WorkOrder', 'internal_accompanists')
+            ->withPivot('work_report', 'reported_by', 'reported_at');
+    }
+    
     /**
      * 
      */
@@ -60,6 +69,6 @@ class Employee extends Model
      */
     public function getFullnameAttribute()
     {
-        return $this->attributes['name'] .' '. $this->attributes['lastname'];
+        return ucwords(strtolower($this->attributes['lastname'] .' '. $this->attributes['name']));
     }
 }

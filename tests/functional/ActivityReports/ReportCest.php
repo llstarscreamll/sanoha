@@ -277,8 +277,8 @@ class ReportCest
         
         // veo que hay un select con los nombres de los trabajadores del centro
         // de costos que seleccioné
-        $I->see('Trabajador 1 B1', 'select optgroup option');
-        $I->see('Trabajador 2 B2', 'select optgroup option');
+        $I->see('B1 Trabajador 1', 'select optgroup option');
+        $I->see('B2 Trabajador 2', 'select optgroup option');
         
         // veo que no están presentes muchos campos porque debo elegir primero al trabajador
         $I->dontSeeElement('input', ['type' => 'checkbox', 'checked' => 'checked']); // por defecto está marcado
@@ -309,7 +309,7 @@ class ReportCest
         $I->seeCurrentUrlEquals('/activityReport/create?employee_id=1');
         
         // veo que el select tiene ya cargado el empleado seleccionado anteriormente
-        $I->seeOptionIsSelected('#employee_id', 'Trabajador 1 B1');
+        $I->seeOptionIsSelected('#employee_id', 'B1 Trabajador 1');
         
         // ahora si veo los campos faltantes del formulario para poder registrar la actividad
         $I->seeElement('input', ['type' => 'checkbox', 'name' =>  'attended', 'checked' => 'checked']);
@@ -340,7 +340,7 @@ class ReportCest
         }
         
         // el nombre del trabajador no debe aparecer en la tabla, pues no reporta actividades
-        $I->dontSee('Trabajador 1 B1', 'tbody tr:first-child td:first-child');
+        $I->dontSee('B1 Trabajador 1', 'tbody tr:first-child td:first-child');
         
         // veo que hay un mensaje de alerta que me dice que nada se le ha cargado al trabajador
         $I->see('No hay actividades registradas...', 'div.alert-warning');

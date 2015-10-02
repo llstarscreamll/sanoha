@@ -20,7 +20,7 @@
 				
 					<tr>
 						<td>{!! Form::checkbox('id[]', $user->id, false, ['class' => 'checkbox-table-item', 'id' => 'user-'.$user->id]) !!}</td>
-						<td><a href="{{ route('users.show', $user->id) }}"> {{ $user->getFullName() }} </a></td>
+						<td><a href="{{ route('users.show', $user->id) }}"> {{ $user->fullname }} </a></td>
 						<td>
 							{{ empty($user->getRoles()) ? 'Indefinido' : $user->getRoles()}}
 						</td>

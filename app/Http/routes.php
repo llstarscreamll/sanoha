@@ -29,6 +29,18 @@ Route::group(['middleware' => 'auth'], function(){
     Route::resource('users', 'UserController');
     Route::resource('roles', 'RoleController');
     Route::resource('employee', 'EmployeeController');
+    /**
+     * Ordenes de Trabajo
+     */
+    Route::get('workOrder/{id}/mainReport', [
+        'as'    =>  'workOrder.mainReport',
+        'uses'  =>  'WorkOrderController@mainReportForm'
+    ]);
+    Route::put('workOrder/{id}/mainReport', [
+        'as'    =>  'workOrder.mainReport',
+        'uses'  =>  'WorkOrderController@mainReportStore'
+    ]);
+    Route::resource('workOrder', 'WorkOrderController');
     
     /**
      * Reporte de Novedades

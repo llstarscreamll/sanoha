@@ -39,7 +39,7 @@ class ShowUserCest
             ]);
         
         $I->amOnPage($this->base_test->userCommons->usersIndexUrl);
-        $I->click($testUser->name. ' ' .$testUser->lastname, 'a');
+        $I->click($testUser->lastname. ' ' .$testUser->name, 'a');
         $I->seeCurrentUrlEquals('/users/'. $testUser->id);
         $I->see('Detalles de Usuario', 'h1');
 
