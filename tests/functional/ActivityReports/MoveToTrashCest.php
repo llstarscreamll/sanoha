@@ -44,7 +44,7 @@ class MoveToTrashCest
             'sub_cost_center_id'    =>  1,
             'employee_id'           =>  2,
             'mining_activity_id'    =>  2,
-            'quantity'              => 4,
+            'quantity'              =>  4,
             'price'                 =>  '10000',
             'comment'               =>  'test test',
             'reported_by'           =>  1,
@@ -77,6 +77,16 @@ class MoveToTrashCest
         ]);
         
         $I->see('Las actividades han sido movidas a la papelera correctamente.', '.alert-success');
+        
+        // en reporte de registros individuales
+        $I->seeCurrentUrlEquals('/activityReport/individual');
+        $I->dontSee('Trabajador 1', 'tbody tr td');
+        $I->dontSee('Trabajador 2', 'tbody tr td');
+        
+        // en reporte de nómina
+        $I->amOnPage('/activityReport');
+        $I->dontSee('Trabajador 1', 'tbody tr td');
+        $I->dontSee('Trabajador 2', 'tbody tr td');
     }
 
     /**

@@ -213,6 +213,7 @@ class ActivityReport extends Model implements LogsActivityInterface
             
         $data = $data
             ->whereBetween('activity_reports.reported_at', [$parameters['from'], $parameters['to']])
+            ->whereNull('activity_reports.deleted_at')
             ->orderBy('employees.name')
             ->get();
 
@@ -259,6 +260,7 @@ class ActivityReport extends Model implements LogsActivityInterface
             
         $data = $data
             ->whereBetween('activity_reports.reported_at', [$parameters['from'], $parameters['to']])
+            ->whereNull('activity_reports.deleted_at')
             ->orderBy('employees.name')
             ->get();
 
