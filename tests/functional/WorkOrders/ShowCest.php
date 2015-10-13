@@ -2,7 +2,7 @@
 namespace WorkOrders;
 
 use \FunctionalTester;
-use \Page\WorkOrdersPage;
+use \Page\WorkOrders\WorkOrdersPage;
 
 class ShowCest
 {

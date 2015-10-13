@@ -1,9 +1,9 @@
 <div class="margin-top-20" id="internal-accompanists">
     <div class="clearfix"></div>
 
-    @if(count($internal_accompanists = $workOrder->internalAccompanists) > 0)
+    @if(count($workOrder->internalAccompanists) > 0)
     <div class="col-md-10 col-md-offset-1 panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-        @foreach($internal_accompanists as $employee)    
+        @foreach($workOrder->internalAccompanists as $employee)
             
         <div class="panel panel-default">
             
@@ -12,6 +12,13 @@
                     <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{$employee->id}}" aria-expanded="true" aria-controls="collapseOne">
                         {{$employee->fullname}} <small>{{$employee->position->name}}</small>
                     </a>
+                    
+                    <div class="pull-right">
+                        <a href="{{route('workOrder.internal_accompanist_report_form', [$workOrder->id, $employee->id])}}" class="btn btn-xs btn-primary">
+                            <span class="glyphicon glyphicon-list-alt"></span>
+                            <span class="sr-only">Crear Reporte de Actividades Realizadas</span>
+                        </a>
+                    </div>
                 </h4>
             </div>
             
@@ -21,7 +28,7 @@
                     
                     @if(!is_null($employee->pivot->work_report))
                     
-                        {{$employee->pivot->work_report}}
+                        {!!$employee->pivot->work_report!!}
                         
                     @else
                     
@@ -30,12 +37,15 @@
                     @endif
                     
                 </div>
-                
+
                 <div class="panel-footer text-right">
-                    {{!is_null($employee->pivot->work_report)
-                        ? 'Reportado por '.$employee->pivot->reported_by.' el '.$employee->pivot->reported_at
-                        : '---'
-                    }}
+                    
+                    @if(!is_null($employee->pivot->work_report))
+                        Reportado por <strong>{{$workOrder->getInternalAccompanistsReportedBy($employee->pivot->reported_by)}}</strong> el <strong>{{$employee->pivot->reported_at}}</strong>
+                    @else
+                        '---'
+                    @endif
+                    
                 </div>
             </div>
         

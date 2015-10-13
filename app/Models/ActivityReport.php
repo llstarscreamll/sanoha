@@ -386,7 +386,8 @@ class ActivityReport extends Model implements LogsActivityInterface
      */ 
     public static function individualSearch($parameters)
     {
-        return \sanoha\Models\ActivityReport::where('reported_at', '>=', $parameters['from'])
+        return \sanoha\Models\ActivityReport::with('employee', 'miningActivity')
+            ->where('reported_at', '>=', $parameters['from'])
             ->where('reported_at', '<=', $parameters['to'])
             ->orderBy('updated_at', 'desc')
             ->whereHas('employee', function($q) use ($parameters)

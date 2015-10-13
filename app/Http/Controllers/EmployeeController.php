@@ -19,10 +19,11 @@ class EmployeeController extends Controller
     {
         $input = $request->all();
         
-        $employees = \sanoha\Models\Employee::where(function($q) use($request){
-            $q->where('name', 'like', '%'.$request->get('find').'%')
-                ->orWhere('lastname', 'like', '%'.$request->get('find').'%')
-                ->orWhere('identification_number', 'like', '%'.$request->get('find').'%');
+        $employees = \sanoha\Models\Employee::with('position', 'subCostCenter')
+            ->where(function($q) use($request){
+                $q->where('name', 'like', '%'.$request->get('find').'%')
+                    ->orWhere('lastname', 'like', '%'.$request->get('find').'%')
+                    ->orWhere('identification_number', 'like', '%'.$request->get('find').'%');
             })
             ->orderBy('updated_at', 'desc')->paginate(15);
 

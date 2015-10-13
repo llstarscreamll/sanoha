@@ -34,9 +34,18 @@ Route::group(['middleware' => 'auth'], function(){
     Route::resource('users', 'UserController');
     Route::resource('roles', 'RoleController');
     Route::resource('employee', 'EmployeeController');
+    
     /**
      * Ordenes de Trabajo
      */
+    Route::get('workOrder/{work_order_id}/internalAccompanist/{employee_id}/report', [
+        'as'    =>  'workOrder.internal_accompanist_report_form',
+        'uses'  =>  'WorkOrderController@internalAccompanistReportForm'
+    ]);
+    Route::post('workOrder/{work_order_id}/internalAccompanist/{employee_id}/report', [
+        'as'    =>  'workOrder.internal_accompanist_report_store',
+        'uses'  =>  'WorkOrderController@internalAccompanistReportStore'
+    ]);
     Route::get('workOrder/{id}/mainReport', [
         'as'    =>  'workOrder.mainReport',
         'uses'  =>  'WorkOrderController@mainReportForm'

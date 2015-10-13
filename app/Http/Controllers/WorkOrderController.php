@@ -95,8 +95,16 @@ class WorkOrderController extends Controller {
 	 */
 	public function show($id)
 	{
-		$workOrder = WorkOrder::findOrFail($id);
-		
+		$workOrder = WorkOrder::with([
+			'employee',
+			'workOrderReports',
+			'workOrderReports.reportedBy',
+			'internalAccompanists.position',
+			'internalAccompanists'	=>	function($q){ $q->orderBy('lastname'); },
+			'workOrderReports'		=>	function($q){ $q->orderBy('updated_at'); },
+			'externalAccompanists'	=>	function($q){ $q->orderBy('fullname'); }
+		])->where('id', $id)->firstOrFail();
+
 		return view('workOrders.show', compact('workOrder'));
 	}
 
@@ -194,6 +202,39 @@ class WorkOrderController extends Controller {
 		
 		return redirect()->route('workOrder.show', $workOrder->id);
 
+	}
+	
+	/**
+	 * Muestra el formulario donde el acompañante interno reporta las actividades
+	 * realizdas en la orden de trabajo
+	 */
+	public function internalAccompanistReportForm($work_order_id, $employee_id)
+	{
+		$workOrder = \sanoha\Models\WorkOrder::findOrFail($work_order_id);
+		$employee = \sanoha\Models\Employee::findOrFail($employee_id);
+		
+		return view('workOrders.internalAccompanistReportForm', compact('workOrder', 'employee'));
+	}
+	
+	/**
+	 * Guarda en la base de datos el reporte del acompañante interno de la orden
+	 * de trabajo
+	 */
+	public function internalAccompanistReportStore($work_order_id, $employee_id, Request $request)
+	{
+		$workOrder = \sanoha\Models\WorkOrder::findOrFail($work_order_id);
+		$employee = \sanoha\Models\Employee::findOrFail($employee_id);
+		//dd($employee->id);
+
+		$workOrder->internalAccompanists()->sync([$employee->id => [
+			'work_report' => $request->get('work_order_report'),
+			'reported_by' => \Auth::getUser()->id,
+			'reported_at' => date('Y-m-d H:i:s')
+		]], false);
+		
+		\Session::flash('success', 'El reporte ha sido creado correctamente.');
+		
+		return redirect()->route('workOrder.show', $workOrder->id);
 	}
 
 	/**

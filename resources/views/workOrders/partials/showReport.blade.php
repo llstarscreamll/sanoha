@@ -1,7 +1,7 @@
 <div id="work-order-report" class="margin-top-20">
 
     <div>
-    @if(count($reports = $workOrder->workOrderReports()->orderBy('updated_at')->get()) > 0)
+    @if(count($reports = $workOrder->workOrderReports) > 0)
     	
     	@foreach($reports as $report)
         	<div class="panel panel-default">

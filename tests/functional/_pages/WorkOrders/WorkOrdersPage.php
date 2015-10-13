@@ -1,6 +1,6 @@
 <?php
 
-namespace Page;
+namespace Page\WorkOrders;
 
 use \FunctionalTester;
 use \common\BaseTest;

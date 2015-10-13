@@ -19,7 +19,7 @@
 										Módulo de Usuarios
 							*******************************************
 						--}}
-						@if(\Auth::getUser()->can('users.index'))
+						@if(Auth::getUser()->can('users.index'))
 							<li class="{{ \Request::is('user*') ? 'active' : '' }}"><a href="{{ url('/users') }}">Usarios</a></li>
 						@endif
 						
@@ -28,7 +28,7 @@
 										Logs
 							*******************************************
 						--}}
-						@if(\Auth::getUser()->can('users.index'))
+						@if(Auth::getUser()->can('users.index'))
 							<li class="{{ \Request::is('logs*') ? 'active' : '' }}"><a href="{{ url('/logs') }}">Logs</a></li>
 						@endif
 						
@@ -37,7 +37,7 @@
 										Múdulo de Roles
 							*******************************************
 						--}}
-						@if(\Auth::getUser()->can('roles.index'))
+						@if(Auth::getUser()->can('roles.index'))
 							<li class="{{ \Request::is('role*') ? 'active' : '' }}"><a href="{{ url('/roles') }}">Roles</a></li>
 						@endif
 						
@@ -46,7 +46,7 @@
 										Múdulo de Empleados
 							*******************************************
 						--}}
-						@if(\Auth::getUser()->can('employee.index'))
+						@if(Auth::getUser()->can('employee.index'))
 							<li class="{{ \Request::is('employee*') ? 'active' : '' }}"><a href="{{ url('/employee') }}">Empleados</a></li>
 						@endif
 						
@@ -55,7 +55,7 @@
 								Múdulo de Reporte de Labores Mineras
 							*******************************************
 						--}}
-						@if(\Auth::getUser()->can('activityReport.index'))
+						@if(Auth::getUser()->can('activityReport.index'))
 							<li class="{{ \Request::is('activityReport*') ? 'active' : '' }} dropdown" id="activityReports">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reporte de Actividades <span class="caret"></span></a>
 								<ul class="dropdown-menu" role="menu">
@@ -66,9 +66,9 @@
 										*******************************************
 									--}}
 									
-									@if(count(Auth::getUser()->getCostCenters()) > 0)
+									@if(count($user_cost_centers = Auth::getUser()->getCostCenters()) > 0)
 										
-										@foreach(Auth::getUser()->getCostCenters() as $center)
+										@foreach($user_cost_centers as $center)
 											<li><a href="{{ url(route('activityReport.setCostCenter', [ $center['id'] ])) }}">{{ $center['name'] }}</a></li>
 										@endforeach
 									
@@ -84,7 +84,7 @@
 								Múdulo de Reporte de Novedades
 							*******************************************
 						--}}
-						@if(\Auth::getUser()->can('noveltyReport.index'))
+						@if(Auth::getUser()->can('noveltyReport.index'))
 							<li class="{{ \Request::is('noveltyReport*') ? 'active' : '' }}" id="noveltyReports">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reporte de Novedades <span class="caret"></span></a>
 								<ul class="dropdown-menu" role="menu">
@@ -95,9 +95,9 @@
 										*******************************************
 									--}}
 									
-									@if(count(Auth::getUser()->getCostCenters()) > 0)
+									@if(count($user_cost_centers = Auth::getUser()->getCostCenters()) > 0)
 										
-										@foreach(Auth::getUser()->getCostCenters() as $center)
+										@foreach($user_cost_centers as $center)
 											<li><a href="{{ url(route('noveltyReport.setCostCenter', [ $center['id'] ])) }}">{{ $center['name'] }}</a></li>
 										@endforeach
 									
@@ -114,7 +114,7 @@
 										Módulo de Usuarios
 							*******************************************
 						--}}
-						@if(\Auth::getUser()->can('workOrder.index'))
+						@if(Auth::getUser()->can('workOrder.index'))
 							<li class="{{ \Request::is('workOrder*') ? 'active' : '' }}"><a href="{{ url('/workOrder') }}">Ordenes de Trabajo</a></li>
 						@endif
 						

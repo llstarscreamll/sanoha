@@ -79,4 +79,13 @@ class WorkOrder extends Model {
     {
         return $this->belongsTo('sanoha\Models\User', 'authorized_by');
     }
+    
+    /**
+     * La relación entre ordenes de trabajo y acopañantes internos (tabla empleados),
+     * muchos a muchos
+     */
+    public function getInternalAccompanistsReportedBy($id)
+    {
+        return \sanoha\Models\User::find($id)->fullname;
+    }
 }

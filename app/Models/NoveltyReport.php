@@ -168,7 +168,8 @@ class NoveltyReport extends Model implements LogsActivityInterface
      */
     public static function individualNovelties($parameters)
     {
-        return \sanoha\Models\NoveltyReport::where('reported_at', '>=', $parameters['from'])
+        return \sanoha\Models\NoveltyReport::with('employee', 'novelty')
+            ->where('reported_at', '>=', $parameters['from'])
 			->where('reported_at', '<=', $parameters['to'])
 			->orderBy('updated_at', 'desc')
 			->whereHas('employee', function($q) use ($parameters)

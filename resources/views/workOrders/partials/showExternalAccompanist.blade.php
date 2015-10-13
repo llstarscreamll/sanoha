@@ -1,6 +1,6 @@
 <div id="external-accompanists" class="margin-top-20">
 	
-	@if(count($accompanists = $workOrder->externalAccompanists()->orderBy('fullname')->get()) > 0)
+	@if(count($accompanists = $workOrder->externalAccompanists) > 0)
 	
 	<div class="panel col-md-10 col-md-offset-1">
 		{{-- List group --}}
