@@ -60,8 +60,8 @@ class SubCostCenter extends Model {
     public static function getRelatedEmployees($cost_center_id = null, $include = null, $exclude = null)
     {
         $centerEmployees = is_null($cost_center_id)
-            ? \sanoha\Models\CostCenter::with('employees')->get()
-            : \sanoha\Models\SubCostCenter::where('cost_center_id', $cost_center_id)->with('employees')->get();
+            ? \sanoha\Models\CostCenter::with(['employees' => function($q){ $q->where('status', 'enabled'); }])->get()
+            : \sanoha\Models\SubCostCenter::where('cost_center_id', $cost_center_id)->with(['employees' => function($q){ $q->where('status', 'enabled'); }])->get();
 		$found_include = false;
 		$employees = [];
 		

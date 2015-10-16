@@ -7,8 +7,7 @@ class Permissions
 {
     private $faker;
     private $date;
-    private $data = array();
-    
+
     public function __construct()
     {
         $this->faker    = Faker::create();
@@ -20,7 +19,7 @@ class Permissions
      */
     public function createWorkOrdersModulePermissions()
     {
-        $this->data[] = [
+        $data[] = [
             'name'           => 'workOrder.index',
             'display_name'   => 'Listar Ordenes de Trabajo',
             'description'    => 'Ver en una lista de todas las ordenes de trabajo registradas',
@@ -28,7 +27,7 @@ class Permissions
             'updated_at'     =>  $this->date->toDateTimeString()
         ];
             
-        $this->data[] = [
+        $data[] = [
             'name'           => 'workOrder.create',
             'display_name'   => 'Crear Orden de Trabajo',
             'description'    => 'Crear nuevas ordenes de trabajo',
@@ -36,7 +35,7 @@ class Permissions
             'updated_at'     =>  $this->date->toDateTimeString()
         ];
             
-        $this->data[] = [
+        $data[] = [
             'name'           => 'workOrder.show',
             'display_name'   => 'Ver Orden de Trabajo',
             'description'    => 'Visalizar la información de ordenes de trabajo (sólo lectura)',
@@ -44,7 +43,7 @@ class Permissions
             'updated_at'     =>  $this->date->toDateTimeString()
         ];
             
-        $this->data[] = [
+        $data[] = [
             'name'           => 'workOrder.edit',
             'display_name'   => 'Actualizar Orden de Trabajo',
             'description'    => 'Actualiza la información de las ordenes de trabajo registradas',
@@ -52,7 +51,7 @@ class Permissions
             'updated_at'     =>  $this->date->toDateTimeString()
         ];
         
-        $this->data[] = [
+        $data[] = [
             'name'           => 'workOrder.destroy',
             'display_name'   => 'Eliminar Orden de Trabajo',
             'description'    => 'Eliminar las ordenes de trabajo registradas',
@@ -60,7 +59,7 @@ class Permissions
             'updated_at'     =>  $this->date->toDateTimeString()
         ];
         
-        \DB::table('permissions')->insert($this->data);
+        \DB::table('permissions')->insert($data);
     }
     
     /**
@@ -68,7 +67,7 @@ class Permissions
      */
     public function createRolesModulePermissions()
     {
-        $this->data[] = [
+        $data[] = [
             'name'           => 'roles.index',
             'display_name'   => 'Listar Roles',
             'description'    => 'Ver en una lista todos los roles del sistema',
@@ -76,7 +75,7 @@ class Permissions
             'updated_at'     =>  $this->date->toDateTimeString()
         ];
             
-        $this->data[] = [
+        $data[] = [
             'name'           => 'roles.create',
             'display_name'   => 'Crear Rol',
             'description'    => 'Crear nuevos roles',
@@ -84,7 +83,7 @@ class Permissions
             'updated_at'     =>  $this->date->toDateTimeString()
         ];
             
-        $this->data[] = [
+        $data[] = [
             'name'           => 'roles.show',
             'display_name'   => 'Ver Rol',
             'description'    => 'Visalizar la información de los roles (sólo lectura)',
@@ -92,7 +91,7 @@ class Permissions
             'updated_at'     =>  $this->date->toDateTimeString()
         ];
             
-        $this->data[] = [
+        $data[] = [
             'name'           => 'roles.edit',
             'display_name'   => 'Actualizar Rol',
             'description'    => 'Actualiza la información de los roles del sistema',
@@ -100,7 +99,7 @@ class Permissions
             'updated_at'     =>  $this->date->toDateTimeString()
         ];
         
-        $this->data[] = [
+        $data[] = [
             'name'           => 'roles.destroy',
             'display_name'   => 'Eliminar Rol',
             'description'    => 'Eliminar roles del sistema',
@@ -108,7 +107,7 @@ class Permissions
             'updated_at'     =>  $this->date->toDateTimeString()
         ];
         
-        \DB::table('permissions')->insert($this->data);
+        \DB::table('permissions')->insert($data);
     }
     
         /**
@@ -116,7 +115,7 @@ class Permissions
      */
     public function createEmployeesModulePermissions()
     {
-        $this->data[] = [
+        $data[] = [
             'name'           => 'employee.index',
             'display_name'   => 'Listar empleados',
             'description'    => 'Ver una lista de todos empleados del sistema',
@@ -124,7 +123,7 @@ class Permissions
             'updated_at'    =>  $this->date->toDateTimeString()
         ];
         
-        $this->data[] = [
+        $data[] = [
             'name'           => 'employee.create',
             'display_name'   => 'Crear empleado',
             'description'    => 'Crear empleados del sistema',
@@ -132,7 +131,7 @@ class Permissions
             'updated_at'    =>  $this->date->toDateTimeString()
         ];
             
-        $this->data[] = [
+        $data[] = [
             'name'           => 'employee.show',
             'display_name'   => 'Ver empleado',
             'description'    => 'Visualizar la información de un empleado (sólo lectura)',
@@ -140,7 +139,7 @@ class Permissions
             'updated_at'    =>  $this->date->toDateTimeString()
         ];
             
-        $this->data[] = [
+        $data[] = [
             'name'           => 'employee.edit',
             'display_name'   => 'Editar empleado',
             'description'    => 'Editar la información de un empleado',
@@ -148,7 +147,7 @@ class Permissions
             'updated_at'    =>  $this->date->toDateTimeString()
         ];
             
-        $this->data[] = [
+        $data[] = [
             'name'           => 'employee.destroy',
             'display_name'   => 'Eliminar empleado',
             'description'    => 'Eliminar empleados del sistema',
@@ -156,7 +155,7 @@ class Permissions
             'updated_at'    =>  $this->date->toDateTimeString()
         ];
         
-        \DB::table('permissions')->insert($this->data);
+        \DB::table('permissions')->insert($data);
     }
     
     
@@ -165,7 +164,7 @@ class Permissions
      */ 
     public function createUsersModulePermissions()
     {
-        $this->data[] = [
+        $data[] = [
             'name'           => 'users.index',
             'display_name'   => 'Listar Usuarios',
             'description'    => 'Ver una lista de todos usuarios del sistema',
@@ -173,7 +172,7 @@ class Permissions
             'updated_at'    =>  $this->date->toDateTimeString()
         ];
         
-        $this->data[] = [
+        $data[] = [
             'name'           => 'users.create',
             'display_name'   => 'Crear Usuario',
             'description'    => 'Crear usuarios del sistema',
@@ -181,7 +180,7 @@ class Permissions
             'updated_at'    =>  $this->date->toDateTimeString()
         ];
             
-        $this->data[] = [
+        $data[] = [
             'name'           => 'users.show',
             'display_name'   => 'Ver Usuario',
             'description'    => 'Visualizar la información de un usuario (sólo lectura)',
@@ -189,7 +188,7 @@ class Permissions
             'updated_at'    =>  $this->date->toDateTimeString()
         ];
             
-        $this->data[] = [
+        $data[] = [
             'name'           => 'users.edit',
             'display_name'   => 'Editar Usuario',
             'description'    => 'Editar la información de un usuario',
@@ -197,7 +196,7 @@ class Permissions
             'updated_at'    =>  $this->date->toDateTimeString()
         ];
             
-        $this->data[] = [
+        $data[] = [
             'name'           => 'users.destroy',
             'display_name'   => 'Eliminar Usuario',
             'description'    => 'Eliminar usuarios del sistema',
@@ -205,7 +204,7 @@ class Permissions
             'updated_at'    =>  $this->date->toDateTimeString()
         ];
         
-        \DB::table('permissions')->insert($this->data);
+        \DB::table('permissions')->insert($data);
     }
     
     /**
@@ -213,7 +212,7 @@ class Permissions
      */
     public function createActivityReportsModulePermissions()
     {
-        $this->data[] = [
+        $data[] = [
             'name'           => 'activityReport.index',
             'display_name'   => 'Ver Reportes de Actividades Reportadas',
             'description'    => 'Ver todos los reportes de las actividades o labores mineras registradas',
@@ -221,7 +220,7 @@ class Permissions
             'updated_at'    =>  $this->date->toDateTimeString()
         ];
         
-        $this->data[] = [
+        $data[] = [
             'name'           => 'activityReport.create',
             'display_name'   => 'Crear reporte de actividades mineras',
             'description'    => 'Registrar una labor minera para luego ser mostrada en los reportes',
@@ -229,7 +228,7 @@ class Permissions
             'updated_at'    =>  $this->date->toDateTimeString()
         ];
         
-        $this->data[] = [
+        $data[] = [
             'name'           => 'activityReport.show',
             'display_name'   => 'Ver detalles de actividad',
             'description'    => 'Ver los detalles de una actividad reportada en modo lectura.',
@@ -237,7 +236,7 @@ class Permissions
             'updated_at'    =>  $this->date->toDateTimeString()
         ];
         
-        $this->data[] = [
+        $data[] = [
             'name'           => 'activityReport.edit',
             'display_name'   => 'Editar la información de una actividad',
             'description'    => 'Editar la información registrada de una actividad minera reportada',
@@ -245,7 +244,7 @@ class Permissions
             'updated_at'    =>  $this->date->toDateTimeString()
         ];
         
-        $this->data[] = [
+        $data[] = [
             'name'           => 'activityReport.destroy',
             'display_name'   => 'Borrar Actividades',
             'description'    => 'Borrar actividades registradas en el sistema',
@@ -253,7 +252,7 @@ class Permissions
             'updated_at'    =>  $this->date->toDateTimeString()
         ];
         
-        $this->data[] = [
+        $data[] = [
             'name'           => 'activityReport.assignCosts',
             'display_name'   => 'Asiganr Costos de Actividades',
             'description'    => 'Asiganr los precios de las actividades mineras registradas en el sistema',
@@ -261,7 +260,7 @@ class Permissions
             'updated_at'     =>  $this->date->toDateTimeString()
         ];
         
-        $this->data[] = [
+        $data[] = [
             'name'           => 'activityReport.individual',
             'display_name'   => 'Reporte de Registros Individuales',
             'description'    => 'Reporte con los registros de las actividades reportadas individualmente',
@@ -269,7 +268,7 @@ class Permissions
             'updated_at'     =>  $this->date->toDateTimeString()
         ];
         
-        $this->data[] = [
+        $data[] = [
             'name'           => 'activityReport.calendar',
             'display_name'   => 'Reporte en Calendario de Actividades Mineras Registradas',
             'description'    => 'La vista calendario mucho mas detallada de las actividades mineras registradas en el sistema',
@@ -277,7 +276,7 @@ class Permissions
             'updated_at'    =>  $this->date->toDateTimeString()
         ];
 
-        \DB::table('permissions')->insert($this->data);
+        \DB::table('permissions')->insert($data);
     }
     
     /**
@@ -285,7 +284,7 @@ class Permissions
      */
     public function createNoveltyReportModulePermissions()
     {
-        $this->data[] = [
+        $data[] = [
             'name'           => 'noveltyReport.index',
             'display_name'   => 'Ver reporte en tabla de actividades mineras registradas',
             'description'    => 'Ver todos los reportes de las actividades o labores mineras registradas',
@@ -293,7 +292,7 @@ class Permissions
             'updated_at'    =>  $this->date->toDateTimeString()
         ];
         
-        $this->data[] = [
+        $data[] = [
             'name'           => 'noveltyReport.create',
             'display_name'   => 'Reportar actividades mineras',
             'description'    => 'Registrar una labor minera para luego ser mostrada en los reportes',
@@ -301,7 +300,7 @@ class Permissions
             'updated_at'    =>  $this->date->toDateTimeString()
         ];
         
-        $this->data[] = [
+        $data[] = [
             'name'           => 'noveltyReport.show',
             'display_name'   => 'Ver detalles de actividad minera registrada',
             'description'    => 'Ver los detalles de una actividad reportada en modo lectura.',
@@ -309,7 +308,7 @@ class Permissions
             'updated_at'    =>  $this->date->toDateTimeString()
         ];
         
-        $this->data[] = [
+        $data[] = [
             'name'           => 'noveltyReport.edit',
             'display_name'   => 'Editar la información de una actividad minera ya registrada',
             'description'    => 'Editar la información registrada de una actividad minera reportada',
@@ -317,7 +316,7 @@ class Permissions
             'updated_at'    =>  $this->date->toDateTimeString()
         ];
         
-        $this->data[] = [
+        $data[] = [
             'name'           => 'noveltyReport.destroy',
             'display_name'   => 'Borrar Actividades Mineras',
             'description'    => 'Borrar actividades registradas en el sistema',
@@ -325,6 +324,6 @@ class Permissions
             'updated_at'    =>  $this->date->toDateTimeString()
         ];
         
-        \DB::table('permissions')->insert($this->data);
+        \DB::table('permissions')->insert($data);
     }
 }

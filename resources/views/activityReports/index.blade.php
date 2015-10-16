@@ -25,9 +25,10 @@
 				@include ('layout.notifications')
 				
 				<div class="row hidden-print">
-				    @include ('activityReports.partials.views-links')
 				    
+				    @include ('activityReports.partials.views-links')
 				    @include ('activityReports.partials.searchForm', ['search_target' => 'activityReport.index'])
+				    
 				</div>
 				
 				

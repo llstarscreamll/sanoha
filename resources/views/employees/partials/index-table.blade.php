@@ -9,6 +9,7 @@
                 <th>Cargo</th>
                 <th>Centro Costo</th>
                 <th>Email</th>
+                <th>Estado</th>
             </tr>
         </thead>
         
@@ -21,13 +22,14 @@
 		            <td>{{$employee->position->name}}</td>
 		            <td>{{$employee->subCostCenter->nameWithCostCenterName}}</td>
 		            <td>{{$employee->email}}</td>
+		            <td>{!!$employee->getStatusHtml()!!}</td>
 		        </tr>
 	        @endforeach
 	        @else
 	            <tr>
-	                <td colspan=4>
-	                    <div class"alert alert-warning">
-	                        No hay empleados registrados...
+	                <td colspan=6>
+	                    <div class="alert alert-warning">
+	                        No se encontraron empleados...
 	                    </div>
 	                </td>
 	            </tr>

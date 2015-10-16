@@ -26,6 +26,7 @@ class PermissionTableSeeder extends Seeder
         $this->createUsersModulePermissions();
         $this->createActivityReportsModulePermissions();
         $this->createNoveltyReportModulePermissions();
+        $this->createLogsModulePermissions();
         
         DB::table('permissions')->insert($this->data);
     }
@@ -75,6 +76,36 @@ class PermissionTableSeeder extends Seeder
             'updated_at'     =>  $this->date->toDateTimeString()
         ];
         
+        $this->data[] = [
+            'name'           => 'workOrder.internal_accompanist_report_form',
+            'display_name'   => 'Crear Reporte de Acompañante Interno',
+            'description'    => 'Permite crear los reportes de los acompañantes internos de la orden de trabajo',
+            'created_at'     =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'     =>  $this->date->toDateTimeString()
+        ];
+        
+        $this->data[] = [
+            'name'           => 'workOrder.mainReport',
+            'display_name'   => 'Crear Reporte Principal',
+            'description'    => 'Permite crear el reporte principal de la orden de trabajo',
+            'created_at'     =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'     =>  $this->date->toDateTimeString()
+        ];
+        
+    }
+    
+    /**
+     * Crea los permisos para el módulo de los logs
+     */
+    public function createLogsModulePermissions()
+    {
+        $this->data[] = [
+            'name'           => 'log.index',
+            'display_name'   => 'Ver Lista de Logs de Usuarios',
+            'description'    => 'Permite ver de forma cronológica los movimientos realizados por los usuarios en el sistema',
+            'created_at'     =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'     =>  $this->date->toDateTimeString()
+        ];
     }
     
     /**
@@ -165,6 +196,14 @@ class PermissionTableSeeder extends Seeder
             'name'           => 'employee.destroy',
             'display_name'   => 'Eliminar empleado',
             'description'    => 'Eliminar empleados del sistema',
+            'created_at'    =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'    =>  $this->date->toDateTimeString()
+        ];
+        
+        $this->data[] = [
+            'name'           => 'employee.status',
+            'display_name'   => 'Activar o Desactivar Empleados',
+            'description'    => 'Permite activar o desactivar a los empleados registrados',
             'created_at'    =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
             'updated_at'    =>  $this->date->toDateTimeString()
         ];
@@ -331,6 +370,14 @@ class PermissionTableSeeder extends Seeder
             'name'           => 'noveltyReport.destroy',
             'display_name'   => 'Borrar Actividades Mineras',
             'description'    => 'Borrar actividades registradas en el sistema',
+            'created_at'    =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'    =>  $this->date->toDateTimeString()
+        ];
+        
+        $this->data[] = [
+            'name'           => 'noveltyReport.calendar',
+            'display_name'   => 'Reporte en Calendario',
+            'description'    => 'Ver reporte en calendario de todas las novedades registradas',
             'created_at'    =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
             'updated_at'    =>  $this->date->toDateTimeString()
         ];

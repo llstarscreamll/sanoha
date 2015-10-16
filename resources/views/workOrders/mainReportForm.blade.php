@@ -18,7 +18,7 @@
 				
 				@include ('layout.notifications')
 				
-				{!! Form::open(['route' => ['workOrder.mainReport', $workOrder->id], 'method' => 'PUT', 'id' => 'report-work-order-activity']) !!}
+				{!! Form::open(['route' => ['workOrder.main_report_store', $workOrder->id], 'method' => 'PUT', 'id' => 'report-work-order-activity']) !!}
 				
 				    @include('workOrders.partials.wysiwygReport')
 				    

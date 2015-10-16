@@ -19,7 +19,7 @@ class EmployeeController extends Controller
     {
         $input = $request->all();
         
-        $employees = \sanoha\Models\Employee::with('position', 'subCostCenter')
+        $employees = \sanoha\Models\Employee::with('position', 'subCostCenter', 'subCostCenter.costCenter')
             ->where(function($q) use($request){
                 $q->where('name', 'like', '%'.$request->get('find').'%')
                     ->orWhere('lastname', 'like', '%'.$request->get('find').'%')
@@ -113,6 +113,46 @@ class EmployeeController extends Controller
         $employee->save() ? \Session::flash('success', 'Empleado actualizado correctamente.') : \Session::flash('error', 'Ocurrió un error actualizado al empleado.');
         
         return redirect()->route('employee.show', $employee->id);
+    }
+    
+    /**
+     * Cambio el estado de los empleados de activado a desactivado
+     */
+    public function status($status, Request $request)
+    {
+        switch($status){
+            case 'disabled':
+                $action = [
+                    'singular'  => 'desactivado',
+                    'plural'    =>  'desactivados'
+                ];
+                break;
+            case 'enabled':
+            default:
+                $action = [
+                    'singular'  => 'activado',
+                    'plural'    =>  'activados'
+                ];
+                break;
+        }
+
+        if($request->has('id')){
+
+            $id = is_array($request->get('id')) ? $request->get('id') : [$request->get('id')];
+            
+            \sanoha\Models\Employee::whereIn('id', $id)->update(['status' => $status])
+                ? \Session::flash('success', [is_array($id) && count($id) > 1
+                    ? 'Los empleados han sido '.$action['plural'].' correctamente.'
+                    : 'El empleado ha sido '.$action['singular'].' correctamente.'])
+                : \Session::flash('error', [is_array($id)
+                    ? 'Los empleados no pudieron ser '.$action['plural'].'.'
+                    : 'El empleado no pudo ser '.$action['singular'].'.']) ;
+                
+        }else
+            \Session::flash('warning', 'Ningún empleado que activar.');
+        
+
+        return redirect()->route('employee.index');
     }
 
     /**

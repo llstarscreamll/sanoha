@@ -1,3 +1,4 @@
+<div class="col-md-6 col-md-offset-6">
 {!! Form::model($input, ['route' => 'employee.index', 'method' => 'GET', 'name' => 'search-form']) !!}
 
     <div class="input-group">
@@ -18,3 +19,4 @@
     </div>
 
 {!! Form::close() !!}
+</div>

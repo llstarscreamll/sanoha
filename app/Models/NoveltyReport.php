@@ -138,6 +138,7 @@ class NoveltyReport extends Model implements LogsActivityInterface
             ->whereHas('subCostCenter', function($q) use ($parameters){
                 $q  ->where('cost_center_id', $parameters['cost_center_id']);
             })
+            ->with('employee', 'novelty')
             ->orderBy('reported_at', 'asc')
             ->get();
             

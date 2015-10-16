@@ -36,6 +36,7 @@ class Employees
                 'lastname'              =>      $subCostCenter->short_name,
                 'identification_number' =>      '1'.$count,
                 'email'                 =>      'trabajador'.$count++.'@example.com',
+                'status'                =>      'enabled',
                 'created_at'            =>      $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
                 'updated_at'            =>      $date->toDateTimeString(),
                 'deleted_at'            =>      null

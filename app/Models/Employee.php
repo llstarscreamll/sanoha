@@ -135,4 +135,31 @@ class Employee extends Model implements LogsActivityInterface
     {
         return ucwords(strtolower($this->attributes['lastname'] .' '. $this->attributes['name']));
     }
+    
+    /**
+     * Obtengo el estado del empleado formateado, es decir con letras de cierto
+     * color dependiendo del estado.
+     */
+    public function getStatusHtml()
+    {
+        // el valor a mostrar en la ui
+        switch($this->status){
+            case 'enabled':
+                $txt = 'Activado';
+                $style_class = 'text-success';
+                break;
+            case 'disabled':
+                $txt = 'Desactivado';
+                $style_class = 'text-danger';
+                break;
+            default:
+                $txt = $this->status;
+                $style_class = '';
+                break;
+        }
+        
+        $tag = '<span class="%style_class%">'.$txt.'</span>';
+        
+        return str_replace('%style_class%', $style_class, $tag);
+    }
 }

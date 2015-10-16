@@ -15,6 +15,8 @@ class Permission extends EntrustPermission
         'employee'          =>  'Empleados',
         'noveltyReport'     =>  'Reporte de Novedades',
         'activityReport'    =>  'Reporte de Labores Mineras',
+        'workOrder'         =>  'Ordenes de Trabajo',
+        'log'               =>  'Log de Usuarios'
         ];
     
     /**

@@ -8,9 +8,9 @@
 function toggleEnableActionButtons(enable)
 {
     if(enable === true){
-        $('#btn-trash').removeAttr('disabled');
+        $('.action-buttons button').removeAttr('disabled');
     }else{
-        $('#btn-trash').attr('disabled', 'disabled');
+        $('.action-buttons button').attr('disabled', 'disabled');
     }
 }
 

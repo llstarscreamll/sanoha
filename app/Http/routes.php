@@ -17,9 +17,12 @@ Route::get('home', [
         'as'    =>  'home',
         'uses'  =>  'HomeController@index'
     ]);
-    
+
+/**
+ * Los logs de actividad de los usuarios
+ */ 
 Route::get('logs', [
-        'as'    =>  'logs',
+        'as'    =>  'log.index',
         'uses'  =>  'LogController@index'
     ]);
 
@@ -33,6 +36,14 @@ Route::group(['middleware' => 'auth'], function(){
     
     Route::resource('users', 'UserController');
     Route::resource('roles', 'RoleController');
+    
+    /**
+     * Empleados
+     */
+    Route::put('employee/status/{status}', [
+        'as'    =>  'employee.status',
+        'uses'  =>  'EmployeeController@status'
+    ]);
     Route::resource('employee', 'EmployeeController');
     
     /**
@@ -50,8 +61,8 @@ Route::group(['middleware' => 'auth'], function(){
         'as'    =>  'workOrder.mainReport',
         'uses'  =>  'WorkOrderController@mainReportForm'
     ]);
-    Route::put('workOrder/{id}/mainReport', [
-        'as'    =>  'workOrder.mainReport',
+    Route::put('workOrder/{id}/mainReportStore', [
+        'as'    =>  'workOrder.main_report_store',
         'uses'  =>  'WorkOrderController@mainReportStore'
     ]);
     Route::resource('workOrder', 'WorkOrderController');
