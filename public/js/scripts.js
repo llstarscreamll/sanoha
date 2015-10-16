@@ -1,4 +1,11 @@
 /**
+ * Oculta los mensajes de alera con una suave animación
+ */ 
+$(".alert").fadeTo(6000, 500).slideUp(500, function(){
+    $("#success-alert").alert('close');
+});
+
+/**
  * Enable or disable the action buttons
  * 
  * @param {bool} enable
