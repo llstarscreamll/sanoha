@@ -1,7 +1,7 @@
 /**
  * Oculta los mensajes de alera con una suave animación
  */ 
-$(".alert").fadeTo(6000, 500).slideUp(500, function(){
+$("#system-notifications .alert").fadeTo(6000, 500).slideUp(500, function(){
     $("#success-alert").alert('close');
 });
 
