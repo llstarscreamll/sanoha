@@ -41,6 +41,9 @@ class FlatReportCest
         
         \DB::table('novelty_reports')->insert($data);
         
+        // debo ver la actividad aún cuando el empleado haya sido elmiminado
+        \sanoha\Models\Employee::destroy(1);
+        
         // estoy en el home
         $I->amOnPage('/home');
           
