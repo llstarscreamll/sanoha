@@ -90,7 +90,7 @@
             },
             "startDate": "{{Carbon\Carbon::now()->format('m/d/Y')}}",
             "endDate": "{{Carbon\Carbon::now()->format('m/d/Y')}}",
-            "maxDate": "{{Carbon\Carbon::now()->format('m/d/Y')}}",
+            "maxDate": "{{Carbon\Carbon::now()->addDays(2)->format('m/d/Y')}}",
             "opens": "left",
             "drops": "down",
             "buttonClasses": "btn btn-sm",
