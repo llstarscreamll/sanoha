@@ -54,7 +54,7 @@ return [
 	|
 	*/
 
-	'from' => ['address' => 'jalvarez@sanoha.com', 'name' => 'Sanoha Web System'],
+	'from' => ['address' => env('MAIL_USERNAME'), 'name' => 'Sanoha Web System'],
 
 	/*
 	|--------------------------------------------------------------------------

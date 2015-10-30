@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel {
 		/*$schedule->command('inspire')
 				 ->hourly();*/
 				 
-		$schedule->exec('sh .backup.sh')->twiceDaily();
+		$schedule->exec('bash .backup.sh')->twiceDaily();
 	}
 
 }
