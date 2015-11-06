@@ -135,7 +135,7 @@
             startDate: moment('{{$parameters["from"]}}', 'YYYY-MM-DD'),
             endDate: moment('{{ $parameters["to"] }}', 'YYYY-MM-DD'),
             //minDate: '01/01/2012',
-            maxDate: moment().format('L'),
+            //maxDate: moment().format('L'),
             //dateLimit: { days: 60 },
             showDropdowns: true,
             showWeekNumbers: true,

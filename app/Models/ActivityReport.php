@@ -446,12 +446,12 @@ class ActivityReport extends Model implements LogsActivityInterface
 
         $end = $request->has('to')
             ? \Carbon\Carbon::createFromFormat('Y-m-d', $request->get('to'))->endOfDay()
-            : \Carbon\Carbon::now()->endOfDay();
+            : \Carbon\Carbon::now()->endOfMonth()->endOfDay();
         
         $parameters['employee'] 		= !empty($request->get('find')) ? $request->get('find') : null;
         $parameters['employee_id'] 		= $request->get('employee_id', null);
         // en caso de que se quiera fechas diferentes a la predeterminadas
-        $parameters['from'] 			= isset($options['start']) && empty($request->get('to')) ? $options['start'] : $start;
+        $parameters['from'] 			= isset($options['start']) && empty($request->get('from')) ? $options['start'] : $start;
         $parameters['to'] 				= isset($options['end']) && empty($request->get('to')) ? $options['end'] : $end;
         $parameters['cost_center_id'] 	= $cost_center_id;
         $parameters['cost_center_name'] = \Session::get('current_cost_center_name');
