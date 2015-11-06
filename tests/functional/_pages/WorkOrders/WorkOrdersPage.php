@@ -34,6 +34,22 @@ class WorkOrdersPage
     public static $createFormButtonCaption = 'Crear';
     public static $createFormButton = 'button[type=submit]';
     
+    /**
+     * Los empleados autorizados para manejar vehículos
+     */ 
+    public static $employeesAuthorizedToDriveVehicles = [
+        'Trabajador 1'
+        ];
+    
+    /**
+     * Los empleados NO autorizados para manejar vehículos
+     */ 
+    public static $employeesUnauthorizedToDriveVehicles = [
+        'Trabajador 2',
+        'Trabajador 3',
+        'Trabajador 4',
+        ];
+    
     public static $msgWorkOrderCreation = [
         'success'                       =>  'Orden de trabajo creada correctamente.',
         'error'                         =>  'Ocurrió un error creando la orden de trabajo.',
@@ -85,7 +101,7 @@ class WorkOrdersPage
         'selector'  =>  'textarea:disabled'
     ];
     public static $workOrderReportBodyLocation = '#work-order-report .panel .panel-body';
-    public static $workOrderReportFooterLocation = '#work-order-report .panel .panel-footer.text-right';
+    public static $workOrderReportFooterLocation = '#work-order-report .panel .panel-footer div.text-right';
     
     public static $workOrderReportEmpty = [
         'selector'  =>  '#work-order-report .alert.alert-warning',
@@ -117,7 +133,8 @@ class WorkOrdersPage
         'selector'  =>  'h1'
         ];
     public static $mainReportTextarea = [
-        'selector'   =>  'textarea[name=work_order_report].form-control'
+        'selector'  =>  'textarea[name=work_order_report].form-control',
+        'name'      =>  'work_order_report'
         ];
     public static $mainReportForm = 'form#report-work-order-activity';
     public static $mainReportFormButton = [
@@ -131,7 +148,7 @@ class WorkOrdersPage
      */ 
     public static $vehicleIdField = 'select[name=vehicle_id]';
     public static $destinationField = 'input[name=destination]';
-    public static $authorizedByField = 'input[name=authorized_by]';
+    public static $authorizedByField = 'input[name=authorized_by]:disabled';
     public static $workDescriptionField = 'textarea[name=work_description]';
     public static $vehicleResponsableField = 'select[name=vehicle_responsable]';
     public static $internalAccompanistsField = 'select[name="internal_accompanists[]"]';
@@ -164,6 +181,47 @@ class WorkOrdersPage
         'internal_accompanists'     =>  [3,4],
         'internal_accompanists_name'=>  [1 => 'B1 Trabajador 3', 2 => 'B1 Trabajador 4'],
         'external_accompanists'     =>  ['Alex Gonzales', 'Cindy Blackman']
+    ];
+    
+    /**
+     * Datos para validar form request
+     */
+    public static $formRequestValidation = [
+        0   =>  [
+            'data'  =>  [
+                'vehicle_responsable'   =>  5659, // no existe
+                'vehicle_id'            =>  2563, // no existe
+                'destination'           =>  '"#SD1', // formato inválido
+                'internal_accompanists' =>  [5699, 2652], // no existen
+                'external_accompanists' =>  ['#$%', 'Alex Ubago'], // formato inválido en indice 0
+                'work_description'      =>  'ASDf%&/(/&' // formato inválido
+            ],
+            'msg'   =>  [
+                'vehicle_responsable'   =>  'No se encontró la información del responsable del vehículo.',
+                'vehicle_id'            =>  'El vehículo no existe en la base de datos.',
+                'destination'           =>  'El destino tiene un formato inválido, sólo se permiten letras y/o números.',
+                'internal_accompanists' =>  'No se encontraró el empleado en la base de datos.',
+                'external_accompanists' =>  'El acompañante externo tiene un formato inválido, sólo se permiten letras, espacios y/o números.',
+                'work_description'      =>  'Sólo se permiten letras, números, espacios, puntos, guiones y/o arroba.'
+            ]
+        ],
+        
+        1   =>  [
+            'data'  =>  [
+                'vehicle_responsable'   =>  null, // requerido
+                'vehicle_id'            =>  null, // requerido
+                'destination'           =>  null, // requerido
+                'internal_accompanists' =>  null,
+                'external_accompanists' =>  null,
+                'work_description'      =>  null // requerido
+            ],
+            'msg'   =>  [
+                'vehicle_responsable'   =>  'Debes elegir al empleado responsable del vehículo.', // requerido
+                'vehicle_id'            =>  'El vehículo es un campo obligatorio, elige uno.', // requerido
+                'destination'           =>  'Digita donde se realizarán las actividades de la orden de trabajo.', // requerido
+                'work_description'      =>  'Debes digitar una descripción para la orden de trabajo.' // requerido
+            ]
+        ]
     ];
     
     /**
@@ -264,5 +322,27 @@ class WorkOrdersPage
         // Reportado por el {{$report->created_at}}
         
         return $data;
+    }
+    
+    /**
+     * Crea el reporte principal de la orden de trabajo
+     */
+    public static function createMainReport(FunctionalTester $I)
+    {
+        $I->amOnPage(WorkOrdersPage::route('/1'));
+        $I->see(WorkOrdersPage::$showTitle, WorkOrdersPage::$showTitleTag);
+        
+        $I->click(WorkOrdersPage::$mainReportLink['txt'], WorkOrdersPage::$mainReportLink['selector']);
+        $I->seeCurrentUrlEquals(WorkOrdersPage::route('/1/mainReport'));
+        
+        $I->see(WorkOrdersPage::$mainReportTitle['txt'], WorkOrdersPage::$mainReportTitle['selector']);
+        $I->seeElement(WorkOrdersPage::$mainReportTextarea['selector']);
+        
+        $I->submitForm(WorkOrdersPage::$mainReportForm, WorkOrdersPage::$workReportFormData, WorkOrdersPage::$mainReportFormButton['txt']);
+        
+        $I->seeCurrentUrlEquals(WorkOrdersPage::route('/1'));
+        
+        $I->see(WorkOrdersPage::$workReportFormData['work_order_report'], WorkOrdersPage::$workOrderReportBodyLocation);
+        $I->see(WorkOrdersPage::getWorkOrderReportFooter(), WorkOrdersPage::$workOrderReportFooterLocation);
     }
 }

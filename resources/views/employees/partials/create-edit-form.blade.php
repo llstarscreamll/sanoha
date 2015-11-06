@@ -67,3 +67,25 @@
         </div>
     @endif
 </div>
+
+<div class="form-group col-md-6">
+    {!! Form::label('authorized_to_drive_vehicles', 'Autorizado para Manejo de Vehículos') !!}
+    <div>
+        {!! Form::checkbox(
+            'authorized_to_drive_vehicles',
+            '1',
+            null,
+            [
+                'class' => 'bootstrap_switch',
+                'data-size' => 'small',
+                'data-on-text' => 'SI',
+                'data-off-text' => 'NO',
+            ])
+        !!}
+    </div>
+    @if ($errors->has('authorized_to_drive_vehicles'))
+        <div class="text-danger">
+            {!! $errors->first('authorized_to_drive_vehicles') !!}
+        </div>
+    @endif
+</div>

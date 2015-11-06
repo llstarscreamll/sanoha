@@ -30,6 +30,18 @@
         	<span class="glyphicon glyphicon-pencil"></span>
 			Editar Orden de Trabajo
         </a>
+        
+        <button
+            class="btn btn-danger"
+            data-method="DELETE"
+            data-action="{{route('workOrder.destroy', $workOrder->id)}}"
+            data-message="La orden de trabajo será movida a la papelera y su información ya no estará disponible..."
+            data-toggle="modal"
+			data-target="#confirm-modal"
+        >
+            <span class="glyphicon glyphicon-trash"></span>
+            <span></span>Mover a Papelera</span>
+        </button>
     </div>
     
 </div>

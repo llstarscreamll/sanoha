@@ -48,6 +48,12 @@ class StatusCest
             ]
         ];
         
+        /**
+         * -----------
+         * Aquí hay que hacer el envío del formulario con la función _loadPage()
+         * que sólo está disponible en los helpers de codeception en la versión 2.1
+         * ----------
+         */ 
         $I->loadDynamicPage($params);
         
         $I->seeCurrentUrlEquals('/employee');

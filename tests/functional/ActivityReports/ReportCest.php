@@ -351,7 +351,7 @@ class ReportCest
             'mining_activity_id'    =>  2,
             'quantity'              =>  2.5,
             'worked_hours'          =>  8,
-            'reported_at'           =>  $date->copy()->toDateTimeString(),
+            'reported_at'           =>  $date->copy()->addDay()->toDateTimeString(),
             'comment'               =>  'Comentario de prueba'
         ];
         

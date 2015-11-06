@@ -54,8 +54,10 @@ class UserController extends Controller
     {
         $roles = $role->lists('display_name', 'id');
         $costCenters = $costCenters->with('subCostCenter')->get();
+        $employees = \sanoha\Models\SubCostCenter::getRelatedEmployees();
+        $areas = \sanoha\Models\Areas::orderBy('name')->lists('name', 'id');
         
-        return view('users.create', compact('roles', 'costCenters'));
+        return view('users.create', compact('roles', 'costCenters', 'employees', 'areas'));
     }
 
     /**
@@ -65,29 +67,43 @@ class UserController extends Controller
      */
     public function store(UserFormRequest $request, Role $role)
     {
-        $user = $this->user->newInstance($request->except('role_id', 'subCostCenter_id'));
-
+        $user = $this->user->newInstance($request->except('role_id', 'sub_cost_center_id'));
+        $user->password = bcrypt($request->get('password'));
+        
         // get the roles ids and names
-        $role_keys = $role->find($request->only('role_id')['role_id'])->lists('id');
-        $role_names = $role->find($request->only('role_id')['role_id'])->lists('name');
+        $role_keys = $role->find($request->get('role_id'))->lists('id');
+        $role_names = $role->find($request->get('role_id'))->lists('name');
 
         // to flash messages
         $success = array();
         $error = array();
         
-        $user->password = bcrypt($request->get('password'));
-        
         // create user
-        ($user->save()) ? $success[] = 'Usuario creado correctamente.' : $error[] = 'Ocurrió un error creando el usuario.';
-        
-        // attach roles to user
-        $user->attachRoles($role_keys);
-        ($user->hasRole($role_names)) ? $success[] = 'Se ha añadido el rol al usuario correctamente.' : $error[] = 'Ocurrió un error añadiendo el rol al usuario.';
-
-        // attach cost centers
-        $subCostCenters = $request->input('subCostCenter_id');
-        //dd($subCostCenter);
-        ( $user->subCostCenters()->sync($subCostCenters) ) ? $success[] = 'Asignación de centro de costos exitosa.' : $error[] = 'Error asignando centro de costos.' ;
+        if($user->save()){
+            
+            $success[] = 'Usuario creado correctamente.';
+            
+            // attach roles to user
+            $user->attachRoles($role_keys);
+            ($user->hasRole($role_names))
+                ? $success[] = 'Se ha añadido el rol al usuario correctamente.'
+                : $error[] = 'Ocurrió un error añadiendo el rol al usuario.';
+    
+            // attach cost centers
+            if(count($subCostCenters = $request->input('sub_cost_center_id')) > 0)
+                $user->subCostCenters()->sync($subCostCenters)
+                    ? $success[] = 'Asignación de centro de costos exitosa.'
+                    : $error[] = 'Error asignando centro de costos.' ;
+            
+            // attach employees
+            if(count($employees = $request->get('employee_id')) > 0)
+                $user->employees()->sync($employees)
+                    ? $success[] = 'Asignación de empleado(s) exitosa.'
+                    : $error[] = 'Falló la asignación de empleado(s).' ;
+            
+        }else{
+            $error[] = 'Ocurrió un error creando el usuario.';
+        }
 
         // flash notification messages
         \Session::flash('success', $success);
@@ -121,8 +137,10 @@ class UserController extends Controller
         $roles = $role->lists('display_name', 'id');
         $costCenters = $costCenters->with('subCostCenter')->get();
         $userSubCostCenters = $user->getSubCostCentersId();
+        $employees = \sanoha\Models\SubCostCenter::getRelatedEmployees();
+        $areas = \sanoha\Models\Areas::orderBy('name')->lists('name', 'id');
 
-        return view('users.edit', compact('user', 'roles', 'costCenters', 'userSubCostCenters'));
+        return view('users.edit', compact('user', 'roles', 'costCenters', 'userSubCostCenters', 'employees', 'areas'));
     }
 
     /**
@@ -135,8 +153,8 @@ class UserController extends Controller
     {
         $user = $this->user->findOrFail($id);
         
-        $data = $request->except('role_id', empty($request->only('password')['password']) ? 'password' : null);
-        $subCostCenters = empty($request->only('subCostCenter_id')['subCostCenter_id']) ? [] : $request->only('subCostCenter_id')['subCostCenter_id'];
+        $data = $request->except('role_id', empty($request->get('password')) ? 'password' : null);
+        $subCostCenters = empty($request->only('sub_cost_center_id')['sub_cost_center_id']) ? [] : $request->only('sub_cost_center_id')['sub_cost_center_id'];
         
         $data['activated'] = $request->has('activated') ? true : false;
         
@@ -161,12 +179,15 @@ class UserController extends Controller
         // update user roles
         $user->roles()->sync($role_keys);
         
-        // attach cos centers
-        //dd($subCostCenters);
+        // attach cost centers
         $user->subCostCenters()->sync($subCostCenters) ? $success[] = 'Actualización de centro de costos exitosa.' : $error[] = 'Error actualizando centro de costos.' ;
         
         if(!empty($role_names))
             ($user->hasRole($role_names)) ? $success[] = 'Se ha actualizado el rol del usuario correctamente.' : $error[] = 'Ocurrió un error actualizando el rol al usuario.';
+
+        // attach employees
+        if(count($employees = $request->get('employee_id')) > 0)
+            $user->employees()->sync($employees) ? $success[] = 'Asignación de empleado(s) exitosa.' : $error[] = 'Falló la asignación de empleado(s).' ;
 
         // flash notification messages
         \Session::flash('success', $success);

@@ -19,6 +19,8 @@ class UserTableSeeder extends Seeder
         
         // create admin user
         $data[] = [
+            'area_id'       =>  null,
+            'area_chief'    =>  false,
             'name'          =>  'Johan',
             'lastname'      =>  'Alvarez',
             'email'         =>  'llstarscreamll@hotmail.com',
@@ -32,14 +34,16 @@ class UserTableSeeder extends Seeder
         // create random users
         for ($i = 0; $i < 10; $i++) {
             $data[] = [
-                'name'          =>    $faker->firstName,
-                'lastname'      =>    $faker->lastname,
-                'email'         =>    $faker->unique()->email,
-                'password'      =>    bcrypt('74123'),
-                'activated'     =>    $faker->randomElement(['0', '1']),
-                'created_at'    =>    $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
-                'updated_at'    =>    $date->toDateTimeString(),
-                'deleted_at'    =>    null
+                'name'          =>  $faker->firstName,
+                'lastname'      =>  $faker->lastname,
+                'email'         =>  $faker->unique()->email,
+                'password'      =>  bcrypt('74123'),
+                'activated'     =>  $faker->randomElement(['0', '1']),
+                'area_id'       =>  null,
+                'area_chief'    =>  false,
+                'created_at'    =>  $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
+                'updated_at'    =>  $date->toDateTimeString(),
+                'deleted_at'    =>  null
             ];
         }
         

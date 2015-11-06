@@ -51,13 +51,14 @@ class EmployeeController extends Controller
      */
     public function store(EmployeeFormRequest $request)
     {
-        $employee                       =   new \sanoha\Models\Employee;
-        $employee->sub_cost_center_id   =   $request->get('sub_cost_center_id');
-        $employee->position_id          =   $request->get('position_id');
-        $employee->name                 =   $request->get('name');
-        $employee->lastname             =   $request->get('lastname');
-        $employee->identification_number=   $request->get('identification_number');
-        $employee->email                =   !empty(trim($request->get('email'))) ? $request->get('email') : null;
+        $employee                               =   new \sanoha\Models\Employee;
+        $employee->sub_cost_center_id           =   $request->get('sub_cost_center_id');
+        $employee->position_id                  =   $request->get('position_id');
+        $employee->name                         =   $request->get('name');
+        $employee->lastname                     =   $request->get('lastname');
+        $employee->identification_number        =   $request->get('identification_number');
+        $employee->email                        =   !empty(trim($request->get('email'))) ? $request->get('email') : null;
+        $employee->authorized_to_drive_vehicles =   $request->get('authorized_to_drive_vehicles', false);
         
         $employee->save() ? \Session::flash('success', 'Empleado creado correctamente.') : \Session::flash('error', 'Ocurrió un error creando el empleado.');
         
@@ -102,13 +103,14 @@ class EmployeeController extends Controller
      */
     public function update(EmployeeFormRequest $request, $id)
     {
-        $employee                       =   \sanoha\Models\Employee::findOrFail($id);
-        $employee->name                 =   $request->get('name');
-        $employee->lastname             =   $request->get('lastname');
-        $employee->identification_number=   $request->get('identification_number');
-        $employee->email                =   !empty(trim($request->get('email'))) ? $request->get('email') : null;
-        $employee->sub_cost_center_id   =   $request->get('sub_cost_center_id');
-        $employee->position_id          =   $request->get('position_id');
+        $employee                               =   \sanoha\Models\Employee::findOrFail($id);
+        $employee->name                         =   $request->get('name');
+        $employee->lastname                     =   $request->get('lastname');
+        $employee->identification_number        =   $request->get('identification_number');
+        $employee->email                        =   !empty(trim($request->get('email'))) ? $request->get('email') : null;
+        $employee->sub_cost_center_id           =   $request->get('sub_cost_center_id');
+        $employee->position_id                  =   $request->get('position_id');
+        $employee->authorized_to_drive_vehicles =   $request->get('authorized_to_drive_vehicles', false);
         
         $employee->save() ? \Session::flash('success', 'Empleado actualizado correctamente.') : \Session::flash('error', 'Ocurrió un error actualizado al empleado.');
         

@@ -1,4 +1,4 @@
-<div class="row">
+<div id="system-notifications" class="row">
     <div class="col-md-8 col-md-offset-2">
 
 {{-- Form Error Messages --}}

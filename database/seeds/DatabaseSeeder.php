@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
          */ 
         $this->call('PermissionTableSeeder');
         $this->call('RoleTableSeeder');
+        $this->call('AreasTableSeeder');
         $this->call('CostCenterTableSeeder');
         $this->call('PositionsTableSeeder');
         $this->call('SubCostCenterTableSeeder');

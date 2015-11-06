@@ -32,12 +32,13 @@ class CreateCest
         $I->see('Crear Empleado', 'h2');
         
         $I->submitForm('form', [
-            'name'                  =>  'Alan',
-            'lastname'              =>  'Silvestri',
-            'identification_number' =>  '74265326',
-            'email'                 =>  'alan.silvestri@example.com',
-            'sub_cost_center_id'    =>  1,
-            'position_id'           =>  1
+            'name'                          =>  'Alan',
+            'lastname'                      =>  'Silvestri',
+            'identification_number'         =>  '74265326',
+            'email'                         =>  'alan.silvestri@example.com',
+            'sub_cost_center_id'            =>  1,
+            'position_id'                   =>  1,
+            'authorized_to_drive_vehicles'  =>  true
         ], 'Crear');
         
         $I->seeCurrentUrlEquals('/employee');
@@ -47,6 +48,16 @@ class CreateCest
         $I->see('Proyecto Beteitiva Bocamina 1', 'tbody tr:first-child td');
         $I->see('Minero', 'tbody tr:first-child td');
         $I->see('alan.silvestri@example.com', 'tbody tr:first-child td');
+        
+        $I->seeRecord('employees', [
+            'name'                          =>  'Alan',
+            'lastname'                      =>  'Silvestri',
+            'identification_number'         =>  '74265326',
+            'email'                         =>  'alan.silvestri@example.com',
+            'sub_cost_center_id'            =>  1,
+            'position_id'                   =>  1,
+            'authorized_to_drive_vehicles'  =>  true
+        ]);
     }
     
     /**

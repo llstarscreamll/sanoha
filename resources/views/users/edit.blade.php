@@ -22,10 +22,12 @@
 
                     @include ('users.partials.form', ['btnText' => 'Actualizar', 'password_required' => ''])
                     
-                    <button type="submit" class="btn btn-warning">
-						<span class="glyphicon glyphicon-pencil"></span>
-						Actualizar
-					</button>
+                    <div class="col-md-10 col-md-offset-1">
+                        <button type="submit" class="btn btn-warning">
+    						<span class="glyphicon glyphicon-pencil"></span>
+    						Actualizar
+    					</button>
+    				</div>
 
                 {!! Form::close() !!}
 

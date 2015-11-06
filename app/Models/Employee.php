@@ -88,6 +88,14 @@ class Employee extends Model implements LogsActivityInterface
     }
     
     /**
+     * La relación entre empleados y usuarios, muchos a muchos
+     */
+    public function users()
+    {
+        return $this->belongsToMany('sanoha\Models\User', 'employee_owners');
+    }
+    
+    /**
      * La relación entre un empledo y las ordenes de trabajo, muchos a muchos
      */
     public function internalAccompanists()

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use \sanoha\Models\WorkOrder;
 use \sanoha\Models\ExternalAccompanist;
+use \sanoha\Http\Requests\WorkOrderFormRequest;
 
 class WorkOrderController extends Controller {
 
@@ -30,9 +31,10 @@ class WorkOrderController extends Controller {
 	public function create()
 	{
 		$employees = \sanoha\Models\SubCostCenter::getRelatedEmployees();
+		$vehicle_responsibles = \sanoha\Models\Employee::where('authorized_to_drive_vehicles', true)->get()->lists('fullname', 'id');
 		$vehicles = \sanoha\Models\Vehicle::all()->lists('plate', 'id');
 		
-		return view('workOrders.create', compact('employees', 'vehicles'));
+		return view('workOrders.create', compact('employees', 'vehicles', 'vehicle_responsibles'));
 	}
 
 	/**
@@ -40,7 +42,7 @@ class WorkOrderController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store(Request $request)
+	public function store(WorkOrderFormRequest $request)
 	{
 		// creo la orden de trabajo
 		$workOrder							=	new WorkOrder;
@@ -118,9 +120,10 @@ class WorkOrderController extends Controller {
 	{
 		$workOrder = WorkOrder::findOrFail($id);
 		$employees = \sanoha\Models\SubCostCenter::getRelatedEmployees();
+		$vehicle_responsibles = \sanoha\Models\Employee::where('authorized_to_drive_vehicles', true)->get()->lists('fullname', 'id');
 		$vehicles = \sanoha\Models\Vehicle::all()->lists('plate', 'id');
 		
-		return view('workOrders.edit', compact('workOrder', 'employees', 'vehicles'));
+		return view('workOrders.edit', compact('workOrder', 'employees', 'vehicles', 'vehicle_responsibles'));
 	}
 
 	/**
@@ -129,7 +132,7 @@ class WorkOrderController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id, Request $request)
+	public function update($id, WorkOrderFormRequest $request)
 	{
 		$workOrder							=	WorkOrder::findOrFail($id);
 		$workOrder->authorized_by			=	\Auth::getUser()->id;
@@ -205,8 +208,60 @@ class WorkOrderController extends Controller {
 	}
 	
 	/**
+	 * Muestra el formulario para la edición de un reporte de la orden de trabajo
+	 * 
+	 * @param int $work_order_id
+	 * @param int $main_report_id
+	 */
+	public function mainReportEdit($work_order_id, $main_report_id)
+	{
+		$workOrder = \sanoha\Models\WorkOrder::findOrFail($work_order_id);
+		$mainReport = \sanoha\Models\WorkOrderReport::findOrFail($main_report_id);
+		
+		return view('workOrders.editMainReport', compact('workOrder', 'mainReport'));
+	}
+	
+	/**
+	 * Actualiza la información del reporte principal de la orden de trabajo
+	 * 
+	 * @param int $work_order_id
+	 * @param int $main_report_id
+	 */
+	public function mainReportUpdate($work_order_id, $main_report_id, Request $request)
+	{
+		$workOrder = \sanoha\Models\WorkOrder::findOrFail($work_order_id);
+		$mainReport = \sanoha\Models\WorkOrderReport::findOrFail($main_report_id);
+
+		$mainReport->work_order_report = $request->get('work_order_report');
+		$mainReport->reported_by = \Auth::getUser()->id;
+		
+		$mainReport->save()
+			? \Session::flash('success', 'Reporte principal actualizado correctamente.')
+			: \Session::flash('error', 'Ocurrió un problema actualizado el reporte');
+			
+		return redirect()->route('workOrder.show', $workOrder->id);
+	}
+	
+	/**
+	 * Elimino (softdelete) el reporte principal de la orden de trabajo
+	 * 
+	 * @param int $report_id
+	 */
+	public function mainReportDestroy($report_id)
+	{
+		\sanoha\Models\WorkOrderReport::destroy($report_id)
+			? \Session::flash('success', 'El reporte principal ha sido movido a la papelera correctamente.')
+			: \Session::flash('error', 'Ocurrió un problema moviendo a la papelera el reporte principal.');
+		
+		return redirect()->back();
+	}
+	
+	/**
 	 * Muestra el formulario donde el acompañante interno reporta las actividades
 	 * realizdas en la orden de trabajo
+	 * 
+	 * @param int $work_order_id
+	 * @param int $main_report_id
 	 */
 	public function internalAccompanistReportForm($work_order_id, $employee_id)
 	{
@@ -217,14 +272,33 @@ class WorkOrderController extends Controller {
 	}
 	
 	/**
+	 * Muestra el formulario donde el acompañante interno editará el reporte de
+	 * las actividades realizdas en la orden de trabajo
+	 * 
+	 * @param int $work_order_id
+	 * @param int $main_report_id
+	 */
+	public function internalAccompanistReportEditForm($work_order_id, $employee_id)
+	{
+		$workOrder = \sanoha\Models\WorkOrder::with(['internalAccompanists' => function($q) use($employee_id){
+				$q->where('employee_id', $employee_id);
+			}])
+			->findOrFail($work_order_id);
+		$employee = \sanoha\Models\Employee::findOrFail($employee_id);
+		
+		return view('workOrders.internalAccompanistEditReportForm', compact('workOrder', 'employee'));
+	}
+	
+	/**
 	 * Guarda en la base de datos el reporte del acompañante interno de la orden
 	 * de trabajo
+	 * @param int $work_order_id
+	 * @param int $main_report_id
 	 */
 	public function internalAccompanistReportStore($work_order_id, $employee_id, Request $request)
 	{
 		$workOrder = \sanoha\Models\WorkOrder::findOrFail($work_order_id);
 		$employee = \sanoha\Models\Employee::findOrFail($employee_id);
-		//dd($employee->id);
 
 		$workOrder->internalAccompanists()->sync([$employee->id => [
 			'work_report' => $request->get('work_order_report'),
@@ -232,7 +306,29 @@ class WorkOrderController extends Controller {
 			'reported_at' => date('Y-m-d H:i:s')
 		]], false);
 		
-		\Session::flash('success', 'El reporte ha sido creado correctamente.');
+		\Session::flash('success', 'Se ha guardado el reporte del acompañante interno.');
+		
+		return redirect()->route('workOrder.show', $workOrder->id);
+	}
+	
+	/**
+	 * Borra el reporte de un acompañante interno de la orden de trabajo
+	 * 
+	 * @param int $work_order_id
+	 * @param int $main_report_id
+	 */
+	public function internalAccompanistReportDelete($work_order_id, $employee_id)
+	{
+		$workOrder = \sanoha\Models\WorkOrder::findOrFail($work_order_id);
+		$employee = \sanoha\Models\Employee::findOrFail($employee_id);
+
+		$workOrder->internalAccompanists()->sync([$employee->id => [
+			'work_report' => null,
+			'reported_by' => null,
+			'reported_at' => null
+		]], false);
+		
+		\Session::flash('success', 'El reporte del acompañante interno ha sido borrado correctamente.');
 		
 		return redirect()->route('workOrder.show', $workOrder->id);
 	}
@@ -245,7 +341,17 @@ class WorkOrderController extends Controller {
 	 */
 	public function destroy($id)
 	{
-		//
+		$id = \Request::has('id') ? \Request::only('id')['id'] : $id;
+        
+        (\sanoha\Models\WorkOrder::destroy($id))
+        	? \Session::flash('success', [is_array($id) && count($id) > 1
+        		? 'Las ordenes de trabajo han sido movidas a la papelera correctamente.'
+        		: 'La orden de trabajo ha sido movida a la papelera correctamente.'])
+        	: \Session::flash('error', [is_array($id)
+        		? 'Ocurrió un error moviendo las ordenes de trabajo a la papelera.'
+        		: 'Ocurrió un problema moviendo las ordenes de trabajo a la papelera.']) ;
+
+        return redirect()->route('workOrder.index');
 	}
 
 }

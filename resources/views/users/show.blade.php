@@ -18,7 +18,7 @@
 
                 @include ('layout.notifications')
 
-                <form>
+                <form class="col-md-10 col-md-offset-1">
                 
                 <fieldset>
                     <legend>Detalles</legend>
@@ -54,21 +54,28 @@
                     
                     <div class="row">
                         
-                        <div class="col-md-5">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 {!! Form::label('role_id', 'Tipo de Usuario', '') !!}
                                 {!! Form::input('text', 'role_id', $user->getRoles(), ['class' => 'form-control', 'disabled', 'readonly']) !!}
                             </div>
                         </div>
                         
-                        <div class="col-md-5">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 {!! Form::label('costCenter_id', 'Centros de Costo', '') !!}
                                 {!! Form::input('text', 'costCenter_id', $user->getSubCostCenters(), ['class' => 'form-control', 'disabled', 'readonly']) !!}
                             </div>
                         </div>
                         
-                        <div class="col-md-2">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {!! Form::label('employee_id', 'Empleados Asignados', '') !!}
+                                {!! Form::input('text', 'employee_id', $user->getEmployees(), ['class' => 'form-control', 'disabled', 'readonly']) !!}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
                             <div class="form-group">
                                 {!! Form::label('activated', 'Estado', '') !!}
                                 {!! Form::input('text', 'activated', $user->getActivatedState(), ['class' => 'form-control', 'disabled', 'readonly']) !!}
@@ -79,16 +86,19 @@
                 </fieldset>
 
                 </form>
-                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning">
-                    <span class="glyphicon glyphicon-pencil"></span>
-                    Editar
-                </a>
-                {{-- This button triggers the confirmation modal window --}}
-                <button class="btn btn-danger" data-toggle="modal" data-target="#modal_confirm">
-                    <span class="glyphicon glyphicon-trash"></span>
-                    Mover a Papelera
-                </button>
-
+                
+                <div class="col-md-10 col-md-offset-1">
+                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                        Editar
+                    </a>
+                    {{-- This button triggers the confirmation modal window --}}
+                    <button class="btn btn-danger" data-toggle="modal" data-target="#modal_confirm">
+                        <span class="glyphicon glyphicon-trash"></span>
+                        Mover a Papelera
+                    </button>
+                </div>
+                
             </div>
         </div>
     </div>

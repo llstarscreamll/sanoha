@@ -22,42 +22,47 @@
                     <h2>Detalles de Empleado</h2>
                 </div>
                 
-				<div class="form-group col-md-8 col-md-offset-2">
+				<div class="form-group col-md-4 col-md-offset-2">
     		        {!! Form::label('', 'Nombre') !!}
                     {!! Form::text('', $employee->name, ['class' => 'form-control', 'disabled']) !!}
     		    </div>
     		    
     		    
-    		    <div class="form-group col-md-3 col-md-offset-2">
+    		    <div class="form-group col-md-4">
     		        {!! Form::label('', 'Apellido') !!}
                     {!! Form::text('', $employee->lastname, ['class' => 'form-control', 'disabled']) !!}
     		    </div>
     		    
-    		    <div class="form-group col-md-3">
+    		    <div class="form-group col-md-4 col-md-offset-2">
     		        {!! Form::label('', 'No. Identificación') !!}
                     {!! Form::text('', $employee->identification_number, ['class' => 'form-control', 'disabled']) !!}
     		    </div>
     		    
-    		    <div class="form-group col-md-2">
+    		    <div class="form-group col-md-4">
     		        {!! Form::label('', 'Código') !!}
                     {!! Form::text('', $employee->internal_code, ['class' => 'form-control', 'disabled']) !!}
     		    </div>
     		    
-    		    <div class="form-group col-md-3 col-md-offset-2">
+    		    <div class="form-group col-md-4 col-md-offset-2">
     		        {!! Form::label('', 'Email') !!}
                     {!! Form::text('', $employee->email, ['class' => 'form-control', 'disabled']) !!}
     		    </div>
     		    
-    		    <div class="form-group col-md-3">
+    		    <div class="form-group col-md-4">
     		        {!! Form::label('', 'Centro de Costo') !!}
                     {!! Form::text('', $employee->subCostCenter->nameWithCostCenterName, ['class' => 'form-control', 'disabled']) !!}
     		    </div>
     		    
-    		    <div class="form-group col-md-2">
+    		    <div class="form-group col-md-4 col-md-offset-2">
     		        {!! Form::label('', 'Cargo') !!}
                     {!! Form::text('', $employee->position->name, ['class' => 'form-control', 'disabled']) !!}
     		    </div>
-                
+    		    
+                <div class="form-group col-md-4">
+                    {!! Form::label('authorized_to_drive_vehicles', 'Autorizado para Manejo de Vehículos') !!}
+                    {!! Form::input('text', 'authorized_to_drive_vehicles', $employee->authorized_to_drive_vehicles ? 'Si' : 'No', ['class' => 'form-control', 'disabled', 'readonly']) !!}
+                </div>
+
                 <div class="col-md-10 col-md-offset-2">
                     
                     <a href="{{ route('employee.edit', $employee->id) }}" class="btn btn-warning">

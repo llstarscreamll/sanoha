@@ -16,11 +16,11 @@ class CreateSubCostCenterOwnerTable extends Migration {
 		{
 			$table->integer('user_id')->unsigned(); // foreign key
 			$table->integer('sub_cost_center_id')->unsigned(); // foreign key
-
+			
 			$table->foreign('user_id')->references('id')->on('users')
-				->onUpdate('cascade')->onDelete('cascade');
+				->onUpdate('cascade')->onDelete('restrict');
 			$table->foreign('sub_cost_center_id')->references('id')->on('sub_cost_centers')
-				->onUpdate('cascade')->onDelete('cascade');
+				->onUpdate('cascade')->onDelete('restrict');
 		});
 	}
 

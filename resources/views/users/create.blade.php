@@ -22,11 +22,12 @@
 
 					@include ('users.partials.form', ['btnText' => 'Crear', 'password_required' => 'required'])
 					
-					<button type="submit" class="btn btn-primary">
-						<span class="glyphicon glyphicon-floppy-disk"></span>
-						Crear
-					</button>
-
+					<div class="col-md-10 col-md-offset-1">
+						<button type="submit" class="btn btn-primary">
+							<span class="glyphicon glyphicon-floppy-disk"></span>
+							Crear
+						</button>
+					</div>
 				{!! Form::close() !!}
 
 			</div>

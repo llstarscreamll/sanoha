@@ -1,6 +1,6 @@
 <div class="col-md-4 col-md-offset-2 form-group">
     {!! Form::label('authorized_by', 'Autorizado por') !!}
-    {!! Form::text('authorized_by', \Auth::getUser()->fullname, ['class' => 'form-control']) !!}
+    {!! Form::text('authorized_by', \Auth::getUser()->fullname, ['class' => 'form-control', 'disabled' => 'disabled']) !!}
     
     @if ($errors->has('authorized_by'))
         <div class="text-danger">
@@ -11,7 +11,7 @@
 
 <div class="col-md-4 form-group">
     {!! Form::label('vehicle_responsable', 'Responsable de Vehículo') !!}
-    {!! Form::select('vehicle_responsable', ['' => 'Selecciona al trabajador']+$employees, null, ['data-live-search' => 'true', 'class' => 'form-control selectpicker show-tick', 'id' => 'vehicle_responsable']) !!}
+    {!! Form::select('vehicle_responsable', ['' => 'Selecciona al trabajador']+$vehicle_responsibles, null, ['data-live-search' => 'true', 'class' => 'form-control selectpicker show-tick', 'id' => 'vehicle_responsable']) !!}
     
     @if ($errors->has('vehicle_responsable'))
         <div class="text-danger">

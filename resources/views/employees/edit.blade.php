@@ -44,4 +44,10 @@
 
 @section('script')
 
-@stop()
+    <script type="text/javascript">
+        
+        $(".bootstrap_switch").bootstrapSwitch();
+        
+    </script>
+    
+@endsection

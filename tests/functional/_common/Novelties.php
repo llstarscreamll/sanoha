@@ -12,8 +12,7 @@ class Novelties
     {
         $faker = Faker::create();
         
-        $date = Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d').' 14:24:12');
-        $date = $date->subMonth();
+        $date = Carbon::now()->subDays(2);
         $data = [];
         
         $data[] = [

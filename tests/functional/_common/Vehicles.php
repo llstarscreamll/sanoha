@@ -16,7 +16,7 @@ class Vehicles
     public function createVehicles()
     {
         $faker = Faker::create();
-        $date = Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d').' 14:24:12');
+        $date = Carbon::now()->subDays(2);
         $date = $date->subDays(3);
         $data = [];
         

@@ -29,7 +29,15 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      *
      * @var array
      */
-    protected $fillable = ['name', 'lastname', 'email', 'password', 'activated'];
+    protected $fillable = [
+        'area_id',
+        'area_chief',
+        'name',
+        'lastname',
+        'email',
+        'password',
+        'activated'
+    ];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -39,7 +47,26 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     protected $hidden = ['password', 'remember_token'];
     
     /**
-     * 
+     * La relación entre empleados y usuarios, es decir, los dueños de la
+     * información de los empleados quienes pueden editar o crear
+     * información que afecta a los empleados asignados en
+     * determinados módulos del sistema, muchos a muchos
+     */
+    public function employees()
+    {
+        return $this->belongsToMany('sanoha\Models\Employee', 'employee_owners');
+    }
+    
+    /**
+     * La relación entre usuario y area, uno a muchos
+     */
+    public function area()
+    {
+        return $this->belongsTo('sanoha\Models\Area');
+    }
+    
+    /**
+     * La relción entre los usuarios y los subcentros de costo, muchos a muchos
      */
     public function subCostCenters()
     {
@@ -47,12 +74,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
     
     /**
+     * Obtiene los subcentros de costo que tiene asociados el usuario
      * 
+     * @return array
      */
     public function getCostCenters()
     {
         $costCenters = [];
-        //dd($this->subCostCenters()->with('costCenter')->get());
+
         foreach($this->subCostCenters()->with('CostCenter')->get() as $subCostCenter){
             $costCenters[$subCostCenter->CostCenter->id]['id'] = $subCostCenter->CostCenter->id;
             $costCenters[$subCostCenter->CostCenter->id]['name'] = $subCostCenter->CostCenter->name;
@@ -69,10 +98,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function hasSubCostCenter($subCostCenterId){
         
         foreach ($this->subCostCenters as $key => $subCostCenter) {
-            
             if($subCostCenter->id === $subCostCenterId)
                 return true;
-                
         }
         
         return false;
@@ -122,6 +149,20 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
     
     /**
+     * Obtiene los id's de los empleados relacionados al empleado
+     * 
+     * @return {array}
+     */
+    public function getIdEmployees()
+    {
+        $employees = [];
+        foreach ($this->employees as $employee) {
+            $employees[] = $employee->id;
+        }
+        return $employees;
+    }
+    
+    /**
      * Get the user sub cost centers name attribute
      * 
      * @return {string}
@@ -134,6 +175,36 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $subCostCenters .= $center->name.' ';
         }
         return $subCostCenters;
+    }
+    
+    /**
+     * Obtiene los empleados asociados al usuario
+     * 
+     * @return {string}
+     */
+    public function getEmployees()
+    {
+        $employees = '';
+        
+        foreach ($this->employees as $employee) {
+            $employees .= $employee->fullname.' ';
+        }
+        return $employees;
+    }
+    
+    /**
+     * Comprueba si el usuario tiene asociado al empleado dado
+     * 
+     * @param   string  $costCenterId
+     */
+    public function hasEmployee($employee_id){
+        
+        foreach ($this->employees as $key => $employee) {
+            if($employee->id === $employee_id)
+                return true;
+        }
+        
+        return false;
     }
     
     /**

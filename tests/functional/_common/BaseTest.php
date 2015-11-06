@@ -1,6 +1,7 @@
 <?php   namespace common;
 
 use \common\User                as UserCommons;
+use \common\Areas               as AreasCommons;
 use \common\Roles               as RolesCommons;
 use \common\Vehicles            as VehiclesCommons;
 use \common\Employees           as EmployeesCommons;
@@ -16,6 +17,7 @@ use \sanoha\Http\Requests\RoleFormRequest;
 class BaseTest
 {
     public $userCommons;
+    public $areasCommons;
     public $rolesCommons;
     public $employeeCommons;
     public $vehiclesCommons;
@@ -105,6 +107,11 @@ class BaseTest
         
         // cargo los datos base
         $this->createBasicData();
+        
+        AreasCommons::createAreas();
+        
+        // creo empleados para la asignación de empleados a los usuarios
+        $this->employeeCommons->createMiningEmployees();
 
         $this->admin_user = $this->userCommons->adminUser;
     }

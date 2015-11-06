@@ -1,6 +1,7 @@
 <?php
-use \FunctionalTester;
+namespace Auth;
 
+use \FunctionalTester;
 use \common\User    as UserCommons;
 use \common\Roles   as RolesCommons;
 
@@ -20,7 +21,7 @@ class RegisterCest
         $this->valid_form = [
             'name'      =>      'Travis',
             'lastname'  =>      'Orbin',
-            'email'     =>      'travis.orbin@gmail.com',
+            'email'     =>      'travis.orbin@example.com',
             'password'  =>      '123456',
             'password_confirmation'  =>      '123456'
             ];
@@ -76,6 +77,5 @@ class RegisterCest
         $I->amOnPage('/home');
         $I->seeRecord('users', ['email' => $this->valid_form['email']]);
         $I->seeAuthentication();
-
     }
 }

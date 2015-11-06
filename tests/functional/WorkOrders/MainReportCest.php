@@ -27,20 +27,7 @@ class MainReportCest
         // creo la orden de trabajo de prueba
         WorkOrdersPage::createWorkOrder($I);
         
-        $I->amOnPage(WorkOrdersPage::route('/1'));
-        $I->see(WorkOrdersPage::$showTitle, WorkOrdersPage::$showTitleTag);
-        
-        $I->click(WorkOrdersPage::$mainReportLink['txt'], WorkOrdersPage::$mainReportLink['selector']);
-        $I->seeCurrentUrlEquals(WorkOrdersPage::route('/1/mainReport'));
-        
-        $I->see(WorkOrdersPage::$mainReportTitle['txt'], WorkOrdersPage::$mainReportTitle['selector']);
-        $I->seeElement(WorkOrdersPage::$mainReportTextarea['selector']);
-        
-        $I->submitForm(WorkOrdersPage::$mainReportForm, WorkOrdersPage::$workReportFormData, WorkOrdersPage::$mainReportFormButton['txt']);
-        
-        $I->seeCurrentUrlEquals(WorkOrdersPage::route('/1'));
-        
-        $I->see(WorkOrdersPage::$workReportFormData['work_order_report'], WorkOrdersPage::$workOrderReportBodyLocation);
-        $I->see(WorkOrdersPage::getWorkOrderReportFooter(), WorkOrdersPage::$workOrderReportFooterLocation);
+        // creo el reporte principal
+        WorkOrdersPage::createWorkOrder($I);
     }
 }

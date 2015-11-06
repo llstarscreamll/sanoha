@@ -19,8 +19,9 @@ class Employees
         $data = [];
         $subCostCenters = SubCostCenterModel::all();
         $count = 1;
+        $bool = true;
         
-        $date = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d').' 14:24:12');
+        $date = \Carbon\Carbon::now()->subDays(2);
         $date = $date->subMonth();
         
         PositionModel::create([
@@ -30,17 +31,20 @@ class Employees
         foreach ($subCostCenters as $subCostCenter) {
             
             $data[] = [
-                'position_id'           =>      1,
-                'sub_cost_center_id'    =>      $subCostCenter->id,
-                'name'                  =>      'Trabajador ' . $count,
-                'lastname'              =>      $subCostCenter->short_name,
-                'identification_number' =>      '1'.$count,
-                'email'                 =>      'trabajador'.$count++.'@example.com',
-                'status'                =>      'enabled',
-                'created_at'            =>      $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
-                'updated_at'            =>      $date->toDateTimeString(),
-                'deleted_at'            =>      null
+                'position_id'                   =>      1,
+                'sub_cost_center_id'            =>      $subCostCenter->id,
+                'name'                          =>      'Trabajador ' . $count,
+                'lastname'                      =>      $subCostCenter->short_name,
+                'identification_number'         =>      '1'.$count,
+                'email'                         =>      'trabajador'.$count++.'@example.com',
+                'status'                        =>      'enabled',
+                'authorized_to_drive_vehicles'  =>      $bool,
+                'created_at'                    =>      $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
+                'updated_at'                    =>      $date->toDateTimeString(),
+                'deleted_at'                    =>      null
             ];
+            
+            $bool = false;
 
         }
         

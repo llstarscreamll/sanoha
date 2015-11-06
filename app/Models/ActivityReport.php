@@ -263,7 +263,7 @@ class ActivityReport extends Model implements LogsActivityInterface
             ->whereNull('activity_reports.deleted_at')
             ->orderBy('employees.name')
             ->get();
-
+        dd($data);
         return json_encode($data);
     }
     

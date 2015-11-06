@@ -43,6 +43,7 @@ class CreateUserCest
             'email'             => '',
             'role_id'           => [],
             'activated'         => true,
+            'employee_id'       => [21252,5654],
             'password'          => '',
             'password_confirmation'   => ''
         ], 'Crear');
@@ -54,6 +55,7 @@ class CreateUserCest
         $I->seeFormErrorMessage('name', 'El nombre es un campo obligatorio.');
         $I->seeFormErrorMessage('email', 'La dirección de correo electrónico es oblogatoria.');
         $I->seeFormErrorMessage('password', 'Por favor digita una contraseña.');
+        $I->seeFormErrorMessage('employee_id', 'No se encontró información del empleado.');
 
         $I->submitForm('form', [
             'name'              => 'Ed',
@@ -127,33 +129,41 @@ class CreateUserCest
         $I->see('Crear Usuario', 'h1');
 
         $newUser = [
-            'name'              => 'Eddy',
-            'lastname'          => 'Ramon',
-            'email'             => 'edy.ramon@example.com',
-            'role_id'           => 1,
-            'activated'         => 1,
-            'subCostCenter_id'     => [1,2],
-            'password'          => 'edy.ramon',
-            'password_confirmation'   => 'edy.ramon'
+            'name'                  => 'Eddy',
+            'lastname'              => 'Ramon',
+            'email'                 => 'edy.ramon@example.com',
+            'role_id'               => 1,
+            'activated'             => 1,
+            'sub_cost_center_id'      => [1,2],
+            'employee_id'           => [1,2],
+            'area_id'               => 1,
+            'area_chief'            => true,
+            'password'              => 'edy.ramon',
+            'password_confirmation' => 'edy.ramon'
         ];
-        
-        //$I->checkOption('activated');
-        //$I->selectOption('form #role_id', 1);
-        //$I->selectOption('form #costCenter_id', 1);
         
         $I->submitForm('form', $newUser, 'Crear');
         
-        $I->seeRecord('users', [
-            'name'              => $newUser['name'],
-            'lastname'          => $newUser['lastname'],
-            'email'             => $newUser['email'],
-            'activated'         => $newUser['activated']
-        ]);
+        $I->seeCurrentUrlEquals('/users');
+        $I->see('Usuario creado correctamente.', '.alert-success div');
+        $I->see('Se ha añadido el rol al usuario correctamente.', '.alert-success div');
+        $I->see('Asignación de centro de costos exitosa.', '.alert-success div');
+        $I->see('Asignación de empleado(s) exitosa.', '.alert-success div');
+        $I->see($newUser['name'], 'tbody tr:first-child td:nth-child(2)');
+        $I->see($newUser['email'], 'tbody tr:first-child td:nth-child(4)');
+        $I->see('Activado', 'tbody tr:first-child td:nth-child(5)'); // activated user
         
         $userRecord = \sanoha\Models\User::where('email', '=', $newUser['email'])->get()->first();
-        
-        //dd($userRecord->id);
-        
+
+        $I->seeRecord('users', [
+            'name'                  => 'Eddy',
+            'lastname'              => 'Ramon',
+            'email'                 => 'edy.ramon@example.com',
+            'activated'             => 1,
+            'area_id'               => 1,
+            'area_chief'            => 1,
+        ]);
+        // veo los subcentros de costo asociados
         $I->seeRecord('sub_cost_center_owner', [
             'user_id'           =>  $userRecord->id,
             'sub_cost_center_id'    =>  1
@@ -163,14 +173,16 @@ class CreateUserCest
             'user_id'           =>  $userRecord->id,
             'sub_cost_center_id'    =>  2
         ]);
-
-        $I->seeCurrentUrlEquals('/users');
-        $I->see('Usuario creado correctamente.', '.alert-success div');
-        $I->see('Se ha añadido el rol al usuario correctamente.', '.alert-success div');
-        $I->see('Asignación de centro de costos exitosa.', '.alert-success div');
-        $I->see($newUser['name'], 'tbody tr:first-child td:nth-child(2)');
-        $I->see($newUser['email'], 'tbody tr:first-child td:nth-child(4)');
-        $I->see('Activado', 'tbody tr:first-child td:nth-child(5)'); // activated user
-
+        
+        // veo los empleados asociados
+        $I->seeRecord('employee_owners', [
+            'user_id'           =>  $userRecord->id,
+            'employee_id'       =>  1
+        ]);
+        
+        $I->seeRecord('employee_owners', [
+            'user_id'           =>  $userRecord->id,
+            'employee_id'       =>  2
+        ]);
     }
 }

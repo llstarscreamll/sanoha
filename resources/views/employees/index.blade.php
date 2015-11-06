@@ -101,7 +101,7 @@
 			    </div>
 			    
 			    <div class="modal-body">
-				    <div id="modal-message"></div>
+				    <div class="modal-message"></div>
 			    </div>
 			    
 			    <div class="modal-footer">
@@ -121,11 +121,6 @@
         
         $(document).ready(function(){
         	
-        	{{-- trigger form submit when click on action buttons --}}
-        	$('.action-buttons button[type=submit]').click(function(){
-        		$('form[name=table-form]').submit();
-        	});
-        	
         	$('#btn-confirm').click(function(event){
         		var btn = $(event.target);
         		var form = $('form[name=table-form]');
@@ -136,8 +131,6 @@
         		});
         		
         		method.attr('value', btn.attr('data-method'));
-        		
-        		console.log(method);
         		form.submit();
         	});
         	
@@ -149,7 +142,7 @@
 				var message = button.data('message');
 
 				var modal = $(this)
-				modal.find('.modal-body #modal-message').text(message)
+				modal.find('.modal-body .modal-message').text(message)
 				modal.find('.modal-footer button#btn-confirm').attr('data-method', method)
 				modal.find('.modal-footer button#btn-confirm').attr('data-action', action)
 			});

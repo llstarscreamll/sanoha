@@ -32,7 +32,7 @@ class User
      */
     public $testUser = [
         'role_id'           =>    1,
-        'subCostCenter_id'  =>    [1],
+        'sub_cost_center_id'=>    [1],
         'name'              =>    'Andrew',
         'lastname'          =>    'Mars',
         'email'             =>    'andrew.mars@example.com',
@@ -71,6 +71,9 @@ class User
         // le asigno los centros de costo al usuario administrador
         $user->subCostCenters()->sync([1,2,3,4]); // estos son los id's de los subcentros de los primeros dos proyectos o centros de costo, sanoha y beteitiva
         
+        // el usuario tendrá asociado al Trabajador 1
+        $user->employees()->sync([1]); // 1 = Trabajador 1 B1
+        
         return $user;
     }
 
@@ -83,7 +86,7 @@ class User
     public function createUsers($num = 10)
     {
         $faker = Faker::create();
-        $date = Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d').' 14:24:12');
+        $date = Carbon::now()->subDays(2);
         $date = $date->subDays(3);
         $data = [];
         

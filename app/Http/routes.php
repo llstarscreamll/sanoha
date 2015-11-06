@@ -53,20 +53,41 @@ Route::group(['middleware' => 'auth'], function(){
         'as'    =>  'workOrder.internal_accompanist_report_form',
         'uses'  =>  'WorkOrderController@internalAccompanistReportForm'
     ]);
+    Route::get('workOrder/{work_order_id}/internalAccompanist/{employee_id}/editReport', [
+        'as'    =>  'workOrder.internal_accompanist_report_edit_form',
+        'uses'  =>  'WorkOrderController@internalAccompanistReportEditForm'
+    ]);
     Route::post('workOrder/{work_order_id}/internalAccompanist/{employee_id}/report', [
         'as'    =>  'workOrder.internal_accompanist_report_store',
         'uses'  =>  'WorkOrderController@internalAccompanistReportStore'
+    ]);
+    Route::delete('workOrder/{work_order_id}/internalAccompanist/{employee_id}/deleteReport', [
+        'as'    =>  'workOrder.internal_accompanist_report_delete',
+        'uses'  =>  'WorkOrderController@internalAccompanistReportDelete'
     ]);
     Route::get('workOrder/{id}/mainReport', [
         'as'    =>  'workOrder.mainReport',
         'uses'  =>  'WorkOrderController@mainReportForm'
     ]);
-    Route::put('workOrder/{id}/mainReportStore', [
+    Route::post('workOrder/{id}/mainReportStore', [
         'as'    =>  'workOrder.main_report_store',
         'uses'  =>  'WorkOrderController@mainReportStore'
     ]);
-    Route::resource('workOrder', 'WorkOrderController');
     
+    // reporte principal de la orden de trabajo
+    Route::get('workOrder/{work_order_id}/mainReport/{main_report_id}/edit', [
+        'as'    =>  'workOrder.mainReportEdit',
+        'uses'  =>  'WorkOrderController@mainReportEdit'
+    ]);
+    Route::put('workOrder/{work_order_id}/mainReport/{main_report_id}/update', [
+        'as'    =>  'workOrder.mainReportUpdate',
+        'uses'  =>  'WorkOrderController@mainReportUpdate'
+    ]);
+    Route::delete('workOrder/mainReport/{main_report_id}/destroy', [
+        'as'    =>  'workOrder.mainReportDestroy',
+        'uses'  =>  'WorkOrderController@mainReportDestroy'
+    ]);
+    Route::resource('workOrder', 'WorkOrderController');
     /**
      * Reporte de Novedades
      */

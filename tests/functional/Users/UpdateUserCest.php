@@ -47,7 +47,7 @@ class UpdateUserCest
         $I->seeAuthentication();
 
         $user = \sanoha\Models\User::create($this->base_test->userCommons->testUser);
-        $user->subCostCenters()->sync($this->base_test->userCommons->testUser['subCostCenter_id']);
+        $user->subCostCenters()->sync($this->base_test->userCommons->testUser['sub_cost_center_id']);
 
         $I->amOnPage($this->base_test->userCommons->usersIndexUrl);
         $I->see('Usuarios', 'h1');
@@ -78,14 +78,15 @@ class UpdateUserCest
 
         // new user data
         $this->base_test->userCommons->testUser = [
-            'role_id'       =>    [1,2],
-            'subCostCenter_id' =>    [1,2],
-            'name'          =>    'Andrew Lorens',
-            'lastname'      =>    'Mars Coleman',
-            'activated'     =>    1,
-            'email'         =>    'andrew.45698@gmail.com',
-            'password'      =>    '654321',
-            'password_confirmation'      =>    '654321'
+            'role_id'           =>  [1,2],
+            'sub_cost_center_id'  =>  [1,2],
+            'employee_id'       =>  [1,2],
+            'name'              =>  'Andrew Lorens',
+            'lastname'          =>  'Mars Coleman',
+            'activated'         =>  1,
+            'email'             =>  'andrew.45698@gmail.com',
+            'password'          =>  '654321',
+            'password_confirmation'=>'654321'
         ];
 
         $I->submitForm('form', $this->base_test->userCommons->testUser, 'Actualizar');
@@ -99,6 +100,17 @@ class UpdateUserCest
             'user_id'           =>  $user->id,
             'sub_cost_center_id'    =>  2
             ]);
+        
+        // veo los empleados asociados
+        $I->seeRecord('employee_owners', [
+            'user_id'           =>  $user->id,
+            'employee_id'       =>  1
+        ]);
+        
+        $I->seeRecord('employee_owners', [
+            'user_id'           =>  $user->id,
+            'employee_id'       =>  2
+        ]);
 
         $I->seeCurrentUrlEquals($this->base_test->userCommons->usersIndexUrl);
         $I->see('Usuarios', 'h1');
@@ -120,7 +132,7 @@ class UpdateUserCest
         
         $this->base_test->userCommons->testUser = [
             'role_id[]'         =>    [1,2],
-            'subCostCenter_id[]'   =>    [],
+            'sub_cost_center_id[]'   =>    [],
             'name'              =>    'Andrew Lorens',
             'lastname'          =>    'Mars Coleman',
             'email'             =>    'andrew.45698@gmail.com',
@@ -137,7 +149,7 @@ class UpdateUserCest
         // new user data
         $this->base_test->userCommons->testUser = [
             'role_id'       =>    [1,2],
-            'subCostCenter_id' =>    [],
+            'sub_cost_center_id' =>    [],
             'name'          =>    'Andrew Lorens',
             'lastname'      =>    'Mars Coleman',
             'email'         =>    'andrew.45698@gmail.com',

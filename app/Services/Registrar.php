@@ -6,7 +6,6 @@ use Illuminate\Contracts\Auth\Registrar as RegistrarContract;
 
 class Registrar implements RegistrarContract
 {
-
     private $messages = [
         'name.required'         =>  'El nombre es un campo obligatorio.',
         'name.max'              =>  'El nombre debe tener un máximo de :max cataracteres.',
@@ -25,7 +24,6 @@ class Registrar implements RegistrarContract
         'password.required'     =>  'Por favor digita una contraseña.',
         'password.confirmed'    =>  'Las contraseñas no coinciden.',
         'password.min'          =>  'La contraseña debe tener al menos :min caracteres.'
-
     ];
 
     /**

@@ -2,10 +2,10 @@
 namespace WorkOrders;
 
 use \FunctionalTester;
-use \Page\WorkOrders\InternalAccompanistReportPage as Page;
 use \Page\WorkOrders\WorkOrdersPage as BasePage;
+use \Page\WorkOrders\InternalAccompanistReportPage as Page;
 
-class InternalAccompanistReportCest
+class InternaReportCest
 {
     public function _before(FunctionalTester $I)
     {
@@ -25,19 +25,11 @@ class InternalAccompanistReportCest
         $I->am('acompañante interno de la orden de trabajo');
         $I->wantTo('reportar las actividades realizadas en la orden');
         
+        // creo la orden de trabajo
         BasePage::createWorkOrder($I);
         
-        $I->amOnPage(BasePage::route('/1'));
-        $I->click(Page::$linkToAccess['txt'], Page::$linkToAccess['selector']);
-        
-        $I->seeCurrentUrlEquals(Page::$URL);
-        $I->see(Page::$mainReportTitle['txt'], Page::$mainReportTitle['selector']);
-        $I->seeElement(Page::$mainReportForm);
-        $I->seeElement(Page::$mainReportTextarea['selector']);
-        $I->submitForm(Page::$mainReportForm, Page::$workReportFormData, Page::$mainReportFormButton['txt']);
-        
-        $I->seeCurrentUrlEquals(BasePage::route('/1'));
-        $I->see(Page::$msgSuccess['txt'], Page::$msgSuccess['selector']);
+        // creo el reporte del acompañante interno
+        Page::createInternalReport($I);
         
         // veo lo que reportó el empleado en la página de los detalles de a orden de trabajo
         $I->see(Page::$workReportFormData['work_order_report'], Page::$workReportViewLocation);

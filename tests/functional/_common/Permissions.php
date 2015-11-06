@@ -11,7 +11,7 @@ class Permissions
     public function __construct()
     {
         $this->faker    = Faker::create();
-        $this->date     = Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d').' 14:24:12')->subMonth();
+        $this->date     = Carbon::now()->subDays(2)->subMonth();
     }
     
     /**

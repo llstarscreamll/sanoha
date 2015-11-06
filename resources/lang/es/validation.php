@@ -70,10 +70,13 @@ return [
         "string"  => ":attribute debe contener :size caracteres.",
         "array"   => ":attribute debe contener :size elementos.",
     ],
-    "string"           => "The :attribute must be a string.",
+    "string"           => "El campo :attribute debe ser de tipo texto.",
     "timezone"         => "El :attribute debe ser una zona válida.",
-    "unique"           => ":attribute ya ha sido registrado.",
+    "unique"           => "El valor del campo :attribute ya ha sido registrado.",
     "url"              => "El formato :attribute es inválido.",
+    
+    // custom rules messages
+    "alpha_numeric_spaces"  =>  ":attribute tiene un formato inválido, sólo se permiten letras, espacios y/o números.",
 
     /*
     |--------------------------------------------------------------------------
@@ -103,6 +106,13 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        
+        /**
+         * Atributos de las ordenes de trabajo
+         */ 
+        'internal_accompanists_name'=>  'El acompañante interno',
+        'external_accompanists'     =>  'El acompañante externo'
+    ],
 
 ];
