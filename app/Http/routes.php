@@ -49,6 +49,14 @@ Route::group(['middleware' => 'auth'], function(){
     /**
      * Ordenes de Trabajo
      */
+    Route::get('workOrder/{work_order_id}/vehicle/{action}', [
+        'as'    =>  'workOrder.vehicleMovementForm',
+        'uses'  =>  'WorkOrderController@vehicleMovementForm'
+    ]);
+    Route::post('workOrder/{work_order_id}/vehicleMovement/{action}', [
+        'as'    =>  'workOrder.vehicleMovementStore',
+        'uses'  =>  'WorkOrderController@vehicleMovementStore'
+    ]);
     Route::get('workOrder/{work_order_id}/internalAccompanist/{employee_id}/report', [
         'as'    =>  'workOrder.internal_accompanist_report_form',
         'uses'  =>  'WorkOrderController@internalAccompanistReportForm'

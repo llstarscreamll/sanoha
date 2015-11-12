@@ -48,6 +48,7 @@
 								<th>Responsable</th>
 								<th>Autorizado Por</th>
 								<th>Fecha</th>
+								<th>Acciones</th>
 							</tr>
 						</thead>
 						
@@ -62,6 +63,28 @@
 									<td>{{$workOrder->employee->fullname}}</td>
 									<td>{{$workOrder->user->fullname}}</td>
 									<td>{{$workOrder->created_at->toDateString()}}</td>
+									<td>
+										<a
+											href="{{$workOrder->hasVehicleMovement('exit') ? '#' : route('workOrder.vehicleMovementForm', ['work_order_id' => $workOrder->id, 'action' => 'exit'])}}"
+											class="btn btn-xs btn-danger {{ $workOrder->hasVehicleMovement('exit') ? 'disabled' : null }}"
+										>
+											<span class="glyphicon glyphicon-log-out"></span>
+											<span class="sr-only">Registrar Salida</span>
+										</a>
+
+										{{-- Si se ha registrado la salida del vehículo de la orden, entonces muestro el botón de registar la entrada --}}
+
+										@if($workOrder->hasVehicleMovement('exit'))
+											<a
+											href="{{$workOrder->hasVehicleMovement('entry') ? '#' : route('workOrder.vehicleMovementForm', ['work_order_id' => $workOrder->id, 'action' => 'entry'])}}"
+											class="btn btn-xs btn-success {{ $workOrder->hasVehicleMovement('entry') ? 'disabled' : null }}"
+											>
+												<span class="glyphicon glyphicon-log-in"></span>
+												<span class="sr-only">Registrar Entrada</span>
+											</a>
+										@endif
+
+									</td>
 								</tr>
 								@endforeach
 								

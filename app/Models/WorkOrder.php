@@ -3,7 +3,8 @@
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class WorkOrder extends Model {
+class WorkOrder extends Model
+{
 
     use SoftDeletes;
 
@@ -28,11 +29,20 @@ class WorkOrder extends Model {
         'destination',
         'work_description'
     ];
+
+    /**
+     * La relación entre las ordenes de trabajo y los movimientos del vehículo
+     * (entradas y salidas), uno a muchos.
+     */
+    public function vehicleMovements()
+    {
+        return $this->hasMany('sanoha\Models\VehicleMovement');
+    }
     
     /**
      * La relación enter la orden de trabajo y los reportes de la misma, uno a muchos
      */
-    public function WorkOrderReports()
+    public function workOrderReports()
     {
         return $this->hasMany('sanoha\Models\WorkOrderReport');
     }
@@ -87,5 +97,24 @@ class WorkOrder extends Model {
     public function getInternalAccompanistsReportedBy($id)
     {
         return \sanoha\Models\User::find($id)->fullname;
+    }
+
+    /**
+     * Determina si hay o no salidas o entradas registradas del vehículo
+     * de la orden de trabajo en cuestión
+     *
+     * @param $action string
+     * @return bool
+     */
+    public function hasVehicleMovement($action)
+    {
+        if ($this->vehicleMovements) {
+            foreach ($this->vehicleMovements as $key => $movement) {
+                if ($movement->action == $action) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

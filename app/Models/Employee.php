@@ -25,7 +25,15 @@ class Employee extends Model implements LogsActivityInterface
      *
      * @var array
      */
-    protected $fillable = ['sub_cost_center_id', 'position_id', 'name', 'lastname', 'identification_number', 'email'];
+    protected $fillable = [
+        'position_id',
+        'sub_cost_center_id',
+        'identification_number',
+        'name',
+        'lastname',
+        'email',
+        'authorized_to_drive_vehicles',
+    ];
     
     /**
      * Get the message that needs to be logged for the given event name.
