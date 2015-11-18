@@ -96,6 +96,7 @@ class CustomValidator extends \Illuminate\Validation\Validator
      * - dots (.)
      * - dashes (_-)
      * - arroba (@)
+     * - slash (/)
      * 
      * @param   string  $attribute
      * @param   mixed   $string
@@ -105,6 +106,6 @@ class CustomValidator extends \Illuminate\Validation\Validator
      */ 
     public function ValidateText($attribute, $value, $parameters)
     {
-        return (bool) preg_match("/^[\p{L}.\s-@0-9]+$/ui", $value);
+        return (bool) preg_match("/^[\p{L}.\s-@0-9\/]+$/ui", $value);
     }
 }
