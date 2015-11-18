@@ -91,7 +91,47 @@ class PermissionTableSeeder extends Seeder
             'created_at'     =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
             'updated_at'     =>  $this->date->toDateTimeString()
         ];
-        
+
+        /* Nuevos permisos añadidos 18-11-2015 */
+        $this->data[] = [
+            'name'           => 'workOrder.mainReportEdit',
+            'display_name'   => 'Actualizar Reporte Principal',
+            'description'    => 'Permite actualizar el reporte principal de la orden de trabajo',
+            'created_at'     =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'     =>  $this->date->toDateTimeString()
+        ];
+
+        $this->data[] = [
+            'name'           => 'workOrder.mainReportDestroy',
+            'display_name'   => 'Eliminar Reporte Principal',
+            'description'    => 'Permite eliminar el reporte principal de la orden de trabajo',
+            'created_at'     =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'     =>  $this->date->toDateTimeString()
+        ];
+
+        $this->data[] = [
+            'name'           => 'workOrder.internal_accompanist_report_edit_form',
+            'display_name'   => 'Actualizar Reporte de Acompañante Interno',
+            'description'    => 'Permite actualizar el reporte del acompañante interno de la orden de trabajo',
+            'created_at'     =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'     =>  $this->date->toDateTimeString()
+        ];
+
+        $this->data[] = [
+            'name'           => 'workOrder.internal_accompanist_report_delete',
+            'display_name'   => 'Eliminar Reporte de Acompañante Interno',
+            'description'    => 'Permite eliminar el reporte del acompañante interno de la orden de trabajo',
+            'created_at'     =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'     =>  $this->date->toDateTimeString()
+        ];
+
+        $this->data[] = [
+            'name'           => 'workOrder.vehicleMovementForm',
+            'display_name'   => 'Registrar Salidas/Entradas del Vehículo de la Orden de Trabajo',
+            'description'    => 'Permite registrar en que estado entra o sale de la empresa el vehículo relacionado a la orden de trabajo',
+            'created_at'     =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'     =>  $this->date->toDateTimeString()
+        ];
     }
     
     /**

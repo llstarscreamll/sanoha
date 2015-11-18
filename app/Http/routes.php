@@ -49,7 +49,8 @@ Route::group(['middleware' => 'auth'], function(){
     /**
      * Ordenes de Trabajo
      */
-    Route::get('workOrder/{work_order_id}/vehicle/{action}', [
+    // entradas o salidas de vehìculos
+    Route::get('workOrder/{work_order_id}/vehicleMovement/{action}', [
         'as'    =>  'workOrder.vehicleMovementForm',
         'uses'  =>  'WorkOrderController@vehicleMovementForm'
     ]);
@@ -57,6 +58,7 @@ Route::group(['middleware' => 'auth'], function(){
         'as'    =>  'workOrder.vehicleMovementStore',
         'uses'  =>  'WorkOrderController@vehicleMovementStore'
     ]);
+    // reporte de acompañante interno
     Route::get('workOrder/{work_order_id}/internalAccompanist/{employee_id}/report', [
         'as'    =>  'workOrder.internal_accompanist_report_form',
         'uses'  =>  'WorkOrderController@internalAccompanistReportForm'
@@ -73,6 +75,7 @@ Route::group(['middleware' => 'auth'], function(){
         'as'    =>  'workOrder.internal_accompanist_report_delete',
         'uses'  =>  'WorkOrderController@internalAccompanistReportDelete'
     ]);
+    // reporte principal de la orden de trabajo
     Route::get('workOrder/{id}/mainReport', [
         'as'    =>  'workOrder.mainReport',
         'uses'  =>  'WorkOrderController@mainReportForm'
@@ -81,8 +84,6 @@ Route::group(['middleware' => 'auth'], function(){
         'as'    =>  'workOrder.main_report_store',
         'uses'  =>  'WorkOrderController@mainReportStore'
     ]);
-    
-    // reporte principal de la orden de trabajo
     Route::get('workOrder/{work_order_id}/mainReport/{main_report_id}/edit', [
         'as'    =>  'workOrder.mainReportEdit',
         'uses'  =>  'WorkOrderController@mainReportEdit'

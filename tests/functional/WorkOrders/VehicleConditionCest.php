@@ -19,7 +19,7 @@ class VehicleConditionCest
     /**
      * Prueba el registro de la condiciones en que entra el vehiculo
      */
-    public function registerExit(FunctionalTester $I)
+    public function registerVehicleExitAndEntry(FunctionalTester $I)
     {
         $I->am('portero');
         $I->wantTo('registrar la salida de una orden de trabajo');

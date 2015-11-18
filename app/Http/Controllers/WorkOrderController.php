@@ -1,15 +1,32 @@
-<?php namespace sanoha\Http\Controllers;
+<?php
+namespace sanoha\Http\Controllers;
 
-use sanoha\Http\Requests;
-use sanoha\Http\Controllers\Controller;
-
+use \sanoha\Http\Requests;
 use Illuminate\Http\Request;
-
 use \sanoha\Models\WorkOrder;
 use \sanoha\Models\ExternalAccompanist;
+use \sanoha\Http\Controllers\Controller;
 use \sanoha\Http\Requests\WorkOrderFormRequest;
 
-class WorkOrderController extends Controller {
+class WorkOrderController extends Controller
+{
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('checkPermmisions', ['except' => [
+            'store',
+            'update',
+            'mainReportStore',
+            'mainReportUpdate',
+            'internalAccompanistReportStore',
+            'vehicleMovementStore'
+        ]]);
+    }
 
     /**
      * Display a listing of the resource.
@@ -99,6 +116,7 @@ class WorkOrderController extends Controller {
     {
         $workOrder = WorkOrder::with([
             'employee',
+            'vehicleMovements',
             'workOrderReports',
             'workOrderReports.reportedBy',
             'internalAccompanists.position',
@@ -106,7 +124,7 @@ class WorkOrderController extends Controller {
             'workOrderReports'      =>  function($q){ $q->orderBy('updated_at'); },
             'externalAccompanists'  =>  function($q){ $q->orderBy('fullname'); }
         ])->where('id', $id)->firstOrFail();
-
+        
         return view('workOrders.show', compact('workOrder'));
     }
 
@@ -227,7 +245,7 @@ class WorkOrderController extends Controller {
      * @param int $work_order_id
      * @param int $main_report_id
      */
-    public function mainReportUpdate($work_order_id, $main_report_id, Request $request)
+    public function mainReportUpdate($work_order_id, $main_report_id, WorkOrderFormRequest $request)
     {
         $workOrder = \sanoha\Models\WorkOrder::findOrFail($work_order_id);
         $mainReport = \sanoha\Models\WorkOrderReport::findOrFail($main_report_id);
@@ -292,10 +310,11 @@ class WorkOrderController extends Controller {
     /**
      * Guarda en la base de datos el reporte del acompañante interno de la orden
      * de trabajo
+     * 
      * @param int $work_order_id
      * @param int $main_report_id
      */
-    public function internalAccompanistReportStore($work_order_id, $employee_id, Request $request)
+    public function internalAccompanistReportStore($work_order_id, $employee_id, WorkOrderFormRequest $request)
     {
         $workOrder = \sanoha\Models\WorkOrder::findOrFail($work_order_id);
         $employee = \sanoha\Models\Employee::findOrFail($employee_id);
@@ -346,7 +365,7 @@ class WorkOrderController extends Controller {
     /**
      * Registra en DB las condiciones en que salió o entró el vehículo de la orden de trabajo
      */
-    public function vehicleMovementStore($work_order_id, $action, Request $request)
+    public function vehicleMovementStore($work_order_id, $action, WorkOrderFormRequest $request)
     {
         // para el mensaje del usuario
         $msgAction = ($action == 'exit') ? 'Salida' : 'Entrada';

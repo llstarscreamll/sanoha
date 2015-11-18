@@ -10,6 +10,10 @@ class EditCest
     public function _before(FunctionalTester $I)
     {
         new WorkOrdersPage($I);
+
+        // actualizo al segundo trabajador para que sea autorizado
+        // para el manejo de vehículos
+        \sanoha\Models\Employee::find(2)->update(['authorized_to_drive_vehicles' => true]);
     }
 
     public function _after(FunctionalTester $I)
