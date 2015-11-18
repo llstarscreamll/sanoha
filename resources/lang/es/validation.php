@@ -77,6 +77,9 @@ return [
     
     // custom rules messages
     "alpha_numeric_spaces"  =>  ":attribute tiene un formato inválido, sólo se permiten letras, espacios y/o números.",
+    "alpha_spaces"          =>  ":attribute tiene un formato inválido, sólo se permiten letras y/o espacios.",
+    "alpha_dots"            =>  ":attribute tiene un formato inválido, sólo se permiten letras y/o puntos.",
+    "text"                  =>  ":attribute tiene un formato inválido, sólo se permiten letras, números, espacios, puntos, slash (/), guiones y/o arroba.",
 
     /*
     |--------------------------------------------------------------------------
@@ -109,10 +112,28 @@ return [
     'attributes' => [
         
         /**
-         * Atributos de las ordenes de trabajo
+         * Atributos de ordenes de trabajo
          */ 
-        'internal_accompanists_name'=>  'El acompañante interno',
-        'external_accompanists'     =>  'El acompañante externo'
+        'internal_accompanists_name'    =>  'El acompañante interno',
+        'external_accompanists'         =>  'El acompañante externo',
+        'vehicle_responsable'           =>  'El responsable del vehículo',
+        'vehicle_id'                    =>  'El vehículo',
+        'destination'                   =>  'El destino',
+        'work_description'              =>  'La descrición',
+        // el atributo para los reportes
+        'work_order_report'             =>  'El reporte',
+        // campos de registro de salida/entrada de vehículos
+        'mileage'                       =>  'El kilometraje',
+        'fuel_level'                    =>  'El nivel de gasolina',
+        'internal_cleanliness'          =>  'La limpieza interna',
+        'external_cleanliness'          =>  'La limpieza externa',
+        'paint_condition'               =>  'El estado de la pintura',
+        'bodywork_condition'            =>  'El estado de la carrocería',
+        'right_front_wheel_condition'   =>  'El estado de la llanta Delantera Derecha',
+        'left_front_wheel_condition'    =>  'El estado de la llanta Delantera Izquierda',
+        'rear_right_wheel_condition'    =>  'El estado de la llanta Trasera Derecha',
+        'rear_left_wheel_condition'     =>  'El estado de la llanta Trasera Izquierda',
+        'comment'                       =>  'El comentario'
     ],
 
 ];
