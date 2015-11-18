@@ -67,7 +67,7 @@ return [
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => 'sws_',
-			'strict'    => false,
+			'strict'    => true,
 		],
 
 		'pgsql' => [
