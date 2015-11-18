@@ -27,7 +27,7 @@ class UpdateQuantityColumnOnActivityReportsTable extends Migration {
 	{
 		Schema::table('activity_reports', function(Blueprint $table)
 		{
-			$table->decimal('quantity', 3, 2)->default(0)->change();
+			$table->decimal('quantity', 4, 2)->default(0)->change();
 		});
 	}
 
