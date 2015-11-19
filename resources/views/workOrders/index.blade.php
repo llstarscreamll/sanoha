@@ -91,7 +91,7 @@
 							@else
 							
 								<tr>
-									<td colspan=6>
+									<td colspan=7>
 										<div class="alert alert-warning">
 											No se encontraron ordenes de trabajo....
 										</div>
