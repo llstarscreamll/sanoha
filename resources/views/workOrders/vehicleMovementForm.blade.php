@@ -47,9 +47,11 @@
 						{!! Form::label('vehicle', 'Destino') !!}
 						{!! Form::text('vehicle', $workOrder->destination, ['disabled' => 'disabled', 'class' => 'form-control']) !!}
 					</div>
+					
+					<div class="clearfix"></div>
 
 					{{-- Los elementos para registrar el estado en que sale o entra el vehóculo --}}
-					<fieldset>
+					<fieldset class="col-xs-12">
 						<legend>Estado del Vehículo</legend>
 
 						<div class="form-group col-md-6">
