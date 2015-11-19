@@ -263,7 +263,7 @@ class ActivityReport extends Model implements LogsActivityInterface
             ->whereNull('activity_reports.deleted_at')
             ->orderBy('employees.name')
             ->get();
-        dd($data);
+
         return json_encode($data);
     }
     
@@ -455,7 +455,7 @@ class ActivityReport extends Model implements LogsActivityInterface
         $parameters['to'] 				= isset($options['end']) && empty($request->get('to')) ? $options['end'] : $end;
         $parameters['cost_center_id'] 	= $cost_center_id;
         $parameters['cost_center_name'] = \Session::get('current_cost_center_name');
-        
+
         return $parameters;
     }
 }
