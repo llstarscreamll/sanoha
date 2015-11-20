@@ -89,8 +89,8 @@ class FlatReportCest
         $I->see('Proyecto Beteitiva', 'th');
         // veo el rango de fechas del reporte
         $report_date = \Carbon\Carbon::now();
-        $I->see($report_date->format('d-m-Y'), 'th h4');
-        $I->see($report_date->startOfYear()->format('d-m-Y'), 'th h4');
+        $I->dontSee('Desde', 'th');
+        $I->dontSee('Hasta', 'th');
         
         // --- actividad 1
         $I->see('1', 'tbody tr:first-child td a');
