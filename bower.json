@@ -1,3 +1,6 @@
 {
-  "name": "Sanoha Web System"
+  "name": "Sanoha Web System",
+  "dependencies": {
+    "bootstrap-calendar": "~0.2.4"
+  }
 }
