@@ -50,7 +50,6 @@ class UpdateMainReportCest
         
         // mensaje de éxito en la operación
         $I->see(Page::$msgSuccess['txt'], Page::$msgSuccess['selector']);
-        //dd(\sanoha\Models\WorkOrderReport::all()->toArray());
         $I->amOnPage(BasePage::route('/1'));
         $I->see(Page::$formData['txt'], BasePage::$workOrderReportBodyLocation);
     }
