@@ -28,7 +28,6 @@ class SecurityAccessCest
         
         // estoy en el home donde debo ver los links de acceso
         $I->amOnPage('/home');
-        //dd(\sanoha\Models\CostCenter::where('id', 1)->get()->lists('name'));
         // veo los links de acceso a mis proyectos
         $I->see('Reporte de Actividades');
         $I->see('Proyecto Beteitiva', 'a');

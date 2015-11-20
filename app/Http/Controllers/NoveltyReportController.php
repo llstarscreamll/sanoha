@@ -1,4 +1,5 @@
-<?php namespace sanoha\Http\Controllers;
+<?php
+namespace sanoha\Http\Controllers;
 
 use sanoha\Http\Requests;
 use sanoha\Http\Controllers\Controller;
@@ -100,7 +101,14 @@ class NoveltyReportController extends Controller
 	{
 		$novelties = Novelty::all()->lists('name', 'id');
 		$subCostCenterEmployees = \sanoha\Models\SubCostCenter::where('cost_center_id', $this->cost_center_id)->with('employees')->get();
-		$employees = \sanoha\Models\SubCostCenter::getRelatedEmployees($this->cost_center_id);
+		// obtengo la lista de empleados relacinados al centro de costo y doy la opción de incluir
+        // al empleado que hizo la labor minera si es que no se encuentra dentro de los empleados del
+        // centro de costo
+        $employees = \sanoha\Models\SubCostCenter::getRelatedEmployees($this->cost_center_id, null, null, [
+            'employees' => [
+                'position_id' => NoveltyReport::getPositionsToInclude()
+            ]
+        ]);
 		$employee_id = \Request::get('employee_id', old('employee_id'));
 
 		return view('noveltyReports.create', compact('employees', 'novelties', 'employee_id'));
@@ -155,11 +163,14 @@ class NoveltyReportController extends Controller
 		
 		$novelties = Novelty::all()->lists('name', 'id');
 		$subCostCenterEmployees = \sanoha\Models\SubCostCenter::where('cost_center_id', $this->cost_center_id)->with('employees')->get();
-		$employees = \sanoha\Models\SubCostCenter::getRelatedEmployees($this->cost_center_id);
-		
-		if (array_key_exists($novelty->employee_id, $employees) !== true){
-			$employees = [$novelty->employee->id => $novelty->employee->fullname]+$employees;
-		}
+		// obtengo la lista de empleados relacinados al centro de costo y doy la opción de incluir
+        // al empleado que hizo la labor minera si es que no se encuentra dentro de los empleados del
+        // centro de costo
+        $employees = \sanoha\Models\SubCostCenter::getRelatedEmployees($this->cost_center_id, $novelty->employee_id, null, [
+            'employees' => [
+                'position_id' => NoveltyReport::getPositionsToInclude()
+            ]
+        ]);
 
 		$employee_id = null;
 		

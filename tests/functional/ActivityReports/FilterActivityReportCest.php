@@ -54,7 +54,7 @@ class FilterActivityReportCest
         $report_date = \Carbon\Carbon::now();
         
         // el rango de fechas del reporte debe ser mostrado en la tabla
-        $I->see('Hasta '.$report_date->format('d-m-Y'), 'th h4');
+        $I->see('Hasta '.$report_date->endOfMonth()->format('d-m-Y'), 'th h4');
         $I->see('Desde '.$report_date->startOfMonth(1)->format('d-m-Y'), 'th h4');
         
         // veo que el nombre corto de todas las actividades mineras están en la

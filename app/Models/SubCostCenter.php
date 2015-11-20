@@ -57,14 +57,35 @@ class SubCostCenter extends Model {
      * @param   string  $exclude
      * @return  array
      */
-    public static function getRelatedEmployees($cost_center_id = null, $include = null, $exclude = null)
+    public static function getRelatedEmployees($cost_center_id = null, $include = null, $exclude = null, $wheres = [])
     {
         $centerEmployees = is_null($cost_center_id)
             ? \sanoha\Models\CostCenter::with(['employees' => function($q){ $q->where('status', 'enabled'); }])->get()
-            : \sanoha\Models\SubCostCenter::where('cost_center_id', $cost_center_id)->with(['employees' => function($q){ $q->where('status', 'enabled'); }])->get();
-		$found_include = false;
+            : \sanoha\Models\SubCostCenter::where('cost_center_id', $cost_center_id)
+                ->with([
+                    'employees' => function($q) use($wheres){
+                        // sólo los empleados habilitados
+                        $q->where('status', 'enabled');
+                        // si se han especificado clausalas a empleados las agrego
+                            if(array_key_exists('employees', $wheres)){
+                                // agrego tantas clausulas como se den
+                                foreach ($wheres['employees'] as $column => $value) {
+                                    // si son varios valores los que se especifican...
+                                    if(is_array($value))
+                                        $q->whereIn($column, $value);
+                                    // si es un sòlo valor...
+                                    else
+                                        $q->where($column, $value);
+                                }
+                            }
+                    }])
+                ->get();
+
+        $found_include = false;
 		$employees = [];
 		
+        // recorro el resultado del query para construir un array que ordene a los empleados por su centro
+        // o subcentro de costo
 		foreach ($centerEmployees as $key => $center) {
 
 			$employees[$center->name] = array();
@@ -75,12 +96,14 @@ class SubCostCenter extends Model {
 			    if($employee->id !== $exclude)
 				    $employees[$center->name][$employee->id] = $employee->fullname;
 				
+                // verifico si el empleado a incluir ya se encuentra dentro de los resultados del query
 				if($employee->id === $include)
 				    $found_include = true;
 			}
 			
 		}
 		
+        // si no encontré el empleado a incluir le busco y le añado al array
 		if(!$found_include && !is_null($include)){
 		    $employee_to_include = \sanoha\Models\Employee::withTrashed()->where('id', $include)->first();
 		    $employees = [$employee_to_include->id => $employee_to_include->fullname ] + $employees;

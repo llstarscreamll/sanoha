@@ -1,4 +1,5 @@
-<?php   namespace NoveltiesReports;
+<?php
+namespace NoveltiesReports;
 
 use \FunctionalTester;
 use \common\BaseTest;
@@ -52,6 +53,10 @@ class ReportCest
         // veo una lista con los empleados del proyecto
         $I->see('B1 Trabajador 1', 'option');
         $I->see('B2 Trabajador 2', 'option');
+
+        // no debo ver a este trabajador el cual no tiene el cargo que requiere
+        // el módulo, para este caso sólo requiere mineros y supervisores de proyectos
+        $I->dontSee('Williams John', 'select optgroup option');
         
         // pero  no veo los trabajadores de otros proyectos
         $I->dontSee('B1 Trabajador 3', 'option');

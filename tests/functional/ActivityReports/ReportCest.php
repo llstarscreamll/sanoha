@@ -279,6 +279,9 @@ class ReportCest
         // de costos que seleccioné
         $I->see('B1 Trabajador 1', 'select optgroup option');
         $I->see('B2 Trabajador 2', 'select optgroup option');
+        // no debo ver a este trabajador el cual no tiene el cargo que requiere
+        // el módulo, para este caso sólo requiere mineros y supervisores de proyectos
+        $I->dontSee('Williams John', 'select optgroup option');
         
         // veo que no están presentes muchos campos porque debo elegir primero al trabajador
         $I->dontSeeElement('input', ['type' => 'checkbox', 'checked' => 'checked']); // por defecto está marcado
@@ -436,7 +439,6 @@ class ReportCest
         $I->see('Actividad Registrada Correctamente.', '.alert-success');
         
         // veo que en la tabla de la vista previa está el registro que acabo de cargar
-        //dd(\sanoha\Models\ActivityReport::all()->toArray());
         $I->see('4', 'tbody tr td');
         $I->see('60.000', 'tbody tr td');
         
@@ -486,7 +488,6 @@ class ReportCest
         
         unset($data['reported_at']);
         
-        //dd(\sanoha\Models\ActivityReport::all()->toArray());
         // veo en la base de datos el nuevo registro
         $I->seeRecord('activity_reports', $data+['price' => 0]);
         
@@ -556,7 +557,6 @@ class ReportCest
         unset($data['reported_at']);
         unset($data['price']);
         
-        //dd(\sanoha\Models\ActivityReport::all()->toArray());
         // veo en la base de datos el nuevo registro
         $I->seeRecord('activity_reports', $data+['price' => 0]);
         

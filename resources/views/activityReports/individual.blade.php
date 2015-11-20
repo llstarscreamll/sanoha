@@ -34,15 +34,8 @@
 				        
 				        <thead>
 				        	<tr>
-				        		<th colspan=6>
+				        		<th colspan=8>
 				        			<h3>{{\Session::get('current_cost_center_name')}}</h3>
-				        		</th>
-				        		<th colspan=2>
-				        			<h4 class="text-right">
-										<small>Desde</small> {{ $parameters['from']->format('d-m-Y') }}
-										<br>
-										<small>Hasta</small> {{ $parameters['to']->format('d-m-Y') }}
-									</h4>
 				        		</th>
 				        	</tr>
 				            <tr>
