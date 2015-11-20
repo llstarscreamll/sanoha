@@ -20,11 +20,5 @@ class SeederUpdate extends Seeder
     
     public function run()
     {
-        $this->createNewPermissions();
-    }
-
-    public function createNewPermissions()
-    {
-        
     }
 }
