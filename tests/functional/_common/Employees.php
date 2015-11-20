@@ -27,6 +27,9 @@ class Employees
         PositionModel::create([
             'name'  =>  'Minero'
             ]);
+        PositionModel::create([
+            'name'  =>  'Supervisor'
+        ]);
         
         foreach ($subCostCenters as $subCostCenter) {
             
@@ -49,6 +52,18 @@ class Employees
         }
         
         \DB::table('employees')->insert($data);
+
+        /* Creo un trabajador, el cual no debe aparecer en la lista de empleados para el registro
+        de labores mineras o reportes de novedades del personal minero porque no tiene el cargo
+        ni de minero ni de administrador de proyectos mineros */
+        $position = \sanoha\Models\Position::create(['name' => 'Ingeniero Técnico']);
+        $excludedEmployee = \sanoha\Models\Employee::create([
+            'position_id'           =>  $position->id,
+            'sub_cost_center_id'    =>  1,
+            'name'                  =>  'John',
+            'lastname'              =>  'Williams',
+            'identification_number' =>  '23652',
+        ]);
     }
     
 }

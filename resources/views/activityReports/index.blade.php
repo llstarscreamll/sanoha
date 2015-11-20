@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('title')
-	Reporte de Labores Mineras
+	Nómina de Labores Mineras
 @stop
 
 @section('content')
@@ -11,9 +11,8 @@
 			<div class="panel-heading">
 				<h1>
 					<a href="{{ url(route('activityReport.individual'))}}" class="link-black">
-						Reporte de Labores Mineras
-					</a>
-					
+						Nómina de Labores Mineras
+					</a>					
 					@include ('activityReports.partials.action-buttons')
 					
 				</h1>
@@ -105,6 +104,7 @@
         
         {{-- Initialize all tooltips --}}
         $('[data-toggle="tooltip"]').tooltip();
+            
     </script>
 
 @stop()

@@ -217,4 +217,18 @@ class NoveltyReport extends Model implements LogsActivityInterface
 		
 		return $parameters;
     }
+
+    /**
+     * Obtiene los cargos de los empleados que serán cargados en el módulo en operaciones 
+     * como el reporte de novedades del personal minero, asì se puede definir cuales trabajadores deben
+     * aparecer, como sòlo mineros y supervisores de proyectos mineros.
+     * 
+     * return array
+     */
+    public static function getPositionsToInclude()
+    {   
+        // de momento se deja ésta configuración estática, a futuro tiene
+        // que ser dinámica
+        return [1, 2]; // Minero y Supervisor
+    }
 }

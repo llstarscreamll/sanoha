@@ -1,4 +1,5 @@
-<?php   namespace NoveltiesReports;
+<?php
+namespace NoveltiesReports;
 
 use \FunctionalTester;
 use \common\BaseTest;
@@ -74,6 +75,10 @@ class EditCest
         $I->seeOptionIsSelected('novelty_id', 'Licencia No Remunerada');
         $I->seeElement('input', ['value' => $date->toDateString()]);
         $I->see('prueba', 'textarea');
+
+        // no debo ver a este trabajador el cual no tiene el cargo que requiere
+        // el módulo, para este caso sólo requiere mineros y supervisores de proyectos
+        $I->dontSee('Williams John', 'select optgroup option');
         
         $I->submitForm('form', [
             'employee_id'   =>  2,

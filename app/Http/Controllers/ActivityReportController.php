@@ -1,4 +1,5 @@
-<?php namespace sanoha\Http\Controllers;
+<?php
+namespace sanoha\Http\Controllers;
 
 use sanoha\Http\Requests;
 use sanoha\Http\Controllers\Controller;
@@ -126,9 +127,13 @@ class ActivityReportController extends Controller {
     public function create(Request $request)
     {
         $input = $request->all();
-        
+
         $miningActivities = MiningActivity::customOrder();
-        $employees = \sanoha\Models\SubCostCenter::getRelatedEmployees($this->cost_center_id);
+        $employees = \sanoha\Models\SubCostCenter::getRelatedEmployees($this->cost_center_id, null, null, [
+            'employees' => [
+                'position_id' => ActivityReport::getPositionsToInclude()
+            ]
+        ]);
         $orderedActivities = ActivityReport::sortedActivities($parameters = ActivityReport::configureParameters($request, $this->cost_center_id));
 
         return view('activityReports.create', compact('employees', 'miningActivities', 'orderedActivities', 'parameters', 'input'));
@@ -219,10 +224,11 @@ class ActivityReportController extends Controller {
         // obtengo la lista de empleados relacinados al centro de costo y doy la opción de incluir
         // al empleado que hizo la labor minera si es que no se encuentra dentro de los empleados del
         // centro de costo
-        $employees = \sanoha\Models\SubCostCenter::getRelatedEmployees($this->cost_center_id, $activity->employee_id);
-
-        //if (!array_key_exists($activity->employee_id, $employees))
-        //    $employees = [$activity->employee->id => $activity->employee->fullname]+$employees;
+        $employees = \sanoha\Models\SubCostCenter::getRelatedEmployees($this->cost_center_id, $activity->employee_id, null, [
+            'employees' => [
+                'position_id' => ActivityReport::getPositionsToInclude()
+            ]
+        ]);
         
         return view('activityReports.edit', compact('activity', 'employees', 'miningActivities', 'orderedActivities', 'parameters', 'input'));
     }

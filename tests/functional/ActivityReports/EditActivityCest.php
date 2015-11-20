@@ -60,10 +60,14 @@ class EditActivityCest
         $I->seeElement('input', ['value' => '4']);
         $I->seeElement('input', ['value' => $date->toDateString()]);
         $I->see('test', 'textarea');
+
+        // no debo ver a este trabajador el cual no tiene el cargo que requiere
+        // el módulo, para este caso sólo requiere mineros y supervisores de proyectos
+        $I->dontSee('Williams John', 'select optgroup option');
         
         // la tabla donde se muestra lo que ha reportado en el día
         $I->seeElement('table');
-        //dd(\sanoha\Models\ActivityReport::all()->toArray());
+
         $I->dontSee('No hay actividades registradas...', '.alert-warning');
         
         $I->see('2', 'tbody tr td');
