@@ -46,7 +46,7 @@
             
             <div class="form-group col-md-6">
                 {!! Form::label('role_id', 'Tipo de Usuario') !!}
-                {!! Form::select('role_id[]', $roles, isset($user) ? $user->getIdRoles() : null, ['id' => 'role_id', 'multiple' => true, 'class' => 'form-control selectpicker', 'title' => 'Elige el tipo de usuario']) !!}
+                {!! Form::select('role_id[]', $roles, isset($user) ? $user->getIdRoles() : null, ['id' => 'role_id', 'multiple' => true, 'class' => 'form-control selectpicker', 'title' => 'Elige el tipo de usuario', 'data-live-search' => 'true']) !!}
                 @if ($errors->has('role_id'))
                     <div class="text-danger">
                         {!! $errors->first('role_id') !!}
@@ -56,7 +56,7 @@
     
             <div class="col-md-6 form-group">
                 {!! Form::label('sub_cost_center_id', 'Centro de Costo') !!}
-                <select name="sub_cost_center_id[]" id="sub_cost_center_id" multiple class="form-control selectpicker"  title="Elige Centro de Costos">
+                <select name="sub_cost_center_id[]" id="sub_cost_center_id" multiple class="form-control selectpicker"  title="Elige Centro de Costos"  data-live-search="true">
         
                     @foreach($costCenters as $costCenter)
                     
@@ -89,7 +89,7 @@
             
             <div class="col-md-6 form-group">
                 {!! Form::label('area_id', 'Área') !!}
-                {!! Form::select('area_id', $areas, null, ['id' => 'area_id', 'class' => 'form-control selectpicker', 'title' => 'Elige el área']) !!}
+                {!! Form::select('area_id', $areas, null, ['id' => 'area_id', 'class' => 'form-control selectpicker', 'title' => 'Elige el área', 'data-live-search' => 'true']) !!}
                 @if ($errors->has('area_id'))
                     <div class="text-danger">
                         {!! $errors->first('area_id') !!}
@@ -123,7 +123,7 @@
         
             <div class="col-md-6 form-group">
                 {!! Form::label('employee_id', 'Empleados Asignados') !!}
-                {!! Form::select('employee_id[]', $employees, isset($user) ? $user->getIdEmployees() : null, ['id' => 'employee_id', 'multiple' => true, 'class' => 'form-control selectpicker', 'title' => 'Elige el empleado']) !!}
+                {!! Form::select('employee_id[]', $employees, isset($user) ? $user->getIdEmployees() : null, ['id' => 'employee_id', 'multiple' => true, 'class' => 'form-control selectpicker', 'title' => 'Elige el empleado', 'data-live-search' => 'true']) !!}
                 @if ($errors->has('employee_id'))
                     <div class="text-danger">
                         {!! $errors->first('employee_id') !!}

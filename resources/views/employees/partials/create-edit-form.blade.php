@@ -50,7 +50,7 @@
 
 <div class="form-group col-md-4">
 	{!! Form::label('sub_cost_center_id', 'Centro de Costo') !!}
-    {!! Form::select('sub_cost_center_id', ['' => 'Selecciona centro de costo']+$cost_centers, null, ['class' => 'form-control selectpicker show-tick'])  !!}
+    {!! Form::select('sub_cost_center_id', ['' => 'Selecciona centro de costo']+$cost_centers, null, ['class' => 'form-control selectpicker show-tick', 'data-live-search' => 'true'])  !!}
     @if ($errors->has('sub_cost_center_id'))
         <div class="text-danger">
             {!! $errors->first('sub_cost_center_id') !!}
@@ -60,7 +60,7 @@
 
 <div class="form-group col-md-4 col-md-offset-2">
 	{!! Form::label('position_id', 'Cargo') !!}
-    {!! Form::select('position_id', ['' => 'Selecciona cargo']+$positions, null, ['class' => 'form-control selectpicker show-tick'])  !!}
+    {!! Form::select('position_id', ['' => 'Selecciona cargo']+$positions, null, ['class' => 'form-control selectpicker show-tick', 'data-live-search' => 'true'])  !!}
     @if ($errors->has('position_id'))
         <div class="text-danger">
             {!! $errors->first('position_id') !!}
