@@ -61,9 +61,8 @@ class WorkOrderFormRequest extends Request
        	if($this->route()->getName() == 'workOrder.internal_accompanist_report_store' && (! \Auth::getUser()->can('workOrder.internal_accompanist_report_edit_form') || ! \Auth::getUser()->can('workOrder.internal_accompanist_report_form')))
             return false;
         
-       	if($this->route()->getName() == 'workOrder.vehicleMovementStore' && ! \Auth::getUser()->can('workOrder.vehicleMovementForm')){
+       	if($this->route()->getName() == 'workOrder.vehicleMovementStore' && ! \Auth::getUser()->can('workOrder.vehicleMovementForm'))
             return false;
-       	}
 
         return true;
 	}

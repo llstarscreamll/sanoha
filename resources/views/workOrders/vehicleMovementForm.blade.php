@@ -51,7 +51,8 @@
 					<div class="clearfix"></div>
 
 					{{-- Los elementos para registrar el estado en que sale o entra el vehóculo --}}
-					<fieldset class="col-xs-12">
+					<div  class="col-xs-12">
+					<fieldset>
 						<legend>Estado del Vehículo</legend>
 
 						<div class="form-group col-md-6">
@@ -244,7 +245,9 @@
 
 
 					</fieldset>
-						
+					</div>
+					
+					<div class="clearfix"></div>
 					<div class="form-group col-md-6">
 						{!! Form::label('comment', 'Comentario') !!}
 						{!! Form::textarea('comment', null, ['class' => 'form-control', 'rows' => 3]) !!}
