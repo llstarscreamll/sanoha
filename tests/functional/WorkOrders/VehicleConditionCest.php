@@ -27,6 +27,11 @@ class VehicleConditionCest
         // creo la orden de trabajo
         BasePage::createWorkOrder($I);
 
+        // para el registro de entrada y salida dejo sólo los permisos que tendrá el portero
+        $adminRole = \sanoha\Models\Role::find(2);
+        // index, detalles de orden (sólo lectura) y registrar salidas de vehículos
+        $adminRole->perms()->sync([1,3,12]);
+
         // registro la salida del vehículo
         Page::registerVehicleExit($I);
 

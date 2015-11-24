@@ -1,4 +1,5 @@
-<?php namespace common;
+<?php
+namespace common;
 
 use Faker\Factory           as Faker;
 use Carbon\Carbon;
