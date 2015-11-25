@@ -217,12 +217,30 @@ class WorkOrderController extends Controller
             'reported_by'       =>  \Auth::getUser()->id
             ]);
             
-        $workOrder->workOrderReports()->save($workOrderReport)
-            ? \Session::flash('success', 'Reporte guardado con éxito')
-            : \Session::flash('error', 'Ocurrió un problema guardando el reporte');
+        if ($workOrder->workOrderReports()->save($workOrderReport)){
+            \Session::flash('success', 'Reporte guardado con éxito');
+
+            // obtengo los emails de los jefes de área para envíar la información
+            $emails = \sanoha\Models\User::where('area_chief', true)->lists('email');
+
+            // obtengo el asunto del mensaje
+            $subject = 'Reporte de Actividades '.$workOrder->employee->fullname.' de Orden de Trabajo a '.$workOrder->destination;
+
+            // serializo el modelo por las diferencias en como se envían los datos a
+            // la vista con el método queue(), en send() es diferente, leer mas aquí:
+            // http://developed.be/2014/05/07/laravel-passing-data-mailqueue-view/
+            $data = array();
+            $data['report'] = serialize($workOrderReport);
+
+            // envío email a los jefes de área con lo reportado
+            \Mail::queue('emails.workOrderReport', $data, function ($m) use ($emails, $subject) {
+                $m->to($emails)->subject($subject);
+            });
+
+        }else
+            \Session::flash('error', 'Ocurrió un problema guardando el reporte');
         
         return redirect()->route('workOrder.show', $workOrder->id);
-
     }
     
     /**

@@ -28,6 +28,6 @@ class MainReportCest
         WorkOrdersPage::createWorkOrder($I);
         
         // creo el reporte principal
-        WorkOrdersPage::createWorkOrder($I);
+        WorkOrdersPage::createMainReport($I);
     }
 }

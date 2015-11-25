@@ -24,7 +24,9 @@ class Kernel extends ConsoleKernel {
 	{
 		/*$schedule->command('inspire')
 				 ->hourly();*/
-				 
+		// para las tareas añadidas a la cola cada 5 minutos
+		$schedule->command('queue:work')->everyFiveMinutes();
+		// para el backup de la base de datos
 		$schedule->exec('bash .backup.sh')->twiceDaily();
 	}
 
