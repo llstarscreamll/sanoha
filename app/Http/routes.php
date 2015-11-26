@@ -20,7 +20,7 @@ Route::get('home', [
 
 /**
  * Los logs de actividad de los usuarios
- */ 
+ */
 Route::get('logs', [
         'as'    =>  'log.index',
         'uses'  =>  'LogController@index'
@@ -31,7 +31,7 @@ Route::controllers([
     'password' => 'Auth\PasswordController',
 ]);
 
-Route::group(['middleware' => 'auth'], function(){
+Route::group(['middleware' => 'auth'], function () {
     
     
     Route::resource('users', 'UserController');

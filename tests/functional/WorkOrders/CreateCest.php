@@ -18,7 +18,7 @@ class CreateCest
 
     /**
      * Pruebo la funcionalidad de crear una orden de trabajo
-     */ 
+     */
     public function createWorkOrder(FunctionalTester $I)
     {
         $I->am(WorkOrdersPage::$mainActor);
@@ -72,14 +72,12 @@ class CreateCest
         $I->see(WorkOrdersPage::$createPageTitle, WorkOrdersPage::$createPageTitleTag);
         
         foreach (WorkOrdersPage::$formRequestValidation as $key => $value) {
-            
             $I->submitForm(WorkOrdersPage::$createForm, $value['data'], WorkOrdersPage::$createFormButtonCaption);
             $I->seeCurrentUrlEquals(WorkOrdersPage::route('/create'));
             
             foreach ($value['msg'] as $field => $msg) {
                 $I->seeFormErrorMessage($field, $msg);
             }
-            
         }
     }
 }

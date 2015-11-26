@@ -1,4 +1,5 @@
-<?php   namespace NoveltiesReports;
+<?php
+namespace NoveltiesReports;
 
 use \FunctionalTester;
 use \common\BaseTest;
@@ -78,7 +79,7 @@ class MoveToTrashCest
 
     /**
      * Pruebo mover a la papelera un reporte de novedad desde la vista de sólo lectura
-     */ 
+     */
     public function moveToTrashOne(FunctionalTester $I)
     {
         // datos de prueba

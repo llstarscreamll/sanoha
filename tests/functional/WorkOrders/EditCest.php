@@ -22,7 +22,7 @@ class EditCest
 
     /**
      * Pruebo la funcionalidad de editar la info de una orden de trabajo
-     */ 
+     */
     public function editWorkOrder(FunctionalTester $I)
     {
         $I->am(WorkOrdersPage::$mainActor);

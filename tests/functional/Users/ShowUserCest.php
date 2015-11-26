@@ -1,4 +1,5 @@
-<?php namespace Users;
+<?php
+namespace Users;
 
 use \FunctionalTester;
 use \common\BaseTest;

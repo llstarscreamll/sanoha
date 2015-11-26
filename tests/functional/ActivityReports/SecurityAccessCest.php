@@ -1,4 +1,5 @@
-<?php namespace ActivityReports;
+<?php
+namespace ActivityReports;
 
 use \FunctionalTester;
 use \common\BaseTest;
@@ -141,6 +142,5 @@ class SecurityAccessCest
         
         // pero veo un mensaje de alerta que me dice que no tengo acceso
         $I->see('No tienes los permisos necesarios para acceder a estos datos.', '.alert-warning');
-        
     }
 }

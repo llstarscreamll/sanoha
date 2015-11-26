@@ -2,9 +2,8 @@
 
 namespace sanoha\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use sanoha\Http\Requests;
+use Illuminate\Http\Request;
 use sanoha\Http\Controllers\Controller;
 use sanoha\Http\Requests\EmployeeFormRequest;
 
@@ -20,7 +19,7 @@ class EmployeeController extends Controller
         $input = $request->all();
         
         $employees = \sanoha\Models\Employee::with('position', 'subCostCenter', 'subCostCenter.costCenter')
-            ->where(function($q) use($request){
+            ->where(function ($q) use ($request) {
                 $q->where('name', 'like', '%'.$request->get('find').'%')
                     ->orWhere('lastname', 'like', '%'.$request->get('find').'%')
                     ->orWhere('identification_number', 'like', '%'.$request->get('find').'%');
@@ -122,7 +121,7 @@ class EmployeeController extends Controller
      */
     public function status($status, Request $request)
     {
-        switch($status){
+        switch ($status) {
             case 'disabled':
                 $action = [
                     'singular'  => 'desactivado',
@@ -138,8 +137,7 @@ class EmployeeController extends Controller
                 break;
         }
 
-        if($request->has('id')){
-
+        if ($request->has('id')) {
             $id = is_array($request->get('id')) ? $request->get('id') : [$request->get('id')];
             
             \sanoha\Models\Employee::whereIn('id', $id)->update(['status' => $status])
@@ -149,9 +147,9 @@ class EmployeeController extends Controller
                 : \Session::flash('error', [is_array($id)
                     ? 'Los empleados no pudieron ser '.$action['plural'].'.'
                     : 'El empleado no pudo ser '.$action['singular'].'.']) ;
-                
-        }else
+        } else {
             \Session::flash('warning', 'Ningún empleado que activar.');
+        }
         
 
         return redirect()->route('employee.index');

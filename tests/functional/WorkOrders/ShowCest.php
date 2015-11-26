@@ -17,7 +17,7 @@ class ShowCest
 
     /**
      * Pruebo la funcionalidad de ver los detalles de una orden de trabajo (sólo lectura)
-     */ 
+     */
     public function showWorkOrder(FunctionalTester $I)
     {
         $I->am(WorkOrdersPage::$mainActor);

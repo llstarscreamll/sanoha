@@ -1,4 +1,5 @@
-<?php   namespace Employees;
+<?php
+namespace Employees;
 
 use \FunctionalTester;
 use \common\BaseTest as BaseTest;
@@ -19,7 +20,7 @@ class EditCest
 
     /**
      * Pruebo la funciónalidad de editar un empleado
-     */ 
+     */
     public function edit(FunctionalTester $I)
     {
         // el empleado a editar, tendrá id 9 porque ya hay 8 creados

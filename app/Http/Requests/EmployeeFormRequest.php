@@ -1,12 +1,10 @@
 <?php
-
 namespace sanoha\Http\Requests;
 
 use sanoha\Http\Requests\Request;
 
 class EmployeeFormRequest extends Request
 {
-    
     protected $rules = [
         'name'                          =>  'required|min:3|max:50|alpha_spaces',
         'lastname'                      =>  'required|min:3|max:50|alpha_spaces',
@@ -23,11 +21,13 @@ class EmployeeFormRequest extends Request
      */
     public function authorize()
     {
-        if($this->route()->getName() == 'employee.update' && ! \Auth::getUser()->can('employee.edit'))
+        if ($this->route()->getName() == 'employee.update' && ! \Auth::getUser()->can('employee.edit')) {
             return false;
+        }
         
-        if($this->route()->getName() == 'employee.store' && ! \Auth::getUser()->can('employee.create'))
+        if ($this->route()->getName() == 'employee.store' && ! \Auth::getUser()->can('employee.create')) {
             return false;
+        }
         
         return true;
     }
@@ -46,10 +46,11 @@ class EmployeeFormRequest extends Request
             $rules['identification_number'] = 'required|numeric|unique:employees,identification_number,' . $this->route()->getParameter('employee');
         }
         
-        if($this->route()->getName() == 'employee.index')
+        if ($this->route()->getName() == 'employee.index') {
             $rules = [
                 'find'  =>  'text' // custom rule declared on sanoha\Provides\CustomValidatorServiceProvider
                 ];
+        }
 
         return $rules;
     }

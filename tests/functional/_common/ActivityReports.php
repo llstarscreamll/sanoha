@@ -3,10 +3,8 @@ namespace common;
 
 use Faker\Factory           as Faker;
 use Carbon\Carbon;
-
 use \sanoha\Models\Employee as EmployeeModel;
 use \sanoha\Models\User     as UserModel;
-
 use sanoha\Models\ActivityReport as Report;
 
 class ActivityReports
@@ -32,23 +30,20 @@ class ActivityReports
         $data = [];
         
         for ($i=0; $i<$days; $i++) {
-            
-            for($j=0; $j<30; $j++){
-                
+            for ($j=0; $j<30; $j++) {
                 $data[] = [
-                    'sub_cost_center_id'    =>      $faker->numberBetween(1,$sub_cost_centers),
-                    'employee_id'           =>      $faker->numberBetween(1,$employees), // empleados creados en EmployeesTableSeeder
-                    'mining_activity_id'    =>      $faker->numberBetween(1,18), // actividades creadas en MiningActivitiesTableSeeder
-                    'quantity'              =>      $faker->numberBetween(1,50),
-                    'price'                 =>      $faker->numberBetween(5000,25000),
-                    'worked_hours'          =>      $faker->numberBetween(1,12),
-                    'reported_by'           =>      $faker->numberBetween(1,3),
+                    'sub_cost_center_id'    =>      $faker->numberBetween(1, $sub_cost_centers),
+                    'employee_id'           =>      $faker->numberBetween(1, $employees), // empleados creados en EmployeesTableSeeder
+                    'mining_activity_id'    =>      $faker->numberBetween(1, 18), // actividades creadas en MiningActivitiesTableSeeder
+                    'quantity'              =>      $faker->numberBetween(1, 50),
+                    'price'                 =>      $faker->numberBetween(5000, 25000),
+                    'worked_hours'          =>      $faker->numberBetween(1, 12),
+                    'reported_by'           =>      $faker->numberBetween(1, 3),
                     'reported_at'           =>      $date->toDateTimeString(),
                     'created_at'            =>      $date->toDateTimeString(),
                     'updated_at'            =>      $date->toDateTimeString(),
                     'deleted_at'            =>      null
                 ];
-                
             }
             
             $date = $date->addDay();
@@ -60,7 +55,7 @@ class ActivityReports
     /**
      * Creo 3 labores mineras reportadas para el día de ayer
      * 
-     */ 
+     */
     public function createYesterdayActivities()
     {
         $faker = Faker::create();

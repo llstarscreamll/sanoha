@@ -1,4 +1,5 @@
-<?php   namespace ActivityReports;
+<?php
+namespace ActivityReports;
 
 use \FunctionalTester;
 use \common\BaseTest;
@@ -66,7 +67,7 @@ class FlatReportCest
         $I->amOnPage('/home');
         $I->see('Proyecto Beteitiva', 'a');
         $I->click('Proyecto Beteitiva', 'a'); // el proyecto o centro de costo creado en UserCommons
-        
+
         // hago clic en el vinculo al proyecto que tengo acceso
         $I->seeCurrentUrlEquals('/activityReport/individual');
         $I->seeInSession('current_cost_center_id', 1); // el id del centro de costos ue seleccioné
@@ -163,7 +164,7 @@ class FlatReportCest
         $I->amOnPage('/home');
         $I->see('Proyecto Beteitiva', 'a');
         $I->click('Proyecto Beteitiva', 'a'); // el proyecto o centro de costo creado en UserCommons
-        
+
         // hago clic en el vinculo al proyecto que tengo acceso
         $I->seeCurrentUrlEquals('/activityReport/individual');
         $I->seeElement('a', ['class' => 'btn btn-default', 'title' => 'Reporte de Registros Individuales']);

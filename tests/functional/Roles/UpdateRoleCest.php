@@ -1,4 +1,5 @@
-<?php namespace Roles;
+<?php
+namespace Roles;
 
 use \FunctionalTester;
 use \common\BaseTest;
@@ -59,7 +60,7 @@ class UpdateRoleCest
         // create the test role
         $role = \sanoha\Models\Role::create($this->role);
         // attach some permissions to role
-        $role->perms()->sync([1,2,3]); // have 6 permissions, only attach 3
+        $role->perms()->sync([1, 2, 3]); // have 6 permissions, only attach 3
         // get all permissions
         $permissions = \sanoha\Models\Permission::select('name')->get();
         // get the role permissions
@@ -82,18 +83,20 @@ class UpdateRoleCest
             ]);
             
         // I see all the permissions listed
-        foreach($permissions as $permission)
+        foreach ($permissions as $permission) {
             $I->seeElement('input', ['value' => $permission->name]);
+        }
             
         // I see the role permissions checked
-        foreach($rolePermissions as $rolePermission)
+        foreach ($rolePermissions as $rolePermission) {
             $I->seeElement('input[type=checkbox]:checked', ['value' => $rolePermission->name]);
+        }
         
         // check the unattached roles that aren´t checked
         $I->dontSeeElement('input[type=checkbox]:checked', ['value' => 'user.list']); // role 4 unattached
         $I->dontSeeElement('input[type=checkbox]:checked', ['value' => 'user.create']); // role 5 unattached
         $I->dontSeeElement('input[type=checkbox]:checked', ['value' => 'user.edit']); // role 6 unattached
-        
+
         // new role data
         $role->name = 'updated.role';
         $role->display_name = 'Updated Role';
@@ -143,8 +146,8 @@ class UpdateRoleCest
             ]);
         
         // I see the updated role permissions checked
-        foreach($rolePermissions as $rolePermission)
+        foreach ($rolePermissions as $rolePermission) {
             $I->seeElement('input[type=checkbox]:checked', ['value' => $rolePermission->name]);
-        
+        }
     }
 }

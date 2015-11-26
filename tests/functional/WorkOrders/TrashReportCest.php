@@ -19,7 +19,7 @@ class TrashReportCest
 
     /**
      * Pruebo la uncionalidad de mover a la papelera un reporte de orden de trabajo
-     */ 
+     */
     public function trashReport(FunctionalTester $I)
     {
         $I->am(BasePage::$mainActor);

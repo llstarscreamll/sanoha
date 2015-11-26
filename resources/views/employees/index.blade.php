@@ -23,7 +23,7 @@
 								id="btn-enable-employee"
 								data-action="{{route('employee.status', 'enabled')}}"
 								data-method="PUT"
-								{{-- abre la ventana modal de confirmación --}}
+								{{--abre la ventana modal de confirmación--}}
 								data-message="Desea activar a el(los) empleado(s) marcado(s)? Se verán disponibles sus datos para realizar operaciones en los respectivos módulos del sistema."
 								data-toggle="modal"
 								data-target="#confirm-modal"

@@ -14,20 +14,20 @@ class UserController extends Controller
 {
     /**
      * The User Model
-     */ 
+     */
     private $user;
     
     /**
-	 * Create a new controller instance.
-	 *
-	 * @return void
-	 */
-	public function __construct()
-	{
-		$this->middleware('auth');
-		$this->middleware('checkPermmisions', ['except' => ['store','update']]);
-		$this->user = new User;
-	}
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('checkPermmisions', ['except' => ['store', 'update']]);
+        $this->user = new User;
+    }
 
     /**
      * Display a listing of the resource.
@@ -78,8 +78,7 @@ class UserController extends Controller
         $error = array();
         
         // create user
-        if($user->save()){
-            
+        if ($user->save()) {
             $success[] = 'Usuario creado correctamente.';
             
             // attach roles to user
@@ -89,18 +88,19 @@ class UserController extends Controller
                 : $error[] = 'Ocurrió un error añadiendo el rol al usuario.';
     
             // attach cost centers
-            if(count($subCostCenters = $request->input('sub_cost_center_id')) > 0)
+            if (count($subCostCenters = $request->input('sub_cost_center_id')) > 0) {
                 $user->subCostCenters()->sync($subCostCenters)
                     ? $success[] = 'Asignación de centro de costos exitosa.'
                     : $error[] = 'Error asignando centro de costos.' ;
+            }
             
             // attach employees
-            if(count($employees = $request->get('employee_id')) > 0)
+            if (count($employees = $request->get('employee_id')) > 0) {
                 $user->employees()->sync($employees)
                     ? $success[] = 'Asignación de empleado(s) exitosa.'
                     : $error[] = 'Falló la asignación de empleado(s).' ;
-            
-        }else{
+            }
+        } else {
             $error[] = 'Ocurrió un error creando el usuario.';
         }
 
@@ -160,8 +160,9 @@ class UserController extends Controller
         $user->fill($data);
         
         // si se dio una contraseña la actualizo
-        if (! empty($request->get('password')))
+        if (! empty($request->get('password'))) {
             $user->password = bcrypt($request->get('password'));
+        }
         
         $role_names = $role_keys = array();
         
@@ -170,7 +171,7 @@ class UserController extends Controller
         $error = array();
 
         // get the roles ids and names if any selected
-        if(!empty($request->only('role_id')['role_id'])){
+        if (!empty($request->only('role_id')['role_id'])) {
             $role_keys = $role->find($request->only('role_id')['role_id'])->lists('id');
             $role_names = $role->find($request->only('role_id')['role_id'])->lists('name');
         }
@@ -183,12 +184,14 @@ class UserController extends Controller
         // attach cost centers
         $user->subCostCenters()->sync($subCostCenters) ? $success[] = 'Actualización de centro de costos exitosa.' : $error[] = 'Error actualizando centro de costos.' ;
         
-        if(!empty($role_names))
+        if (!empty($role_names)) {
             ($user->hasRole($role_names)) ? $success[] = 'Se ha actualizado el rol del usuario correctamente.' : $error[] = 'Ocurrió un error actualizando el rol al usuario.';
+        }
 
         // attach employees
-        if(count($employees = $request->get('employee_id')) > 0)
+        if (count($employees = $request->get('employee_id')) > 0) {
             $user->employees()->sync($employees) ? $success[] = 'Asignación de empleado(s) exitosa.' : $error[] = 'Falló la asignación de empleado(s).' ;
+        }
 
         // flash notification messages
         \Session::flash('success', $success);

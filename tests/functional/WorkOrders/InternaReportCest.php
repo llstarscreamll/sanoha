@@ -19,7 +19,7 @@ class InternaReportCest
     /**
      * Pruebo la funcionalidad de reportar actividades por parte de los
      * acompañantes internos de la orden de trabajo
-     */ 
+     */
     public function internalReport(FunctionalTester $I)
     {
         $I->am('acompañante interno de la orden de trabajo');

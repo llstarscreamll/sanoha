@@ -20,7 +20,7 @@ class EraseInternalReportCest
     /**
      * Prueba la funcionalidad de borrar el reporte de un acompañante interno de
      * la orden de trabajo
-     */ 
+     */
     public function eraseInternalReport(FunctionalTester $I)
     {
         $I->am(BasePage::$mainActor);

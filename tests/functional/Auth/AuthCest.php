@@ -1,4 +1,6 @@
 <?php
+namespace Auth;
+
 use \FunctionalTester;
 
 class AuthCest

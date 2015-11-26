@@ -7,14 +7,12 @@ use \common\Roles   as RolesCommons;
 
 class RegisterCest
 {
-
     private $userCommons;
     private $valid_form;
     private $invalid_form;
 
     public function _before(FunctionalTester $I)
     {
-
         $this->userCommons = new RolesCommons;
         $this->userCommons->createBasicRoles();
 

@@ -1,4 +1,5 @@
-<?php   namespace NoveltiesReports;
+<?php
+namespace NoveltiesReports;
 
 use \FunctionalTester;
 use \common\BaseTest;
@@ -19,7 +20,7 @@ class AccessLinksCest
 
     /**
      * 
-     */ 
+     */
     public function seeAccessLinks(FunctionalTester $I)
     {
         $I->am('supervisor de minas');

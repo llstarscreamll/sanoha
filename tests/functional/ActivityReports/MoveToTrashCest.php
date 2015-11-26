@@ -1,4 +1,5 @@
-<?php   namespace ActivityReports;
+<?php
+namespace ActivityReports;
 
 use \FunctionalTester;
 use \common\BaseTest;
@@ -93,7 +94,7 @@ class MoveToTrashCest
      * Pruebo la funconalidad de borrar una actividad reportada en la base de datos
      * mediante el botón "Mover a la papelera" de la vista de sólo lectura de la
      * actividad
-     */ 
+     */
     public function moveToTrash(FunctionalTester $I)
     {
         $I->am('soy un supervisor del Proyecto Beteitiva');

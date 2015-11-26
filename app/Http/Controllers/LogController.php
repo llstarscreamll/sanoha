@@ -1,18 +1,15 @@
-<?php namespace sanoha\Http\Controllers;
+<?php
+namespace sanoha\Http\Controllers;
 
-use sanoha\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
-
-use sanoha\Http\Requests\RoleFormRequest;
 use \sanoha\Models\Role;
+use Illuminate\Http\Request;
 use \sanoha\Models\Permission;
-
+use sanoha\Http\Controllers\Controller;
 use Spatie\Activitylog\Models\Activity;
+use sanoha\Http\Requests\RoleFormRequest;
 
 class LogController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -24,5 +21,4 @@ class LogController extends Controller
         
         return view('logs.index', compact('latestActivities'));
     }
-
 }

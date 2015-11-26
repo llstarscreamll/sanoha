@@ -1,4 +1,5 @@
-<?php namespace Roles;
+<?php
+namespace Roles;
 
 use \FunctionalTester;
 use \common\BaseTest;
@@ -37,7 +38,7 @@ class ShowRoleCest
 
     /**
      * Test details role view
-     */ 
+     */
     public function tryToTest(FunctionalTester $I)
     {
         $I->am('admin user loged in');
@@ -48,7 +49,7 @@ class ShowRoleCest
         // create the test role
         $role = \sanoha\Models\Role::create($this->role);
         // attach some permissions to role
-        $role->perms()->sync([1,2,3]); // have 6 permissions, only attach 3
+        $role->perms()->sync([1, 2, 3]); // have 6 permissions, only attach 3
         // get all permissions
         $permissions = \sanoha\Models\Permission::select('name')->get();
         // get the role permissions
@@ -72,7 +73,8 @@ class ShowRoleCest
         $I->seeElement('textarea[name=description]:disabled');
         
         // I see the role permissions checked and them have disabled attribute
-        foreach($rolePermissions as $rolePermission)
+        foreach ($rolePermissions as $rolePermission) {
             $I->seeElement('input:disabled[type=checkbox]:checked', ['value' => $rolePermission->name]);
+        }
     }
 }

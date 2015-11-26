@@ -1,4 +1,5 @@
-<?php   namespace Employees;
+<?php
+namespace Employees;
 
 use \FunctionalTester;
 use \common\BaseTest as BaseTest;
@@ -19,7 +20,7 @@ class GetAllEmployeesCest
 
     /**
      * Pruebo la vista que me devuelve todos los empleados creados
-     */ 
+     */
     public function getAllEmployeesView(FunctionalTester $I)
     {
         $I->am('admin de recurso humano');

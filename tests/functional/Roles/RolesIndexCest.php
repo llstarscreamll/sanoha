@@ -1,4 +1,5 @@
-<?php   namespace Roles;
+<?php
+namespace Roles;
 
 use \FunctionalTester;
 use \common\BaseTest;

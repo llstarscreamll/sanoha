@@ -1,4 +1,5 @@
-<?php namespace common;
+<?php
+namespace common;
 
 use Carbon\Carbon;
 use Faker\Factory as Faker;
@@ -31,7 +32,7 @@ class Roles
             'name'           => 'user',
             'display_name'   => 'Usuario',
             'description'    => 'Usuario con permisos restringidos.',
-            'created_at'    =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
+            'created_at'    =>  $this->date->addMinutes($this->faker->numberBetween(1, 10))->toDateTimeString(),
             'updated_at'    =>  $this->date->toDateTimeString()
         ];
         
@@ -39,7 +40,7 @@ class Roles
             'name'           => 'admin',
             'display_name'   => 'Administrador',
             'description'    => 'Usuario con permisos sobre la mayoría de las funciones del sistema.',
-            'created_at'    =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
+            'created_at'    =>  $this->date->addMinutes($this->faker->numberBetween(1, 10))->toDateTimeString(),
             'updated_at'    =>  $this->date->toDateTimeString()
         ];
         

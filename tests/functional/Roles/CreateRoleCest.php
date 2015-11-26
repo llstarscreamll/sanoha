@@ -1,4 +1,5 @@
-<?php namespace Roles;
+<?php
+namespace Roles;
 
 use \FunctionalTester;
 use \common\BaseTest;
@@ -32,7 +33,7 @@ class CreateRoleCest
      * @return void
      */
     public function createRole(FunctionalTester $I)
-    {   
+    {
         $I->am('admin user loged in');
         $I->wantTo('create role and asign permissions to that role');
 
@@ -65,7 +66,6 @@ class CreateRoleCest
         $I->see('Permisos añadidos al rol correctamente.', '.alert-success div');
         $I->see($role['display_name'], 'tbody tr:first-child td:nth-child(2)');
         $I->see($role['description'], 'tbody tr:first-child td:nth-child(3)');
-        
     }
     
     /**
@@ -91,7 +91,7 @@ class CreateRoleCest
             'description'   =>  'Au',
             'permissions'   =>  [
                 true,
-                false, 
+                false,
                 true,
                 false,
                 true
@@ -118,7 +118,7 @@ class CreateRoleCest
         
         /***********************
          * submit again the form
-         ***********************/ 
+         ***********************/
 
         // test other messages
         $role = [
@@ -127,7 +127,7 @@ class CreateRoleCest
             'description'   =>  'dfgsdfgsdfgsdgdfgsdfgsgfsbym opñpñdvfgs  fgsfqwassxbcv bcbvghfghfgjghrthdrgthfghfgh opñpñdvfgs  fgsfqwassxbcv bcbvghfghfgjghrthdrgthfghfgh opñpñdvfgs  fgsfqwassxbcv bcbvghfghfgjghrthdrgthfghfgh opñpñdvfgs  fgsfqwassxbcv bcbvghfghfgjghrthdrgthfghfgh opñpñdvfgs  fgsfqwassxbcv bcbvghfghfgjghrthdrgthfghfghdfghdfghdfghdfh',
             'permissions'   =>  [
                 true,
-                false, 
+                false,
                 true,
                 false,
                 true
@@ -154,7 +154,7 @@ class CreateRoleCest
         
         /***********************
          * submit again the form
-         ***********************/ 
+         ***********************/
 
         // test other messages
         $role = [
@@ -163,7 +163,7 @@ class CreateRoleCest
             'description'   =>  '2356gfggdfg',
             'permissions'   =>  [
                 true,
-                false, 
+                false,
                 true,
                 false,
                 true
@@ -187,6 +187,5 @@ class CreateRoleCest
         $I->see($this->base_test->roleFormMessages['name.alpha_dots'], '.text-danger');
         $I->see($this->base_test->roleFormMessages['display_name.alpha_spaces'], '.text-danger');
         $I->see($this->base_test->roleFormMessages['description.alpha_spaces'], '.text-danger');
-        
     }
 }

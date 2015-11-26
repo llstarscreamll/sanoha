@@ -20,7 +20,7 @@ class EditCest
 
     /**
      * 
-     */ 
+     */
     public function updateReportedNovelty(FunctionalTester $I)
     {
         // datos de prueba

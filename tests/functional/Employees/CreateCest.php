@@ -1,4 +1,5 @@
-<?php   namespace Employees;
+<?php
+namespace Employees;
 
 use \FunctionalTester;
 use \common\BaseTest as BaseTest;
@@ -19,7 +20,7 @@ class CreateCest
 
     /**
      * Pruebo la funcionalidad para crear empleados
-     */ 
+     */
     public function createEmployee(FunctionalTester $I)
     {
         $I->am('admin de recurso humano');
@@ -62,7 +63,7 @@ class CreateCest
     
     /**
      * Pruebo la funcionalidad para crear empleado, sin digitar el email
-     */ 
+     */
     public function createWithoutEamil(FunctionalTester $I)
     {
         $date = \Carbon\Carbon::now()->subMonth();

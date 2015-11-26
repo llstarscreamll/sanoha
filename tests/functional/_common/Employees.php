@@ -1,7 +1,7 @@
-<?php namespace common;
+<?php
+namespace common;
 
 use Faker\Factory as Faker;
-
 use \sanoha\Models\Position as PositionModel;
 use \sanoha\Models\SubCostCenter as SubCostCenterModel;
 
@@ -32,7 +32,6 @@ class Employees
         ]);
         
         foreach ($subCostCenters as $subCostCenter) {
-            
             $data[] = [
                 'position_id'                   =>      1,
                 'sub_cost_center_id'            =>      $subCostCenter->id,
@@ -42,16 +41,14 @@ class Employees
                 'email'                         =>      'trabajador'.$count++.'@example.com',
                 'status'                        =>      'enabled',
                 'authorized_to_drive_vehicles'  =>      $bool,
-                'created_at'                    =>      $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
+                'created_at'                    =>      $date->addMinutes($faker->numberBetween(1, 10))->toDateTimeString(),
                 'updated_at'                    =>      $date->toDateTimeString(),
                 'deleted_at'                    =>      null
             ];
             
             $bool = false;
-
         }
         
         \DB::table('employees')->insert($data);
     }
-    
 }

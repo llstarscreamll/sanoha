@@ -1,4 +1,5 @@
-<?php   namespace NoveltiesReports;
+<?php
+namespace NoveltiesReports;
 
 use \FunctionalTester;
 use \common\BaseTest;
@@ -55,7 +56,7 @@ class FormErrorsCest
 
     /**
      * Pruebo los mensages de error en al reportar una novedad
-     */ 
+     */
     public function createErrors(FunctionalTester $I)
     {
         $I->am('un ingheniero del área tecnica');

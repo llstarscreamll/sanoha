@@ -1,4 +1,5 @@
-<?php namespace sanoha\Models;
+<?php
+namespace sanoha\Models;
 
 use Zizaco\Entrust\EntrustRole;
 use Illuminate\Database\Eloquent\SoftDeletes;

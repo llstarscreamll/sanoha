@@ -1,4 +1,5 @@
-<?php namespace Users;
+<?php
+namespace Users;
 
 use \FunctionalTester;
 use \common\BaseTest;
@@ -9,7 +10,7 @@ class CreateUserCest
      * The user create url
      * 
      * @var string
-     */ 
+     */
     private $create_url = '/users/create';
     
     public function _before(FunctionalTester $I)
@@ -43,7 +44,7 @@ class CreateUserCest
             'email'             => '',
             'role_id'           => [],
             'activated'         => true,
-            'employee_id'       => [21252,5654],
+            'employee_id'       => [21252, 5654],
             'password'          => '',
             'password_confirmation'   => ''
         ], 'Crear');
@@ -152,7 +153,7 @@ class CreateUserCest
         $I->see($newUser['name'], 'tbody tr:first-child td:nth-child(2)');
         $I->see($newUser['email'], 'tbody tr:first-child td:nth-child(4)');
         $I->see('Activado', 'tbody tr:first-child td:nth-child(5)'); // activated user
-        
+
         $userRecord = \sanoha\Models\User::where('email', '=', $newUser['email'])->get()->first();
 
         $I->seeRecord('users', [

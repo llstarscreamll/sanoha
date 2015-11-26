@@ -1,4 +1,5 @@
-<?php   namespace NoveltiesReports;
+<?php
+namespace NoveltiesReports;
 
 use \FunctionalTester;
 use \common\BaseTest;
@@ -19,7 +20,7 @@ class ShowCest
 
     /**
      * Pruebo la vista de solo lectura de una novedad reportada
-     */ 
+     */
     public function readOnlyNoveltyDetails(FunctionalTester $I)
     {
         // datos de prueba

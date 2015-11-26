@@ -1,4 +1,5 @@
-<?php   namespace Employees;
+<?php
+namespace Employees;
 
 use \FunctionalTester;
 use \common\BaseTest as BaseTest;
@@ -28,7 +29,7 @@ class SearchCest
 
     /**
      * Prueba la funcionalidad de búsqueda por nombre de empleado
-     */ 
+     */
     public function searchByName(FunctionalTester $I)
     {
         $I->am('admin de recurso humano');
@@ -60,7 +61,7 @@ class SearchCest
     
     /**
      * Prueba la funcionalidad de búsqueda por apellido
-     */ 
+     */
     public function searchByLastname(FunctionalTester $I)
     {
         $I->am('admin de recurso humano');
@@ -92,7 +93,7 @@ class SearchCest
     
     /**
      * Prueba la funcionalidad de búsqueda por número de cédula
-     */ 
+     */
     public function searchByCC(FunctionalTester $I)
     {
         $I->am('admin de recurso humano');

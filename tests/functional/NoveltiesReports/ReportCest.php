@@ -83,6 +83,5 @@ class ReportCest
 
         // veo mensaje de éxito en la operación
         $I->see('Novedad reportada exitosamente.', '.alert-success');
-        
     }
 }

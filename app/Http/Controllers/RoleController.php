@@ -1,12 +1,11 @@
-<?php namespace sanoha\Http\Controllers;
+<?php
+namespace sanoha\Http\Controllers;
 
-use sanoha\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
-
-use sanoha\Http\Requests\RoleFormRequest;
 use \sanoha\Models\Role;
+use Illuminate\Http\Request;
 use \sanoha\Models\Permission;
+use sanoha\Http\Controllers\Controller;
+use sanoha\Http\Requests\RoleFormRequest;
 
 class RoleController extends Controller
 {
@@ -23,17 +22,17 @@ class RoleController extends Controller
     private $permission;
      
     /**
-	 * Create a new controller instance.
-	 *
-	 * @return void
-	 */
-	public function __construct()
-	{
-		$this->middleware('checkPermmisions', ['except' => ['store', 'update']]);
-		
-		$this->role = new Role;
-		$this->permission = new Permission;
-	}
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('checkPermmisions', ['except' => ['store', 'update']]);
+        
+        $this->role = new Role;
+        $this->permission = new Permission;
+    }
 
     /**
      * Display a listing of the resource.
@@ -164,5 +163,4 @@ class RoleController extends Controller
         
         return redirect()->route('roles.index');
     }
-
 }

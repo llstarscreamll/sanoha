@@ -18,7 +18,7 @@ class UpdateMainReportCest
 
     /**
      * Pruebo la funcionalidad de editar un reporte principal ya creado 
-     */ 
+     */
     public function updateReport(FunctionalTester $I)
     {
         $I->am(BasePage::$mainActor);

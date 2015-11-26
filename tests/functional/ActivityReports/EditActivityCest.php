@@ -1,7 +1,8 @@
-<?php   namespace ActivityReports;
+<?php
+namespace ActivityReports;
 
-use \FunctionalTester;
 use \common\BaseTest;
+use \FunctionalTester;
 
 class EditActivityCest
 {
@@ -19,7 +20,7 @@ class EditActivityCest
 
     /**
      * Prueba la funcionalidad de editar una actividad minera reportada
-     */ 
+     */
     public function editReportedActivity(FunctionalTester $I)
     {
         $I->am('soy un supervisor del Proyecto Beteitiva');

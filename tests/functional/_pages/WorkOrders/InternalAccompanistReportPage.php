@@ -31,13 +31,13 @@ class InternalAccompanistReportPage
     /**
      * La sección donde está el link de acceso a la creació del reporte del
      * trabajador 2, del cual no tiene acceso el actual usuario
-     */ 
+     */
     public static $linkThatCantAccess = [
         'txt'       =>  'Crear Reporte de Actividades Realizadas',
         'selector'  =>  '#internal-accompanists .panel-default:nth-child(2) .panel-title .pull-right a.btn-primary'
         ];
     
-     public static $mainReportTitle = [
+    public static $mainReportTitle = [
         'txt'       =>  'Reportar Actividades de la Orden de Trabajo',
         'selector'  =>  'h1'
         ];

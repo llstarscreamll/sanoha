@@ -1,4 +1,5 @@
-<?php namespace Users;
+<?php
+namespace Users;
 
 use \FunctionalTester;
 use \common\BaseTest;
@@ -40,7 +41,7 @@ class UpdateUserCest
     public function dontUpdateEmptyPassword(FunctionalTester $I)
     {
         $I->am('un administrador del sistema');
-        $I->wantTo('comprobar que no se actualiza la contraseña si esta vacia');
+        $I->wantTo('comprobar que no se actualiza la contrasenia si esta vacia');
 
         // estoy en la página de edición de usuario, modifico mi propio usuario
         $I->amOnPage('/users/1/edit');
@@ -50,9 +51,9 @@ class UpdateUserCest
 
         // envío el formulario con el campo de contraseña vacío, no se debe actualizar la contraseña
         $I->submitForm('form', [
-            'role_id'               =>  [1,2],
-            'sub_cost_center_id'    =>  [1,2],
-            'employee_id'           =>  [1,2],
+            'role_id'               =>  [1, 2],
+            'sub_cost_center_id'    =>  [1, 2],
+            'employee_id'           =>  [1, 2],
             'name'                  =>  'Andrew Lorens',
             'lastname'              =>  'Mars Coleman',
             'activated'             =>  1,
@@ -224,12 +225,11 @@ class UpdateUserCest
         
         /**
          * Final check
-         */ 
+         */
         $I->see($this->base_test->userCommons->testUser['name'], 'tbody tr:first-child td:nth-child(2)');
         $I->see('Usuario Administrador', 'tbody tr:first-child td:nth-child(3)');
         $I->see($this->base_test->userCommons->testUser['email'], 'tbody tr:first-child td:nth-child(4)');
         $I->see('Desactivado', 'tbody tr:first-child td:nth-child(5)');
-
     }
 
     /**

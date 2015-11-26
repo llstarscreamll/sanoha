@@ -75,18 +75,18 @@ class WorkOrderController extends Controller
         // array de los modelos de acompañantes externos de orden de trabajo
         $external_accompanists = [];
         
-        if ($workOrder->save()){
+        if ($workOrder->save()) {
             $msg_success[] = 'Orden de trabajo creada correctamente.';
             
             // una vez creada la orden de trabajo, asocio los acompañantes (empleados) a la orden,
             // si es que se especificaron
-            if(!empty($request->get('internal_accompanists'))){
+            if (!empty($request->get('internal_accompanists'))) {
                 $workOrder->internalAccompanists()->sync($request->get('internal_accompanists'));
                 $msg_success[] = 'Acompañantes internos asociados correctamente.';
             }
             
             // asocio los los acompañantes externos a la orden de trabajo, si es que se ha especificado alguno
-            if(!empty($request->get('external_accompanists'))){
+            if (!empty($request->get('external_accompanists'))) {
                 foreach ($request->get('external_accompanists') as $key => $value) {
                     $external_accompanists[] = new ExternalAccompanist(['fullname' => $value]);
                 }
@@ -95,8 +95,7 @@ class WorkOrderController extends Controller
                     ? $msg_success[] = 'Acompañantes externos asociados correctamente.'
                     : $msg_error[] = 'Error asociando los acompañates externos.';
             }
-            
-        }else{
+        } else {
             $msg_error[] = 'Error creaendo la orden de trabajo.';
         }
         
@@ -120,9 +119,9 @@ class WorkOrderController extends Controller
             'workOrderReports',
             'workOrderReports.reportedBy',
             'internalAccompanists.position',
-            'internalAccompanists'  =>  function($q){ $q->orderBy('lastname'); },
-            'workOrderReports'      =>  function($q){ $q->orderBy('updated_at'); },
-            'externalAccompanists'  =>  function($q){ $q->orderBy('fullname'); }
+            'internalAccompanists'  =>  function ($q) { $q->orderBy('lastname'); },
+            'workOrderReports'      =>  function ($q) { $q->orderBy('updated_at'); },
+            'externalAccompanists'  =>  function ($q) { $q->orderBy('fullname'); }
         ])->where('id', $id)->firstOrFail();
         
         return view('workOrders.show', compact('workOrder'));
@@ -165,18 +164,18 @@ class WorkOrderController extends Controller
         // array de los modelos de acompañantes externos de orden de trabajo
         $external_accompanists = [];
         
-        if ($workOrder->save()){
+        if ($workOrder->save()) {
             $msg_success[] = 'La orden ha sido actualizada correctamente.';
             
             // una vez creada la orden de trabajo, asocio los acompañantes (empleados) a la orden,
             // si es que se especificaron
-            if(!empty($request->get('internal_accompanists'))){
+            if (!empty($request->get('internal_accompanists'))) {
                 $workOrder->internalAccompanists()->sync($request->get('internal_accompanists'), false);
                 $msg_success[] = 'Acompañantes internos actualizados correctamente.';
             }
             
             // asocio los los acompañantes externos a la orden de trabajo, si es que se ha especificado alguno
-            if(!empty($request->get('external_accompanists'))){
+            if (!empty($request->get('external_accompanists'))) {
                 foreach ($request->get('external_accompanists') as $key => $value) {
                     $external_accompanists[] = new ExternalAccompanist(['fullname' => $value]);
                 }
@@ -185,8 +184,7 @@ class WorkOrderController extends Controller
                     ? $msg_success[] = 'Acompañantes externos actualizados correctamente.'
                     : $msg_error[] = 'Error actualizados los acompañates externos.';
             }
-            
-        }else{
+        } else {
             $msg_error[] = 'Error creaendo la orden de trabajo.';
         }
         
@@ -217,7 +215,7 @@ class WorkOrderController extends Controller
             'reported_by'       =>  \Auth::getUser()->id
             ]);
             
-        if ($workOrder->workOrderReports()->save($workOrderReport)){
+        if ($workOrder->workOrderReports()->save($workOrderReport)) {
             \Session::flash('success', 'Reporte guardado con éxito');
 
             // obtengo los emails de los jefes de área para envíar la información
@@ -236,9 +234,9 @@ class WorkOrderController extends Controller
             \Mail::queue('emails.workOrderReport', $data, function ($m) use ($emails, $subject) {
                 $m->to($emails)->subject($subject);
             });
-
-        }else
+        } else {
             \Session::flash('error', 'Ocurrió un problema guardando el reporte');
+        }
         
         return redirect()->route('workOrder.show', $workOrder->id);
     }
@@ -316,7 +314,7 @@ class WorkOrderController extends Controller
      */
     public function internalAccompanistReportEditForm($work_order_id, $employee_id)
     {
-        $workOrder = \sanoha\Models\WorkOrder::with(['internalAccompanists' => function($q) use($employee_id){
+        $workOrder = \sanoha\Models\WorkOrder::with(['internalAccompanists' => function ($q) use ($employee_id) {
                 $q->where('employee_id', $employee_id);
             }])
             ->findOrFail($work_order_id);
@@ -348,7 +346,7 @@ class WorkOrderController extends Controller
         $emails = \sanoha\Models\User::where('area_chief', true)->lists('email');
 
         // si se encontrarón jefes de área, envío el email
-        if(count($emails) > 0){
+        if (count($emails) > 0) {
             // obtengo el asunto del mensaje
             $subject = 'Reporte de Actividades '.$employee->fullname.' de Orden de Trabajo a '.$workOrder->destination;
 
@@ -456,5 +454,4 @@ class WorkOrderController extends Controller
 
         return redirect()->route('workOrder.index');
     }
-
 }

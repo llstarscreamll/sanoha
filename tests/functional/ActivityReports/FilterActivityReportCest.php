@@ -1,4 +1,5 @@
-<?php namespace ActivityReports;
+<?php
+namespace ActivityReports;
 
 use \FunctionalTester;
 use \common\BaseTest;
@@ -21,7 +22,7 @@ class FilterActivityReportCest
      * Probar el reporte de nómina de las actividades del día de ayer
      * 
      * @param FunctionalTester $I
-     */ 
+     */
     public function testPayrollReport(FunctionalTester $I)
     {
         $this->base_test->activityReportsCommons->createYesterdayActivities();
@@ -37,7 +38,7 @@ class FilterActivityReportCest
         // hago clic en el vinculo al proyecto que tengo acceso
         $I->seeCurrentUrlEquals('/activityReport');
         $I->seeInSession('current_cost_center_id', 1); // el id del centro de costos ue seleccioné
-        
+
         // titulo de la página
         $I->see('Reporte de Actividades');
         $I->amOnPage('/activityReport');
@@ -95,10 +96,10 @@ class FilterActivityReportCest
         $I->see('125.000', 'tbody tr:last-child td');
         // --- actividad dos
         $I->see('2', 'tbody tr:last-child td');
-        $I->see('20.000', 'tbody tr:last-child td');    
+        $I->see('20.000', 'tbody tr:last-child td');
         // --- actividad tres
         $I->see('4', 'tbody tr:last-child td');
-        $I->see('48.000', 'tbody tr:last-child td');   
+        $I->see('48.000', 'tbody tr:last-child td');
         
         // los totales de todos los empleado en la fila-columna final
         $I->see('193.000', 'tbody tr:last-child td:last-child');

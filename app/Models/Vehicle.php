@@ -1,4 +1,5 @@
-<?php namespace sanoha\Models;
+<?php
+namespace sanoha\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;

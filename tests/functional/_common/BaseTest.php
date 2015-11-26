@@ -1,4 +1,5 @@
-<?php   namespace common;
+<?php
+namespace common;
 
 use \common\User                as UserCommons;
 use \common\Areas               as AreasCommons;
@@ -11,7 +12,6 @@ use \common\Permissions         as PermissionsCommons;
 use \common\SubCostCenters      as SubCostCentersCommons;
 use \common\ActivityReports     as ActivityReportsCommons;
 use \common\MiningActivities    as MiningActivitiesCommons;
-
 use \sanoha\Http\Requests\RoleFormRequest;
 
 class BaseTest
@@ -131,7 +131,7 @@ class BaseTest
     
     /**
      * Dependencias de los test de reporte de actividades mineras
-     */ 
+     */
     public function activityReports()
     {
         // creo los permisos para el módulo de reporte de novedad
@@ -181,7 +181,7 @@ class BaseTest
     
     /**
      * Creo los datos básicos que deben existir en la mayoría de los tests
-     */ 
+     */
     private function createBasicData()
     {
         // creo los roles de usuario y añado todos los permisos al rol de administrador

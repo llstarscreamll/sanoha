@@ -1,4 +1,5 @@
-<?php namespace sanoha\Http\Requests;
+<?php
+namespace sanoha\Http\Requests;
 
 use sanoha\Http\Requests\Request;
 
@@ -24,11 +25,13 @@ class UserFormRequest extends Request
      */
     public function authorize()
     {
-        if($this->route()->getName() == 'users.update' && ! \Auth::getUser()->can('users.edit'))
+        if ($this->route()->getName() == 'users.update' && ! \Auth::getUser()->can('users.edit')) {
             return false;
+        }
         
-        if($this->route()->getName() == 'users.store' && ! \Auth::getUser()->can('users.create'))
+        if ($this->route()->getName() == 'users.store' && ! \Auth::getUser()->can('users.create')) {
             return false;
+        }
         
         return true;
     }
@@ -47,10 +50,11 @@ class UserFormRequest extends Request
             $rules['password']  = 'confirmed|min:6';
         }
         
-        if($this->route()->getName() == 'users.index')
+        if ($this->route()->getName() == 'users.index') {
             $rules = [
                 'find'  =>  'text' // custom rule declared on sanoha\Provides\CustomValidatorServiceProvider
                 ];
+        }
 
         return $rules;
     }

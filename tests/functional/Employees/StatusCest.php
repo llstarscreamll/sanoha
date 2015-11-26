@@ -1,5 +1,4 @@
 <?php
-
 namespace Employees;
 
 use \FunctionalTester;
@@ -23,7 +22,7 @@ class StatusCest
     /**
      * Pruebo la funcionalidad de cambiar el estado de los empleados, de inactivo
      * a retirado por ejemplo
-     */ 
+     */
     public function toggleStatus(FunctionalTester $I)
     {
         $I->am('admin de recurso humano');
@@ -53,7 +52,7 @@ class StatusCest
          * Aquí hay que hacer el envío del formulario con la función _loadPage()
          * que sólo está disponible en los helpers de codeception en la versión 2.1
          * ----------
-         */ 
+         */
         $I->loadDynamicPage($params);
         
         $I->seeCurrentUrlEquals('/employee');
@@ -65,7 +64,7 @@ class StatusCest
         // ahora que esta desactivado el empleado, este no debe ser cargado en
         // las listas de los select de por ejemplo los reporttes de novedades o
         // reportes de actividades mineras, queda invisible en dichos módulos...
-        
+
         // hago clic en el proyecto que quiero trabajar
         $I->click('Proyecto Beteitiva', 'a');
         // doy clic al botón de registrar una actividad minera

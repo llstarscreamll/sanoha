@@ -1,4 +1,5 @@
-<?php   namespace Employees;
+<?php
+namespace Employees;
 
 use \FunctionalTester;
 use \common\BaseTest as BaseTest;
@@ -39,7 +40,7 @@ class TrashCest
 
     /**
      * Pruebo la funcionalidad de borrar un empleado en la vista "Detalles de Empleado"
-     */ 
+     */
     public function trashOne(FunctionalTester $I)
     {
         \sanoha\Models\Employee::create([

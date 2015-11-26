@@ -1,4 +1,5 @@
-<?php   namespace sanoha\Providers;
+<?php
+namespace sanoha\Providers;
 
 use \Carbon\Carbon;
 

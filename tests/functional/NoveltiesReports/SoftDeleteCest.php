@@ -1,4 +1,5 @@
-<?php   namespace NoveltiesReports;
+<?php
+namespace NoveltiesReports;
 
 use \FunctionalTester;
 use \common\BaseTest;
@@ -20,7 +21,7 @@ class SoftDeleteCest
     /**
      * Pruebo el borrado de una novedad reportadan en la vista de sólo
      * lectura de la novedad
-     */ 
+     */
     public function softDeleteNovelty(FunctionalTester $I)
     {
         $I->am('un supervisor de proyecto');

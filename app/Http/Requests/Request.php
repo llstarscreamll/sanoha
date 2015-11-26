@@ -1,9 +1,9 @@
-<?php namespace sanoha\Http\Requests;
+<?php
+namespace sanoha\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-abstract class Request extends FormRequest {
-
-	//
-
+abstract class Request extends FormRequest
+{
+    //
 }

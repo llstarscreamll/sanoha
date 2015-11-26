@@ -1,11 +1,10 @@
-<?php namespace common;
+<?php
+namespace common;
 
 use Faker\Factory           as Faker;
 use Carbon\Carbon;
-
 use \sanoha\Models\Role     as RoleModel;
 use \sanoha\Models\User     as UserModel;
-
 use \common\Roles           as RolesCommons;
 
 class User
@@ -67,13 +66,13 @@ class User
     {
         $user = UserModel::firstOrCreate(array_merge($this->adminUser, ['password' => bcrypt($this->adminUser['password'])]));
         $user->attachRole(2); // 2 es el id del rol admin
-        
+
         // le asigno los centros de costo al usuario administrador
-        $user->subCostCenters()->sync([1,2,3,4]); // estos son los id's de los subcentros de los primeros dos proyectos o centros de costo, sanoha y beteitiva
-        
+        $user->subCostCenters()->sync([1, 2, 3, 4]); // estos son los id's de los subcentros de los primeros dos proyectos o centros de costo, sanoha y beteitiva
+
         // el usuario tendrá asociado al Trabajador 1
         $user->employees()->sync([1]); // 1 = Trabajador 1 B1
-        
+
         return $user;
     }
 
@@ -97,7 +96,7 @@ class User
                 'email'         =>      $faker->unique()->email,
                 'password'      =>      '123456',
                 'activated'     =>      1,
-                'created_at'    =>      $date->addSeconds($faker->numberBetween(1,10))->toDateTimeString(),
+                'created_at'    =>      $date->addSeconds($faker->numberBetween(1, 10))->toDateTimeString(),
                 'updated_at'    =>      $date->toDateTimeString(),
                 'deleted_at'    =>      null
             ];
@@ -105,5 +104,4 @@ class User
         
         \DB::table('users')->insert($data);
     }
-    
 }

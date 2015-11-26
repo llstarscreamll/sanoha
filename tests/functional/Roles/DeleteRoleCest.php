@@ -1,4 +1,5 @@
-<?php namespace Roles;
+<?php
+namespace Roles;
 
 use \FunctionalTester;
 use \common\BaseTest;
@@ -37,7 +38,7 @@ class DeleteRoleCest
      * Test soft delete one user role
      * 
      * @return void
-     */ 
+     */
     public function softDeleteSingleRole(FunctionalTester $I)
     {
         $I->am('admin user loged in');
@@ -48,8 +49,8 @@ class DeleteRoleCest
         // create the test role
         $role = \sanoha\Models\Role::create($this->role);
         // attach some permissions to role
-        $role->perms()->sync([1,2,3]); // have 6 permissions, only attach 3
-        
+        $role->perms()->sync([1, 2, 3]); // have 6 permissions, only attach 3
+
         $I->amOnPage('/roles');
         $I->click($role->display_name, 'a');
         $I->seeCurrentUrlEquals('/roles/' . $role->id);
@@ -60,7 +61,6 @@ class DeleteRoleCest
         $I->see('El rol ha sido movido a la papelera correctamente.', '.alert-success');
         $I->dontSee($role->display_name, 'a');
         $I->seeRecord('roles', ['name' => $this->role['name'], 'display_name' => $this->role['display_name']]);
-        
     }
     
     /**
@@ -78,7 +78,7 @@ class DeleteRoleCest
         // create the test role
         $role = \sanoha\Models\Role::create($this->role);
         // attach some permissions to role
-        $role->perms()->sync([1,2,3]); // have 6 permissions, only attach 3
+        $role->perms()->sync([1, 2, 3]); // have 6 permissions, only attach 3
         $roles = \sanoha\Models\Role::get();
         
         $I->amOnPage('/roles');

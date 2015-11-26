@@ -18,7 +18,7 @@ class MainReportCest
 
     /**
      * Pruebo la funcionalidad de crear el reporte principal de la orden de trabajo
-     */ 
+     */
     public function createMainReport(FunctionalTester $I)
     {
         $I->am(WorkOrdersPage::$mainActor);

@@ -18,7 +18,7 @@ class IndexCest
 
     /**
      * Pruebo los datos mostrados en el index del módulo
-     */ 
+     */
     public function checkTableData(FunctionalTester $I)
     {
         $I->am(WorkOrdersPage::$mainActor);

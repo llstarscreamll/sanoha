@@ -19,7 +19,7 @@ class WorkOrdersPage
     
     /**
      * index
-     */ 
+     */
     public static $indexPageTitle = 'Ordenes de Trabajo';
     public static $indexPageTitleTag = 'h1';
     public static $indexPageTable = '.table-hover';
@@ -36,14 +36,14 @@ class WorkOrdersPage
     
     /**
      * Los empleados autorizados para manejar vehículos
-     */ 
+     */
     public static $employeesAuthorizedToDriveVehicles = [
         'Trabajador 1'
         ];
     
     /**
      * Los empleados NO autorizados para manejar vehículos
-     */ 
+     */
     public static $employeesUnauthorizedToDriveVehicles = [
         'Trabajador 2',
         'Trabajador 3',
@@ -145,7 +145,7 @@ class WorkOrdersPage
     
     /**
      * los elementos de formulario
-     */ 
+     */
     public static $vehicleIdField = 'select[name=vehicle_id]';
     public static $destinationField = 'input[name=destination]';
     public static $authorizedByField = 'input[name=authorized_by]:disabled';
@@ -156,7 +156,7 @@ class WorkOrdersPage
     
     /**
      * datos de prueba formulario de creación de orden de trabajo
-     */ 
+     */
     public static $createFormData = [
         'authorized_by'             =>  'Orbin Travis', // campo informativo
         'vehicle_responsable'       =>  1,
@@ -242,7 +242,7 @@ class WorkOrdersPage
     /**
      * Hago el setup inicial del módulo, creando datos de los que depende y creo
      * al usuario admin del sistema y lo logeo...
-     */ 
+     */
     public function __construct(FunctionalTester $I)
     {
         $base_test = new BaseTest;
@@ -281,7 +281,7 @@ class WorkOrdersPage
      * de una orden de trabajo, los 
      * 
      * @param array $data
-     */ 
+     */
     public static function checkDataOnShowRoute($data, FunctionalTester $I)
     {
         $I->see(self::$showTitle, self::$showTitleTag);
@@ -304,7 +304,7 @@ class WorkOrdersPage
         // el footer del reporte
         $I->see(self::$internalsAccompanistReportMsg['no_activity_reported_footer']['txt'], self::$internalsAccompanistReportMsg['no_activity_reported_footer']['selector']);
         // nadie ha reportado actividades de la orden de trabajo
-        
+
         // sección donde se muestran los campoañantes externos
         $I->see($data['external_accompanists'][0], self::$externalsAccompanistsLocation);
         $I->see($data['external_accompanists'][1], self::$externalsAccompanistsLocation);
@@ -320,7 +320,7 @@ class WorkOrdersPage
         $data .= is_null($date) ? ' el '.date('Y-m-d') : ' el '.$date;
         
         // Reportado por el {{$report->created_at}}
-        
+
         return $data;
     }
     

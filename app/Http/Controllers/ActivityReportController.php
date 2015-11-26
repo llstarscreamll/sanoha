@@ -1,18 +1,16 @@
 <?php
 namespace sanoha\Http\Controllers;
 
+use Carbon\Carbon;
 use sanoha\Http\Requests;
+use Illuminate\Http\Request;
+use sanoha\Models\ActivityReport;
+use sanoha\Models\MiningActivity;
 use sanoha\Http\Controllers\Controller;
 use sanoha\Http\Requests\ActivityReportFormRequest;
 
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-
-use sanoha\Models\ActivityReport;
-use sanoha\Models\MiningActivity;
-
-class ActivityReportController extends Controller {
-    
+class ActivityReportController extends Controller
+{
     /** 
      * El centro de costos con el que se está trabajando
      * 
@@ -22,7 +20,7 @@ class ActivityReportController extends Controller {
     
     /**
      * 
-     */ 
+     */
     private $parameters = [];
     
     /**
@@ -36,7 +34,7 @@ class ActivityReportController extends Controller {
         $this->middleware('checkCostCenter', ['except' => ['selectCostCenterView', 'setCostCenter']]);
         
         // control de acceso a los métodos de esta clase
-        $this->middleware('checkPermmisions', ['except' => ['store','update','selectCostCenterView','setCostCenter']]);
+        $this->middleware('checkPermmisions', ['except' => ['store', 'update', 'selectCostCenterView', 'setCostCenter']]);
         
         // el id del centro de costo de trabajo elegido
         $this->cost_center_id = \Session::get('current_cost_center_id');
@@ -87,8 +85,8 @@ class ActivityReportController extends Controller {
     {
         $search_input = $request->all();
         
-        $orderedActivities 	= ActivityReport::sortedActivities($parameters = ActivityReport::configureParameters($request, $this->cost_center_id));
-        $miningActivities 	= MiningActivity::customOrder();
+        $orderedActivities    = ActivityReport::sortedActivities($parameters = ActivityReport::configureParameters($request, $this->cost_center_id));
+        $miningActivities    = MiningActivity::customOrder();
         
         return view('activityReports.index', compact('orderedActivities', 'miningActivities', 'parameters', 'search_input'));
     }
@@ -152,34 +150,36 @@ class ActivityReportController extends Controller {
         $data['reported_at'] = \Carbon\Carbon::createFromFormat('Y-m-d', $data['reported_at']);
         
         // debo saber si se ha reportado ya la actividad en el mismo día
-        if($reported_activity = ActivityReport::alreadyMiningActivityReported($data))
+        if ($reported_activity = ActivityReport::alreadyMiningActivityReported($data)) {
             return redirect()
                 ->back()
                 ->with('error', 'El trabajador ya reportó '.$reported_activity->miningActivity->name.' el día '.$reported_activity->reported_at->toDateString().'.');
+        }
 
         $employee = \sanoha\Models\Employee::findOrFail($data['employee_id']);
         
         $historical_price = ActivityReport::getHistoricalActivityPrice($data['mining_activity_id'], $employee->sub_cost_center_id, $employee->id);
         
-        $activity 						=	new ActivityReport;
-        $activity->sub_cost_center_id	=	$employee->sub_cost_center_id;
-        $activity->employee_id 			=	$data['employee_id'];
-        $activity->mining_activity_id	=	$data['mining_activity_id'];
-        $activity->quantity 			=	$data['quantity'];
-        $activity->price 				=	!empty($data['price']) && \Auth::getUser()->can('activityReport.assignCosts') ? $data['price'] : $historical_price;
-        $activity->worked_hours			=	$data['worked_hours'];
-        $activity->comment 				=	$data['comment'];
-        $activity->reported_by 			=	\Auth::getUser()->id;
-        $activity->reported_at 			=	$data['reported_at']->toDateTimeString();
+        $activity                        =    new ActivityReport;
+        $activity->sub_cost_center_id    =    $employee->sub_cost_center_id;
+        $activity->employee_id            =    $data['employee_id'];
+        $activity->mining_activity_id    =    $data['mining_activity_id'];
+        $activity->quantity            =    $data['quantity'];
+        $activity->price                =    !empty($data['price']) && \Auth::getUser()->can('activityReport.assignCosts') ? $data['price'] : $historical_price;
+        $activity->worked_hours            =    $data['worked_hours'];
+        $activity->comment                =    $data['comment'];
+        $activity->reported_by            =    \Auth::getUser()->id;
+        $activity->reported_at            =    $data['reported_at']->toDateTimeString();
         
-        if($activity->save()){
+        if ($activity->save()) {
             \Session::flash('success', 'Actividad Registrada Correctamente.');
             
-            if(\Auth::getUser()->can('activityReport.assignCosts') == false && $historical_price == 0)
+            if (\Auth::getUser()->can('activityReport.assignCosts') == false && $historical_price == 0) {
                 \Session::flash('warning', 'La actividad fue registrada, pero no se asignó el precio porque no hay históricos en que basar la selección.');
-            
-        }else
+            }
+        } else {
             \Session::flash('error', 'Error registrando la actividad.');
+        }
 
         return redirect()->back()->withInput($request->only('employee_id'));
     }
@@ -210,10 +210,10 @@ class ActivityReportController extends Controller {
         $input = $request->all();
         // parametros de búsqueda de activiades del empleado
         $parameters = ActivityReport::configureParameters($request, $this->cost_center_id);
-        $parameters['employee_id'] 		= $activity->employee_id;
-        $parameters['cost_center_id'] 	= $activity->subCostCenter->costCenter->id;
-        $parameters['to'] 				= $activity->reported_at->endOfDay()->toDateTimeString();
-        $parameters['from'] 			= $activity->reported_at->startOfDay()->toDateTimeString();
+        $parameters['employee_id']        = $activity->employee_id;
+        $parameters['cost_center_id']    = $activity->subCostCenter->costCenter->id;
+        $parameters['to']                = $activity->reported_at->endOfDay()->toDateTimeString();
+        $parameters['from']            = $activity->reported_at->startOfDay()->toDateTimeString();
         
         // actividades registradas del empleado ordenadas
         $orderedActivities = ActivityReport::sortedActivities($parameters);
@@ -240,15 +240,15 @@ class ActivityReportController extends Controller {
      * @return Response
      */
     public function update($id, ActivityReportFormRequest $request)
-    {	
-        $activity						= ActivityReport::findOrFail($id);
-        $activity->employee_id			= $request->get('employee_id');
-        $activity->mining_activity_id 	= $request->get('mining_activity_id');
-        $activity->quantity 			= $request->get('quantity');
-        $activity->price 				= $request->has('price') ? $request->get('price') : 0;
-        $activity->worked_hours			= $request->get('worked_hours');
-        $activity->reported_at 			= $request->get('reported_at');
-        $activity->comment				= $request->get('comment');
+    {
+        $activity                        = ActivityReport::findOrFail($id);
+        $activity->employee_id            = $request->get('employee_id');
+        $activity->mining_activity_id    = $request->get('mining_activity_id');
+        $activity->quantity            = $request->get('quantity');
+        $activity->price                = $request->has('price') ? $request->get('price') : 0;
+        $activity->worked_hours            = $request->get('worked_hours');
+        $activity->reported_at            = $request->get('reported_at');
+        $activity->comment                = $request->get('comment');
         $activity->save()
             ? \Session::flash('success', 'Actualización de Actividad Minera exitosa.')
             : \Session::flash('error', 'Ocurrió un error actualizando la actividad.');

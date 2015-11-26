@@ -1,4 +1,5 @@
-<?php namespace ActivityReports;
+<?php
+namespace ActivityReports;
 
 use \FunctionalTester;
 use \common\BaseTest;
@@ -29,7 +30,7 @@ class ReportCest
        // soy un supervisor minero y quiero probar los mensajes de error o alerta
        // cuando intente ingresar información inválida en el formuario
        $I->am('supervisor minero');
-       $I->wantTo('probar los mensajes de error del formulario de reporte de actividades mineras');
+        $I->wantTo('probar los mensajes de error del formulario de reporte de actividades mineras');
        
         // estoy en el home
         $I->amOnPage('/home');
@@ -89,7 +90,7 @@ class ReportCest
         // ----------------------------
         // ----- segunda prueba -------
         // ----------------------------
-        
+
         $I->wantTo('probar los mensajes de error en identifidores de trabajador y labor minera');
         
         // aquí los datos erroneos con lo que voy a enviar el formulrio
@@ -125,7 +126,7 @@ class ReportCest
         // ----------------------------
         // ------ tercera prueba ------
         // ----------------------------
-        
+
         $I->wantTo('probar mensajes de error en la cantidad de la labor minera');
         
         // aquí los datos erroneos con lo que voy a enviar el formulrio
@@ -213,7 +214,7 @@ class ReportCest
     {
         // id del projecto con el que voy a trabajar
         $project_id = 1; // Beteitiva
-        
+
         // quito el permiso de asignar costos, pues el supervisor no debe hacerlo
         $permissions = \sanoha\Models\Permission::where('name', '!=', 'activityReport.assignCosts')->get()->lists('id'); // obtengo el permiso que quiero quitar
         $admin_role = \sanoha\Models\Role::where('name', '=', 'admin')->first();
@@ -253,7 +254,7 @@ class ReportCest
         // -----------------------
         // --- Empieza el test ---
         // -----------------------
-        
+
         $I->am('soy un supervisor del Proyecto Beteitiva');
         $I->wantTo('registrar la actividad minera de un trabajador');
         
@@ -331,7 +332,7 @@ class ReportCest
         $I->dontSeeElement('input', ['name' => 'price']); // NO VEO el input para digitar el precio
         $I->seeElement('input', ['name' => 'worked_hours', 'step' => '1', 'max' => '12']); // campo de horas trabajadas, máximo 12 horas a reportar
         $I->seeElement('button', ['type' => 'submit']); // el botton para enviar el formulario
-        
+
         // ahora si veo la tabla donde se mostrarán los registros de las actividades del trabajador
         $I->seeElement('table', ['class' => 'table table-hover table-bordered table-vertical-align-middle']);
         
@@ -448,7 +449,7 @@ class ReportCest
         // ------------------------------
         // ---- usuario SIN permisos ----
         // ------------------------------
-        
+
         // quito el permiso de asignar costos, pues el supervisor no debe hacerlo
         $permissions = \sanoha\Models\Permission::where('name', '!=', 'activityReport.assignCosts')->get()->lists('id'); // obtengo el permiso que quiero quitar
         $admin_role = \sanoha\Models\Role::where('name', '=', 'admin')->first();
@@ -456,7 +457,7 @@ class ReportCest
         
         // inicio sesión con un usuario que no puede asignar costos
         $I->amLoggedAs($this->base_test->admin_user); // ya se lequitaron los permisos
-        
+
         // estoy en el home
         $I->amOnPage('/home');
         

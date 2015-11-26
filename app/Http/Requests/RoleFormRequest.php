@@ -1,4 +1,5 @@
-<?php namespace sanoha\Http\Requests;
+<?php
+namespace sanoha\Http\Requests;
 
 use sanoha\Http\Requests\Request;
 
@@ -8,7 +9,7 @@ class RoleFormRequest extends Request
      * Validation rules
      * 
      * @var array
-     */ 
+     */
     protected $rules = [
         'name'          =>  'required|min:3|max:50|alpha_dots|unique:roles,name',
         'display_name'  =>  'required|min:3|max:50|alpha_spaces',
@@ -19,7 +20,7 @@ class RoleFormRequest extends Request
      * Custom error messages
      * 
      * @var array
-     */ 
+     */
     protected $messages = [
         'name.required'             =>  'El nombre es un campo obligatorio.',
         'name.min'                  =>  'El nombre debe tener al menos :min caracteres.',
@@ -44,11 +45,13 @@ class RoleFormRequest extends Request
      */
     public function authorize()
     {
-        if($this->route()->getName() == 'roles.update' && ! \Auth::getUser()->can('roles.edit'))
+        if ($this->route()->getName() == 'roles.update' && ! \Auth::getUser()->can('roles.edit')) {
             return false;
+        }
         
-        if($this->route()->getName() == 'roles.store' && ! \Auth::getUser()->can('roles.create'))
+        if ($this->route()->getName() == 'roles.store' && ! \Auth::getUser()->can('roles.create')) {
             return false;
+        }
         
         return true;
     }
@@ -62,7 +65,7 @@ class RoleFormRequest extends Request
     {
         $rules = $this->rules;
 
-        if($this->route()->getName() == 'roles.update'){
+        if ($this->route()->getName() == 'roles.update') {
             $rules['name'] = 'required|min:3|max:50|alpha_dots|unique:roles,name,'. $this->route()->getParameter('roles');
         }
 
@@ -73,12 +76,11 @@ class RoleFormRequest extends Request
      * Custom error messages for validation
      * 
      * @return array
-     */ 
+     */
     public function messages()
     {
         $messages = $this->messages;
         
         return $messages;
     }
-
 }

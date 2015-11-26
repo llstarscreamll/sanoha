@@ -1,4 +1,5 @@
-<?php   namespace ActivityReports;
+<?php
+namespace ActivityReports;
 
 use \FunctionalTester;
 use \common\BaseTest;
@@ -24,7 +25,7 @@ class SelectCostCenterCest
      * anteriormente...
      * 
      * @param FunctionalTester $I
-     */ 
+     */
     public function forceAccessActivityReport(FunctionalTester $I)
     {
         $this->base_test->activityReportsCommons->createYesterdayActivities();
@@ -86,6 +87,5 @@ class SelectCostCenterCest
         // y veo que la cabecera del reporte tiene el nombre del proyecto o
         // centro de costos que elejí
         $I->see('Proyecto Sanoha');
-        
     }
 }
