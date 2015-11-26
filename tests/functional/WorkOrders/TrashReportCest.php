@@ -40,12 +40,14 @@ class TrashReportCest
          * Aquí hay que hacer el envío del formulario con la función _loadPage()
          * que sólo está disponible en los helpers de codeception en la versión 2.1
          * ----------
-         */ 
+         */
+        /*
         $I->amOnRoute(Page::$route, ['main_report_id' => 1]);
         
         $I->seeCurrentUrlEquals(BasePage::route('/1'));
         $I->see(Page::$msgSuccess['txt'], Page::$msgSuccess['selector']);
         
         $I->dontSee(BasePage::$workReportFormData['work_order_report'], BasePage::$workOrderReportBodyLocation);
+        */
     }
 }

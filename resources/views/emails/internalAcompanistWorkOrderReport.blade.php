@@ -1,4 +1,3 @@
-<?php $report = unserialize($report); ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -31,11 +30,11 @@
 		    	
         	<div class="panel panel-default">
         		<div class="panel-heading" role="tab" id="headingOne">
-        			<h2 class="panel-heading">Reporte de {{$report->workOrder->employee->fullname}}</h2>
+        			<h2 class="panel-heading">Reporte de {{$data['employee']}}</h2>
         		</div>
         		
 				<div class="panel-body">
-					{!!$report->work_order_report!!}
+					{!!$data['work_report']!!}
 				</div>
 				
 				<div class="panel-footer">
@@ -43,7 +42,7 @@
 						<div class="col-md-6">
 						</div>
 						<div class="col-md-6 text-right">
-							Reportado por <strong>{{$report->reportedBy->fullname}}</strong> el <strong>{{$report->created_at}}</strong>
+							Reportado por <strong>{{$data['reported_by']}}</strong> el <strong>{{$data['reported_at']}}</strong>
 						</div>
 					</div>
 				</div>

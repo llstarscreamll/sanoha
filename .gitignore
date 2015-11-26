@@ -11,4 +11,5 @@ public/resources/*
 .env.*.php
 .env.php
 .env
+.env.testing
 >>>>>>> 19270ca28486a5ad0736581a6031a124a9076562

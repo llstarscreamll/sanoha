@@ -19,7 +19,7 @@ class TrashWorkOrderCest
     // tests
     public function tryToTest(FunctionalTester $I)
     {
-         $I->am(BasePage::$mainActor);
+        $I->am(BasePage::$mainActor);
         $I->wantTo('editar reporte principal de orden de trabajo');
         
         // creo la orden de trabajo de prueba
@@ -36,7 +36,5 @@ class TrashWorkOrderCest
         // atraves de javascript, por lo tanto par aprobarlo aquí debo usar la
         // función _loadPage() del modulo de laravel5 codeception disponible
         // desde la versión 2.1
-        
-        
     }
 }

@@ -336,12 +336,37 @@ class WorkOrderController extends Controller
     {
         $workOrder = \sanoha\Models\WorkOrder::findOrFail($work_order_id);
         $employee = \sanoha\Models\Employee::findOrFail($employee_id);
+        $date = date('Y-m-d H:i:s');
 
         $workOrder->internalAccompanists()->sync([$employee->id => [
             'work_report' => $request->get('work_order_report'),
             'reported_by' => \Auth::getUser()->id,
-            'reported_at' => date('Y-m-d H:i:s')
+            'reported_at' => $date
         ]], false);
+
+        // obtengo los emails de los jefes de área para envíar la información
+        $emails = \sanoha\Models\User::where('area_chief', true)->lists('email');
+
+        // si se encontrarón jefes de área, envío el email
+        if(count($emails) > 0){
+            // obtengo el asunto del mensaje
+            $subject = 'Reporte de Actividades '.$employee->fullname.' de Orden de Trabajo a '.$workOrder->destination;
+
+            // serializo el modelo por las diferencias en como se envían los datos a
+            // la vista con el método queue(), en send() es diferente, leer mas aquí:
+            // http://developed.be/2014/05/07/laravel-passing-data-mailqueue-view/
+            $data = [
+                'work_report'   =>  $request->get('work_order_report'),
+                'employee'      =>  $employee->fullname,
+                'reported_by'   =>  \Auth::user()->fullname,
+                'reported_at'   =>  $date
+            ];
+
+            // envío email a los jefes de área con lo reportado
+            \Mail::queue('emails.internalAcompanistWorkOrderReport', ['data' => $data], function ($m) use ($emails, $subject) {
+                $m->to($emails)->subject($subject);
+            });
+        }
         
         \Session::flash('success', 'Se ha guardado el reporte del acompañante interno.');
         

@@ -7,7 +7,7 @@
             
         <div class="panel panel-default">
             
-            <div class="panel-heading" role="tab" id="headingOne">
+            <div class="panel-heading" role="tab">
                 
                 <h4 class="panel-title">
                     
