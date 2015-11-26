@@ -1,15 +1,14 @@
-<?php namespace sanoha\Http\Controllers;
+<?php
+namespace sanoha\Http\Controllers;
 
-use sanoha\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
 use Auth;
-
-use sanoha\Http\Requests\UserFormRequest;
 use sanoha\Models\Role;
 use sanoha\Models\User;
+use Illuminate\Http\Request;
 use sanoha\Models\CostCenter;
 use sanoha\Models\SubCostCenter;
+use sanoha\Http\Controllers\Controller;
+use sanoha\Http\Requests\UserFormRequest;
 
 class UserController extends Controller
 {
@@ -160,7 +159,9 @@ class UserController extends Controller
         
         $user->fill($data);
         
-        $user->password = bcrypt($request->get('password'));
+        // si se dio una contraseña la actualizo
+        if (! empty($request->get('password')))
+            $user->password = bcrypt($request->get('password'));
         
         $role_names = $role_keys = array();
         

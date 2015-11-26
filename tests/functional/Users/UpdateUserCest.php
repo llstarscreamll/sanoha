@@ -34,6 +34,45 @@ class UpdateUserCest
     }
 
     /**
+     * Prueba que no se cambie la contraseña en la actualización
+     * del usuario al dejar la contraseña vacía...
+     */
+    public function dontUpdateEmptyPassword(FunctionalTester $I)
+    {
+        $I->am('un administrador del sistema');
+        $I->wantTo('comprobar que no se actualiza la contraseña si esta vacia');
+
+        // estoy en la página de edición de usuario, modifico mi propio usuario
+        $I->amOnPage('/users/1/edit');
+
+        // obtengo la contraseña actual del usuario
+        $oldPassword = \sanoha\Models\User::where('email', 'travis.orbin@example.com')->first()->password;
+
+        // envío el formulario con el campo de contraseña vacío, no se debe actualizar la contraseña
+        $I->submitForm('form', [
+            'role_id'               =>  [1,2],
+            'sub_cost_center_id'    =>  [1,2],
+            'employee_id'           =>  [1,2],
+            'name'                  =>  'Andrew Lorens',
+            'lastname'              =>  'Mars Coleman',
+            'activated'             =>  1,
+            'email'                 =>  'travis.orbin@example.com',
+            'password'              =>  '',
+            'password_confirmation' =>  ''
+        ]);
+
+        // soy redirigido a la página de
+        $I->seeCurrentUrlEquals('/users');
+        // veo mensaje de exito en la operación
+        $I->see('Usuario actualizado correctamente.', '.alert-success');
+        // veo el registro con la contraseña intacta
+        $I->seeRecord('users', [
+            'email'     =>  'travis.orbin@example.com',
+            'password'  =>  $oldPassword
+        ]);
+    }
+
+    /**
      * Test the update user information functionality with valid data
      *
      * @param \FunctionalTester $I
@@ -78,15 +117,15 @@ class UpdateUserCest
 
         // new user data
         $this->base_test->userCommons->testUser = [
-            'role_id'           =>  [1,2],
-            'sub_cost_center_id'  =>  [1,2],
-            'employee_id'       =>  [1,2],
-            'name'              =>  'Andrew Lorens',
-            'lastname'          =>  'Mars Coleman',
-            'activated'         =>  1,
-            'email'             =>  'andrew.45698@gmail.com',
-            'password'          =>  '654321',
-            'password_confirmation'=>'654321'
+            'role_id'               =>  [1,2],
+            'sub_cost_center_id'    =>  [1,2],
+            'employee_id'           =>  [1,2],
+            'name'                  =>  'Andrew Lorens',
+            'lastname'              =>  'Mars Coleman',
+            'activated'             =>  1,
+            'email'                 =>  'andrew.45698@gmail.com',
+            'password'              =>  '654321',
+            'password_confirmation' =>  '654321'
         ];
 
         $I->submitForm('form', $this->base_test->userCommons->testUser, 'Actualizar');
