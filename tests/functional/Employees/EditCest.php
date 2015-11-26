@@ -29,6 +29,7 @@ class EditCest
             'lastname'              =>  'Silvestri',
             'identification_number' =>  '74265326',
             'email'                 =>  'alan.silvestri@example.com',
+            'phone'                 =>  '159753',
             'sub_cost_center_id'    =>  1,
             'position_id'           =>  1
             ]);
@@ -57,6 +58,7 @@ class EditCest
             'lastname'              =>  'Silvestri',
             'identification_number' =>  '74265326',
             'email'                 =>  'alan.silvestri@example.com',
+            'phone'                 =>  '159753',
             'sub_cost_center_id'    =>  1,
             'position_id'           =>  1
         ]);
@@ -66,6 +68,7 @@ class EditCest
             'lastname'              =>  'Silvestri Smith',
             'identification_number' =>  '99987',
             'email'                 =>  'alan.silvestri@example.com',
+            'phone'                 =>  '5555555',
             'sub_cost_center_id'    =>  3,
             'position_id'           =>  2
         ], 'Actualizar');
@@ -73,5 +76,13 @@ class EditCest
         $I->seeCurrentUrlEquals('/employee/13');
         $I->see('Empleados', 'h1');
         $I->see('Empleado actualizado correctamente.', '.alert-success');
+
+        // veo el campo actualizado en la base de datos
+        $I->seeRecord('employees', [
+            'lastname'              =>  'Silvestri Smith',
+            'identification_number' =>  '99987',
+            'email'                 =>  'alan.silvestri@example.com',
+            'phone'                 =>  '5555555',
+        ]);
     }
 }

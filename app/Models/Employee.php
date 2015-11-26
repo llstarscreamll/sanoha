@@ -1,11 +1,10 @@
 <?php
 namespace sanoha\Models;
 
+use Spatie\Activitylog\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 use Spatie\Activitylog\LogsActivityInterface;
-use Spatie\Activitylog\LogsActivity;
 
 class Employee extends Model implements LogsActivityInterface
 {
@@ -33,6 +32,7 @@ class Employee extends Model implements LogsActivityInterface
         'name',
         'lastname',
         'email',
+        'phone',
         'authorized_to_drive_vehicles',
     ];
     

@@ -1,8 +1,8 @@
 <?php
-
 namespace sanoha\Http\Controllers;
 
 use sanoha\Http\Requests;
+use sanoha\Models\Employee;
 use Illuminate\Http\Request;
 use sanoha\Http\Controllers\Controller;
 use sanoha\Http\Requests\EmployeeFormRequest;
@@ -18,7 +18,7 @@ class EmployeeController extends Controller
     {
         $input = $request->all();
         
-        $employees = \sanoha\Models\Employee::with('position', 'subCostCenter', 'subCostCenter.costCenter')
+        $employees = Employee::with('position', 'subCostCenter', 'subCostCenter.costCenter')
             ->where(function ($q) use ($request) {
                 $q->where('name', 'like', '%'.$request->get('find').'%')
                     ->orWhere('lastname', 'like', '%'.$request->get('find').'%')
@@ -56,10 +56,13 @@ class EmployeeController extends Controller
         $employee->name                         =   $request->get('name');
         $employee->lastname                     =   $request->get('lastname');
         $employee->identification_number        =   $request->get('identification_number');
-        $employee->email                        =   !empty(trim($request->get('email'))) ? $request->get('email') : null;
+        $employee->email                        =   empty($request->get('email')) ?: $request->get('email');
+        $employee->phone                        =   $request->get('phone', null);
         $employee->authorized_to_drive_vehicles =   $request->get('authorized_to_drive_vehicles', false);
         
-        $employee->save() ? \Session::flash('success', 'Empleado creado correctamente.') : \Session::flash('error', 'Ocurrió un error creando el empleado.');
+        $employee->save()
+            ? $request->session()->flash('success', 'Empleado creado correctamente.')
+            : $request->session()->flash('error', 'Ocurrió un error creando el empleado.');
         
         return redirect()->route('employee.index');
     }
@@ -72,7 +75,7 @@ class EmployeeController extends Controller
      */
     public function show($id)
     {
-        $employee = \sanoha\Models\Employee::findOrFail($id);
+        $employee = Employee::findOrFail($id);
         
         return view('employees.show', compact('employee'));
     }
@@ -85,7 +88,7 @@ class EmployeeController extends Controller
      */
     public function edit($id)
     {
-        $employee = \sanoha\Models\Employee::findOrFail($id);
+        $employee = Employee::findOrFail($id);
         
         $cost_centers = \sanoha\Models\CostCenter::getOrderListWithSubCostCenters();
         $positions = \sanoha\Models\Position::orderBy('name')->lists('name', 'id');
@@ -102,16 +105,19 @@ class EmployeeController extends Controller
      */
     public function update(EmployeeFormRequest $request, $id)
     {
-        $employee                               =   \sanoha\Models\Employee::findOrFail($id);
+        $employee                               =   Employee::findOrFail($id);
         $employee->name                         =   $request->get('name');
         $employee->lastname                     =   $request->get('lastname');
         $employee->identification_number        =   $request->get('identification_number');
-        $employee->email                        =   !empty(trim($request->get('email'))) ? $request->get('email') : null;
+        $employee->email                        =   empty($request->get('email')) ?: $request->get('email');
+        $employee->phone                        =   $request->get('phone');
         $employee->sub_cost_center_id           =   $request->get('sub_cost_center_id');
         $employee->position_id                  =   $request->get('position_id');
         $employee->authorized_to_drive_vehicles =   $request->get('authorized_to_drive_vehicles', false);
         
-        $employee->save() ? \Session::flash('success', 'Empleado actualizado correctamente.') : \Session::flash('error', 'Ocurrió un error actualizado al empleado.');
+        $employee->save()
+            ? $request->session()->flash('success', 'Empleado actualizado correctamente.')
+            : $request->session()->flash('error', 'Ocurrió un error actualizado al empleado.');
         
         return redirect()->route('employee.show', $employee->id);
     }
@@ -140,17 +146,16 @@ class EmployeeController extends Controller
         if ($request->has('id')) {
             $id = is_array($request->get('id')) ? $request->get('id') : [$request->get('id')];
             
-            \sanoha\Models\Employee::whereIn('id', $id)->update(['status' => $status])
-                ? \Session::flash('success', [is_array($id) && count($id) > 1
+            Employee::whereIn('id', $id)->update(['status' => $status])
+                ? $request->session()->flash('success', [is_array($id) && count($id) > 1
                     ? 'Los empleados han sido '.$action['plural'].' correctamente.'
                     : 'El empleado ha sido '.$action['singular'].' correctamente.'])
-                : \Session::flash('error', [is_array($id)
+                : $request->session()->flash('error', [is_array($id)
                     ? 'Los empleados no pudieron ser '.$action['plural'].'.'
                     : 'El empleado no pudo ser '.$action['singular'].'.']) ;
         } else {
-            \Session::flash('warning', 'Ningún empleado que activar.');
+            $request->session()->flash('warning', 'Ningún empleado que activar.');
         }
-        
 
         return redirect()->route('employee.index');
     }
@@ -161,11 +166,17 @@ class EmployeeController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy($id, Request $request)
     {
-        $id = \Request::has('id') ? \Request::only('id')['id'] : $id;
+        $id = $request->has('id') ? $request->get('id') : $id;
         
-        (\sanoha\Models\Employee::destroy($id)) ? \Session::flash('success', [is_array($id) && count($id) > 1 ? 'Los empleados han sido movidos a la papelera correctamente.' : 'El empleado ha sido movido a la papelera correctamente.']) : \Session::flash('error', [is_array($id) ? 'Ocurrió un error moviendo los empleados a la papelera.' : 'Ocurrió un problema moviendo el empleado a la papelera.']) ;
+        (Employee::destroy($id))
+            ? $request->session()->flash('success', [is_array($id) && count($id) > 1
+                ? 'Los empleados han sido movidos a la papelera correctamente.'
+                : 'El empleado ha sido movido a la papelera correctamente.'])
+            : $request->session()->flash('error', [is_array($id)
+                ? 'Ocurrió un error moviendo los empleados a la papelera.'
+                : 'Ocurrió un problema moviendo el empleado a la papelera.']) ;
 
         return redirect()->route('employee.index');
     }

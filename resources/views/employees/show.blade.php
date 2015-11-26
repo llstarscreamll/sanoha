@@ -1,8 +1,6 @@
 @extends('app')
 
-@section('title')
-    Detalles de Empleado
-@stop
+@section('title') Detalles de Empleado @stop
 
 @section('content')
     
@@ -39,8 +37,8 @@
     		    </div>
     		    
     		    <div class="form-group col-md-4">
-    		        {!! Form::label('', 'Código') !!}
-                    {!! Form::text('', $employee->internal_code, ['class' => 'form-control', 'disabled']) !!}
+    		        {!! Form::label('', 'Teléfono') !!}
+                    {!! Form::text('', $employee->phone , ['class' => 'form-control', 'disabled']) !!}
     		    </div>
     		    
     		    <div class="form-group col-md-4 col-md-offset-2">

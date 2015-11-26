@@ -29,6 +29,7 @@ class ShowCest
             'identification_number' =>  '74265326',
             'email'                 =>  'alan.silvestri@example.com',
             'sub_cost_center_id'    =>  1,
+            'phone'                 =>  '123456',
             'position_id'           =>  1
             ]);
         
@@ -47,8 +48,10 @@ class ShowCest
         $I->seeElement('input', ['value' => 'Alan']);
         $I->seeElement('input', ['value' => 'Silvestri']);
         $I->seeElement('input', ['value' => '74265326']);
+        $I->seeElement('input', ['value' => '123456']); // teléfono
         $I->seeElement('input', ['value' => 'alan.silvestri@example.com']);
         $I->seeElement('input', ['value' => 'Proyecto Beteitiva Bocamina 1']);
         $I->seeElement('input', ['value' => 'Minero']);
+        $I->seeElement('input', ['value' => 'No']); // autorizado para manejo de vehículos
     }
 }

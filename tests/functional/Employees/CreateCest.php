@@ -37,6 +37,7 @@ class CreateCest
             'lastname'                      =>  'Silvestri',
             'identification_number'         =>  '74265326',
             'email'                         =>  'alan.silvestri@example.com',
+            'phone'                         =>  '123456789',
             'sub_cost_center_id'            =>  1,
             'position_id'                   =>  1,
             'authorized_to_drive_vehicles'  =>  true
@@ -55,6 +56,7 @@ class CreateCest
             'lastname'                      =>  'Silvestri',
             'identification_number'         =>  '74265326',
             'email'                         =>  'alan.silvestri@example.com',
+            'phone'                         =>  '123456789',
             'sub_cost_center_id'            =>  1,
             'position_id'                   =>  1,
             'authorized_to_drive_vehicles'  =>  true

@@ -10,8 +10,10 @@ class EmployeeFormRequest extends Request
         'lastname'                      =>  'required|min:3|max:50|alpha_spaces',
         'identification_number'         =>  'required|numeric|unique:employees,identification_number',
         'email'                         =>  'email|unique:employees,email',
+        'phone'                         =>  'numeric',
         'sub_cost_center_id'            =>  'numeric|exists:sub_cost_centers,id',
-        'position_id'                   =>  'numeric|exists:positions,id'
+        'position_id'                   =>  'numeric|exists:positions,id',
+        'authorized_to_drive_vehicles'  =>  'boolean',
     ];
     
     /**

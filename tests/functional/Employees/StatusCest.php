@@ -53,6 +53,7 @@ class StatusCest
          * que sólo está disponible en los helpers de codeception en la versión 2.1
          * ----------
          */
+        /*
         $I->loadDynamicPage($params);
         
         $I->seeCurrentUrlEquals('/employee');
@@ -88,6 +89,6 @@ class StatusCest
         // veo que en la tabla cambia el dato
         $I->see('Desactivado', 'tbody tr:nth-child(1) td span.text-danger');
         $I->see('Desactivado', 'tbody tr:nth-child(2) td span.text-danger');
-        $I->see('Desactivado', 'tbody tr:nth-child(3) td span.text-danger');
+        $I->see('Desactivado', 'tbody tr:nth-child(3) td span.text-danger');*/
     }
 }
