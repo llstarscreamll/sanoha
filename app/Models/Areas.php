@@ -3,9 +3,9 @@ namespace sanoha\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Areas extends Model {
-
-	protected $dates = ['created_at', 'updated_at'];
+class Areas extends Model
+{
+    protected $dates = ['created_at', 'updated_at'];
 
     /**
      * The database table used by the model.
@@ -28,5 +28,4 @@ class Areas extends Model {
     {
         return $this->hasMany('sanoha\Models\User');
     }
-
 }

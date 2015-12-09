@@ -9,11 +9,11 @@ class UserFormRequest extends Request
         'name'              =>  'required|min:3|max:50|alpha_spaces',
         'lastname'          =>  'min:3|max:50|alpha_spaces',
         'email'             =>  'required|email|unique:users,email',
-        'role_id'           =>  'exists:roles,id',
-        'sub_cost_center_id'=>  'exists:sub_cost_centers,id',
+        'role_id'           =>  'array|exists:roles,id',
+        'sub_cost_center_id'=>  'array|exists:sub_cost_centers,id',
         'area_id'           =>  'numeric|exists:areas,id',
         'area_chief'        =>  'boolean',
-        'employee_id'       =>  'exists:employees,id',
+        'employee_id'       =>  'array|exists:employees,id',
         'activated'         =>  'boolean',
         'password'          =>  'required|confirmed|min:6',
     ];
@@ -53,7 +53,7 @@ class UserFormRequest extends Request
         if ($this->route()->getName() == 'users.index') {
             $rules = [
                 'find'  =>  'text' // custom rule declared on sanoha\Provides\CustomValidatorServiceProvider
-                ];
+            ];
         }
 
         return $rules;

@@ -4,14 +4,13 @@ namespace sanoha\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-
 class Position extends Model
 {
     use SoftDeletes;
 
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
-	/**
+    /**
      * The database table used by the model.
      *
      * @var string
@@ -25,7 +24,10 @@ class Position extends Model
      */
     protected $fillable = ['name'];
 
-    public function employee()
+    /**
+     * La relación entre cargos y empleados, uno a muchos
+     */
+    public function employees()
     {
         return $this->hasMany('\sanoha\Models\Employee');
     }

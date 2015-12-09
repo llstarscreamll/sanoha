@@ -41,20 +41,18 @@ class Permission extends EntrustPermission
      */
     public function getOrderedPermissions(array $permissions = [])
     {
-        if(empty($permissions))
+        if (empty($permissions)) {
             $permissions = $this->orderBy('name')->get()->toArray();
+        }
         
         $orderedPermissions = array();
 
-        foreach($permissions as $permission){
-            
-            foreach($this->categories as $key => $value){
-                
-                    if(strpos($permission['name'], $key) !== false){
-                        $orderedPermissions[$key][] = $permission;
+        foreach ($permissions as $permission) {
+            foreach ($this->categories as $key => $value) {
+                if (strpos($permission['name'], $key) !== false) {
+                    $orderedPermissions[$key][] = $permission;
                 }
             }
-            
         }
         
         return $orderedPermissions;

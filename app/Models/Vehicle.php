@@ -4,9 +4,9 @@ namespace sanoha\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Vehicle extends Model {
-
-	use SoftDeletes;
+class Vehicle extends Model
+{
+    use SoftDeletes;
 
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
     

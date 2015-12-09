@@ -22,13 +22,13 @@ class NoveltyReportController extends Controller
     
     public function __construct()
     {
-        // me aseguro que se haya elejido un centro de costos y que el usuario tenga acceso
-        // a ese centro
+        // el usuario debe haber iniciado sesión
+        $this->middleware('auth');
+        // comprueba que el usuario tenga permisos sobre el centro de costo seleccionado
         $this->middleware('checkCostCenter', ['except' => ['selectCostCenterView', 'setCostCenter']]);
-        
         // control de acceso a los métodos de esta clase
         $this->middleware('checkPermmisions', ['except' => ['store', 'update', 'selectCostCenterView', 'setCostCenter']]);
-        
+        // el id del centro de costo elegido
         $this->cost_center_id = \Session::get('current_cost_center_id');
     }
     
@@ -118,21 +118,20 @@ class NoveltyReportController extends Controller
      */
     public function store(NovletyReportFormRequest $request)
     {
-        $request = $request->all();
-        $sub_cost_center_id = Employee::findOrFail($request['employee_id'])->sub_cost_center_id;
+        $sub_cost_center_id = Employee::findOrFail($request->get('employee_id'))->sub_cost_center_id;
         
         $novelty                        = new NoveltyReport;
         $novelty->sub_cost_center_id    = $sub_cost_center_id;
-        $novelty->employee_id            = $request['employee_id'];
-        $novelty->novelty_id            = $request['novelty_id'];
-        $novelty->comment                = $request['comment'] or null;
-        $novelty->reported_at            = $request['reported_at'];
+        $novelty->employee_id           = $request->get('employee_id');
+        $novelty->novelty_id            = $request->get('novelty_id');
+        $novelty->comment               = $request->get('comment');
+        $novelty->reported_at           = $request->get('reported_at');
         
         $novelty->save()
-            ? \Session::flash('success', 'Novedad reportada exitosamente.')
-            : \Session::flash('error', 'Ocurrió un error reportando la novedad.');
+            ? $request->session()->flash('success', 'Novedad reportada exitosamente.')
+            : $request->session()->flash('error', 'Ocurrió un error reportando la novedad.');
         
-        return redirect(route('noveltyReport.create'));
+        return redirect()->route('noveltyReport.create');
     }
 
     /**
@@ -182,20 +181,18 @@ class NoveltyReportController extends Controller
      */
     public function update($id, NovletyReportFormRequest $request)
     {
-        $request = $request->all();
+        $sub_cost_center_id = Employee::findOrFail($request->get('employee_id'))->sub_cost_center_id;
         
-        $sub_cost_center_id = Employee::findOrFail($request['employee_id'])->sub_cost_center_id;
-        
-        $novelty = NoveltyReport::findOrFail($id);
+        $novelty                        = NoveltyReport::findOrFail($id);
         $novelty->sub_cost_center_id    = $sub_cost_center_id;
-        $novelty->employee_id            = $request['employee_id'];
-        $novelty->novelty_id            = $request['novelty_id'];
-        $novelty->comment                = $request['comment'] or null;
-        $novelty->reported_at            = $request['reported_at'];
+        $novelty->employee_id           = $request->get('employee_id');
+        $novelty->novelty_id            = $request->get('novelty_id');
+        $novelty->comment               = $request->get('comment');
+        $novelty->reported_at           = $request->get('reported_at');
         
         $novelty->save()
-            ? \Session::flash('success', 'Novedad actualizada exitosamente.')
-            : \Session::flash('error', 'Ocurrió un error actualizando la novedad.');
+            ? $request->session()->flash('success', 'Novedad actualizada exitosamente.')
+            : $request->session()->flash('error', 'Ocurrió un error actualizando la novedad.');
         
         return redirect()->route('noveltyReport.show', $id);
     }
@@ -206,15 +203,15 @@ class NoveltyReportController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy($id, Request $request)
     {
-        $id = \Request::has('id') ? \Request::only('id')['id'] : $id;
+        $id = $request->get('id', $id);
         
-        (NoveltyReport::destroy($id))
-            ? \Session::flash('success', [is_array($id) && count($id) > 1
+        NoveltyReport::destroy($id)
+            ? $request->session()->flash('success', [is_array($id) && count($id) > 1
                 ? 'Las novedades han sido movidos a la papelera correctamente.'
                 : 'La novedad ha sido movida a la papelera correctamente.'])
-            : \Session::flash('error', [is_array($id)
+            : $request->session()->flash('error', [is_array($id)
                 ? 'Ocurrió un error moviendo las novedades a la papelera.'
                 : 'Ocurrió un problema moviendo la novedades a la papelera.']) ;
 

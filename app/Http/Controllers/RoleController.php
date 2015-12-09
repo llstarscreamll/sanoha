@@ -28,9 +28,13 @@ class RoleController extends Controller
      */
     public function __construct()
     {
+        // el usuario debe haber iniciado sesión
+        $this->middleware('auth');
+        // control de acceso a los métodos de esta clase
         $this->middleware('checkPermmisions', ['except' => ['store', 'update']]);
-        
+        // instancia de modelo de roles
         $this->role = new Role;
+        // intancia de modelo de permisos
         $this->permission = new Permission;
     }
 
@@ -53,9 +57,8 @@ class RoleController extends Controller
      */
     public function create()
     {
-        $permissions = $this->permission;
-        $categories = $permissions->categories;
-        $permissions = $permissions->getOrderedPermissions();
+        $categories = $this->permission->categories;
+        $permissions = $this->permission->getOrderedPermissions();
         
         return view('roles.create', compact('permissions', 'categories'));
     }
@@ -67,18 +70,26 @@ class RoleController extends Controller
      */
     public function store(RoleFormRequest $request)
     {
-        $role = $this->role->newInstance($request->except('permissions'));
-        $permissions = $this->permission->whereIn('name', $request->only('permissions')['permissions'])->get();
+        $role = $this->role->newInstance($request->all());
+        $permissions = $this->permission->whereIn('name', $request->get('permissions'))->get();
         
         // vars to flash messages
         $success = array();
         $error = array();
         
-        $role->save() ? $success[] = 'El rol de usuaro ha sido creado correctamente.' : $error[] = 'Ocurrió un error creando el rol.';
-        $role->perms()->sync($permissions) ? $success[] = 'Permisos añadidos al rol correctamente.' : $error[] = 'Ocurrió un error añadiendo los permisos.';
+        // si el rol es guardado correctamente, le asocio los permisos especificados
+        if ($role->save()) {
+            $success[] = 'El rol de usuaro ha sido creado correctamente.';
+
+            $role->perms()->sync($permissions)
+                ? $success[] = 'Permisos añadidos al rol correctamente.'
+                : $error[] = 'Ocurrió un error añadiendo los permisos.';
+        } else {
+            $error[] = 'Ocurrió un error creando el rol.';
+        }
         
-        \Session::flash('success', $success);
-        \Session::flash('error', $error);
+        $request->session()->flash('success', $success);
+        $request->session()->flash('error', $error);
         
         return redirect()->route('roles.index');
     }
@@ -92,9 +103,9 @@ class RoleController extends Controller
     public function show($id)
     {
         $role = $this->role->findOrFail($id);
-        $permissions = $role->find($id)->perms()->select('name', 'display_name')->orderBy('name', 'asc')->get()->toArray();
-        $permissions = !empty($permissions) ?  $this->permission->getOrderedPermissions($permissions) : [];
 
+        $permissions = $role->find($id)->perms()->orderBy('name', 'asc')->get(['name', 'display_name'])->toArray();
+        $permissions = !empty($permissions) ?  $this->permission->getOrderedPermissions($permissions) : [];
         $categories = $this->permission->categories;
 
         return view('roles.show', compact('role', 'permissions', 'categories'));
@@ -126,18 +137,25 @@ class RoleController extends Controller
     public function update($id, RoleFormRequest $request)
     {
         $role = $this->role->findOrFail($id);
-        $role->fill($request->except('permissions'));
-        $permissions = $this->permission->whereIn('name', $request->only('permissions')['permissions'])->get();
+        $role->fill($request->all());
         
         // vars to flash messages
         $success = array();
         $error = array();
         
-        $role->save() ? $success[] = 'El rol ha sido actualizado correctamente.' : $error[] = 'Ocurrió un error actualizando el rol.';
-        $role->perms()->sync($permissions) ? $success[] = 'Permisos de rol actualizados correctamente.' : $error[] = 'Ocurrió un error actualizando los permisos.';
+        // si todo va bien actualizando el rol, le asocio los nuevos permisos
+        if ($role->save()) {
+            $success[] = 'El rol ha sido actualizado correctamente.';
+
+            $role->perms()->sync($request->get('permissions'))
+                ? $success[] = 'Permisos de rol actualizados correctamente.'
+                : $error[] = 'Ocurrió un error actualizando los permisos.';
+        } else {
+            $error[] = 'Ocurrió un error actualizando el rol.';
+        }
         
-        \Session::flash('success', $success);
-        \Session::flash('error', $error);
+        $request->session()->flash('success', $success);
+        $request->session()->flash('error', $error);
         
         return redirect()->route('roles.index');
     }
@@ -148,18 +166,21 @@ class RoleController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy($id, Request $request)
     {
-        $id = \Request::has('id') ? \Request::only('id')['id'] : $id;
+        $id = $request->get('id', $id);
         
         // vars to flash messages
         $success = array();
         $error = array();
         
-        $this->role->destroy($id) ? $success[] = is_array($id) && count($id) > 1 ? 'Los roles se han movido a la papelera correctamente.' : 'El rol ha sido movido a la papelera correctamente.' : 'Ocurrió un error moviendo el rol a al papelera.' ;
-        
-        \Session::flash('success', $success);
-        \Session::flash('error', $error);
+        $this->role->destroy($id)
+            ? $success[] = is_array($id) && count($id) > 1
+                ? $request->session()->flash('success', 'Los roles se han movido a la papelera correctamente.')
+                : $request->session()->flash('success', 'El rol ha sido movido a la papelera correctamente.')
+            : is_array($id) && count($id) > 1
+                ? $request->session()->flash('error', 'Error moviendo los roles a la papelera.')
+                : $request->session()->flash('error', 'Ocurrió un error moviendo el rol a al papelera.');
         
         return redirect()->route('roles.index');
     }

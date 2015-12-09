@@ -10,7 +10,7 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h1>
-					Proyectos Asignados
+					Proyectos Asignºados
 				</h1>
 				
 			</div>
@@ -20,11 +20,11 @@
 				@include ('layout.notifications')
 				
 
-              	@if(count(Auth::getUser()->getCostCenters()) > 0)
+              	@if(count(Auth::getUser()->getCostCentersArray()) > 0)
 				    
 				    <ul class="list-group">
 				        
-					@foreach(Auth::getUser()->getCostCenters() as $center)
+					@foreach(Auth::getUser()->getCostCentersArray() as $center)
 						<li class="list-group-item">
 						    <a href="{{ url(route('noveltyReport.setCostCenter', [ $center['id'] ])) }}">{{ $center['name'] }}</a>
 					    </li>

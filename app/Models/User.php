@@ -3,18 +3,17 @@ namespace sanoha\Models;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Auth\Passwords\CanResetPassword;
+use Zizaco\Entrust\Traits\EntrustUserTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
-
-    use Authenticatable, CanResetPassword;
     use SoftDeletes;
     use EntrustUserTrait;
+    use Authenticatable, CanResetPassword;
 
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
@@ -75,15 +74,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
     
     /**
-     * Obtiene los subcentros de costo que tiene asociados el usuario
+     * Obtiene los centros de costo que tiene asociados el usuario a traves de los subcentros de costo
      * 
      * @return array
      */
-    public function getCostCenters()
+    public function getCostCentersArray()
     {
         $costCenters = [];
-
-        foreach($this->subCostCenters()->with('CostCenter')->get() as $subCostCenter){
+        foreach ($this->subCostCenters as $subCostCenter) {
             $costCenters[$subCostCenter->CostCenter->id]['id'] = $subCostCenter->CostCenter->id;
             $costCenters[$subCostCenter->CostCenter->id]['name'] = $subCostCenter->CostCenter->name;
         }
@@ -94,51 +92,45 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     /**
      * Comprueba si el usuario tiene asignado el centro de costo dado
      * 
-     * @param   string  $costCenterId
+     * @param integer $costCenterId
+     * @return bool
      */
-    public function hasSubCostCenter($subCostCenterId){
-        
-        foreach ($this->subCostCenters as $key => $subCostCenter) {
-            if($subCostCenter->id === $subCostCenterId)
-                return true;
-        }
-        
-        return false;
+    public function hasSubCostCenter($subCostCenterId)
+    {
+        return in_array($subCostCenter, $this->subCostCenters->lists('id'));
     }
-    
+
     /**
+     * Verifica si el usuario tiene X centro de costo asociado
      * 
+     * @param integer $costCenterId
+     * @return bool
      */
-    public function hasCostCenter($costCenterId){
-        
-        foreach ($this->getCostCenters() as $key => $costCenter) {
-            
-            if($costCenter['id'] === $costCenterId)
-                return true;
-                
-        }
-        
-        return false;
+    public function hasCostCenter($costCenterId)
+    {
+        return array_key_exists($costCenterId, $this->getCostCentersArray());
     }
 
     /**
      * Get the user roles display_name attribute
      * 
-     * @return {string}
+     * @return string
      */
     public function getRoles()
     {
         $roles = '';
+
         foreach ($this->roles as $role) {
             $roles .= $role->display_name.' ';
         }
+
         return $roles;
     }
 
     /**
      * Get the user roles id
      * 
-     * @return {array}
+     * @return array
      */
     public function getIdRoles()
     {
@@ -152,7 +144,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     /**
      * Obtiene los id's de los empleados relacionados al empleado
      * 
-     * @return {array}
+     * @return array
      */
     public function getIdEmployees()
     {
@@ -166,7 +158,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     /**
      * Get the user sub cost centers name attribute
      * 
-     * @return {string}
+     * @return string
      */
     public function getSubCostCenters()
     {
@@ -181,7 +173,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     /**
      * Obtiene los empleados asociados al usuario
      * 
-     * @return {string}
+     * @return string
      */
     public function getEmployees()
     {
@@ -196,22 +188,18 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     /**
      * Comprueba si el usuario tiene asociado al empleado dado
      * 
-     * @param   string  $costCenterId
+     * @param string $costCenterId
+     * @return bool
      */
-    public function hasEmployee($employee_id){
-        
-        foreach ($this->employees as $key => $employee) {
-            if($employee->id === $employee_id)
-                return true;
-        }
-        
-        return false;
+    public function hasEmployee($employee_id)
+    {
+        return in_array($employee_id, $this->employees->lists('id'));
     }
     
     /**
      * Get the user sub cost centers id
      * 
-     * @return {array}
+     * @return array
      */
     public function getSubCostCentersId()
     {
@@ -223,8 +211,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
     
     /**
+     * Getter, concatena el nombre y el apellido del empleado
      * 
-     */ 
+     * @return string
+     */
     public function getFullnameAttribute()
     {
         return $this->lastname . ' ' . $this->name;
@@ -233,34 +223,37 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     /**
      * Search by name query scope
      * 
-     * @return {object}
+     * @return object
      */
     public function scopeSearchByName($query, $name)
     {
-        if(!empty( trim($name) ))
+        if (!empty(trim($name))) {
             return $query->where('name', 'LIKE', '%'.$name.'%');
+        }
     }
     
     /**
      * Search by lastname query scope
      * 
-     * @return {object}
+     * @return object
      */
     public function scopeOrSearchByLastname($query, $last_name)
     {
-        if(!empty( trim($last_name) ))
+        if (!empty(trim($last_name))) {
             return $query->orWhere('lastname', 'LIKE', '%'.$last_name.'%');
+        }
     }
 
     /**
      * Search by email query scope
      * 
-     * @return {object}
+     * @return object
      */
     public function scopeOrSearchByEmail($query, $email)
     {
-        if(!empty( trim($email) ))
+        if (!empty(trim($email))) {
             return $query->orWhere('email', 'LIKE', '%'.$email.'%');
+        }
     }
     
     /**
@@ -268,7 +261,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      * 
      * @param {string} $text
      * 
-     * @return {object} Collection
+     * @return object Collection
      */
     public static function indexSearch($text)
     {
@@ -282,7 +275,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
     
     /**
+     * Devuelve el estado del empleado formateado en HTML y con algunas clases CSS
      * 
+     * @return string
      */
     public function getHtmlActivatedState()
     {
@@ -290,11 +285,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
     
     /**
+     * Obtiene el texto del estado del empleado para humanos, es decir activado/descartivado
+     * en ves de 0/1 en la base de datos
      * 
+     * @return string
      */
     public function getActivatedState()
     {
         return $this->activated ? 'Activado' : 'Desactivado';
     }
-    
 }

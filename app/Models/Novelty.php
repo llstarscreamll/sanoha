@@ -4,8 +4,8 @@ namespace sanoha\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Novelty extends Model {
-    
+class Novelty extends Model
+{
     use SoftDeletes;
 
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
@@ -26,10 +26,9 @@ class Novelty extends Model {
     
     /**
      * La relación entre tipos novedade y reporte de novedades, uno a muchos
-     */ 
+     */
     public function noveltyReports()
     {
         return $this->hasMany('sanoha\Models\NoveltyReport');
     }
-
 }

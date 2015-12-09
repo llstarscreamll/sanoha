@@ -287,7 +287,7 @@ class UpdateUserCest
         $I->seeFormErrorMessage('name', 'El nombre sólo puede contener letras y/o espacios.');
         $I->seeFormErrorMessage('lastname', 'El apellido sólo puede contener letras y/o espacios.');
         $I->seeFormErrorMessage('email', 'La dirección de correo electrónico no es válida.');
-        $I->seeFormErrorMessage('role_id', 'Tipo de usuario inválido.');
+        $I->seeFormErrorMessage('role_id', 'El tipo de usuario debe ser un conjunto.');
         $I->seeFormErrorMessage('password', 'Las contraseñas no coinciden.');
 
         $I->submitForm('form', [

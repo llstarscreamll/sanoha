@@ -24,8 +24,11 @@ class UserController extends Controller
      */
     public function __construct()
     {
+        // el usuario debe haber iniciado sesión
         $this->middleware('auth');
+        // control de acceso a los métodos de esta clase
         $this->middleware('checkPermmisions', ['except' => ['store', 'update']]);
+        // instancia de modelo usuario
         $this->user = new User;
     }
 
@@ -37,9 +40,7 @@ class UserController extends Controller
     public function index(UserFormRequest $request)
     {
         $input = $request->all();
-        $text = $request->get('find');
-        
-        $users = $this->user->indexSearch($text);
+        $users = $this->user->indexSearch($request->get('find'));
 
         return view('users.index', compact('users', 'input'));
     }
@@ -49,10 +50,10 @@ class UserController extends Controller
      *
      * @return Response
      */
-    public function create(Role $role, CostCenter $costCenters)
+    public function create()
     {
-        $roles = $role->lists('display_name', 'id');
-        $costCenters = $costCenters->with('subCostCenter')->get();
+        $roles = Role::lists('display_name', 'id');
+        $costCenters = CostCenter::with('subCostCenter')->get();
         $employees = \sanoha\Models\SubCostCenter::getRelatedEmployees();
         $areas = \sanoha\Models\Areas::orderBy('name')->lists('name', 'id');
         
@@ -64,14 +65,13 @@ class UserController extends Controller
      *
      * @return Response
      */
-    public function store(UserFormRequest $request, Role $role)
+    public function store(UserFormRequest $request)
     {
-        $user = $this->user->newInstance($request->except('role_id', 'sub_cost_center_id'));
+        $user = $this->user->newInstance($request->all());
         $user->password = bcrypt($request->get('password'));
         
-        // get the roles ids and names
-        $role_keys = $role->find($request->get('role_id'))->lists('id');
-        $role_names = $role->find($request->get('role_id'))->lists('name');
+        // get the roles names
+        $role_names = Role::find($request->get('role_id'))->lists('name');
 
         // to flash messages
         $success = array();
@@ -82,31 +82,26 @@ class UserController extends Controller
             $success[] = 'Usuario creado correctamente.';
             
             // attach roles to user
-            $user->attachRoles($role_keys);
-            ($user->hasRole($role_names))
+            $user->roles()->sync($request->get('role_id'))
                 ? $success[] = 'Se ha añadido el rol al usuario correctamente.'
                 : $error[] = 'Ocurrió un error añadiendo el rol al usuario.';
     
             // attach cost centers
-            if (count($subCostCenters = $request->input('sub_cost_center_id')) > 0) {
-                $user->subCostCenters()->sync($subCostCenters)
-                    ? $success[] = 'Asignación de centro de costos exitosa.'
-                    : $error[] = 'Error asignando centro de costos.' ;
-            }
+            $user->subCostCenters()->sync($request->get('sub_cost_center_id'))
+                ? $success[] = 'Asignación de centro de costos exitosa.'
+                : $error[] = 'Error asignando centro de costos.' ;
             
             // attach employees
-            if (count($employees = $request->get('employee_id')) > 0) {
-                $user->employees()->sync($employees)
-                    ? $success[] = 'Asignación de empleado(s) exitosa.'
-                    : $error[] = 'Falló la asignación de empleado(s).' ;
-            }
+            $user->employees()->sync($request->get('employee_id'))
+                ? $success[] = 'Asignación de empleado(s) exitosa.'
+                : $error[] = 'Falló la asignación de empleado(s).' ;
         } else {
             $error[] = 'Ocurrió un error creando el usuario.';
         }
 
         // flash notification messages
-        \Session::flash('success', $success);
-        \Session::flash('error', $error);
+        $request->session()->flash('success', $success);
+        $request->session()->flash('error', $error);
 
         return redirect()->route('users.index');
     }
@@ -130,11 +125,12 @@ class UserController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function edit($id, Role $role, CostCenter $costCenters)
+    public function edit($id)
     {
         $user = $this->user->findOrFail($id);
-        $roles = $role->lists('display_name', 'id');
-        $costCenters = $costCenters->with('subCostCenter')->get();
+
+        $roles = Role::lists('display_name', 'id');
+        $costCenters = CostCenter::with('subCostCenter')->get();
         $userSubCostCenters = $user->getSubCostCentersId();
         $employees = \sanoha\Models\SubCostCenter::getRelatedEmployees();
         $areas = \sanoha\Models\Areas::orderBy('name')->lists('name', 'id');
@@ -148,54 +144,47 @@ class UserController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update($id, UserFormRequest $request, Role $role)
+    public function update($id, UserFormRequest $request)
     {
         $user = $this->user->findOrFail($id);
-        
-        $data = $request->except('role_id', empty($request->get('password')) ? 'password' : null);
-        $subCostCenters = empty($request->only('sub_cost_center_id')['sub_cost_center_id']) ? [] : $request->only('sub_cost_center_id')['sub_cost_center_id'];
-        
-        $data['activated'] = $request->has('activated') ? true : false;
-        
-        $user->fill($data);
-        
+
+        // actualizo la info del usuario
+        $user->fill($request->except('password'));
         // si se dio una contraseña la actualizo
         if (! empty($request->get('password'))) {
             $user->password = bcrypt($request->get('password'));
         }
+        // defino el estado del usuario
+        $user->activated = $request->has('activated');
         
-        $role_names = $role_keys = array();
-        
-        // to flash messages
         $success = array();
         $error = array();
 
-        // get the roles ids and names if any selected
-        if (!empty($request->only('role_id')['role_id'])) {
-            $role_keys = $role->find($request->only('role_id')['role_id'])->lists('id');
-            $role_names = $role->find($request->only('role_id')['role_id'])->lists('name');
-        }
+        // si todo va bien, guardando el usuario y entonces le asocio la demas información
+        if ($user->save()) {
+            $success[] = 'Usuario actualizado correctamente.';
 
-        ($user->save()) ? $success[] = 'Usuario actualizado correctamente.' : $error[] = 'Ocurrió un error actualizando el usuario.';
+            // attach cost centers
+            $user->subCostCenters()->sync($request->get('sub_cost_center_id'))
+                ? $success[] = 'Actualización de centro de costos exitosa.'
+                : $error[] = 'Error actualizando centro de costos.' ;
 
-        // update user roles
-        $user->roles()->sync($role_keys);
-        
-        // attach cost centers
-        $user->subCostCenters()->sync($subCostCenters) ? $success[] = 'Actualización de centro de costos exitosa.' : $error[] = 'Error actualizando centro de costos.' ;
-        
-        if (!empty($role_names)) {
-            ($user->hasRole($role_names)) ? $success[] = 'Se ha actualizado el rol del usuario correctamente.' : $error[] = 'Ocurrió un error actualizando el rol al usuario.';
-        }
+            // update user roles
+            $user->roles()->sync($request->get('role_id'))
+                ? $success[] = 'Se ha actualizado el rol del usuario correctamente.'
+                : $error[] = 'Ocurrió un error actualizando el rol al usuario.';
 
-        // attach employees
-        if (count($employees = $request->get('employee_id')) > 0) {
-            $user->employees()->sync($employees) ? $success[] = 'Asignación de empleado(s) exitosa.' : $error[] = 'Falló la asignación de empleado(s).' ;
+            // attach employees
+            $user->employees()->sync($request->get('employee_id'))
+                ? $success[] = 'Asignación de empleado(s) exitosa.'
+                : $error[] = 'Falló la asignación de empleado(s).' ;
+        } else {
+            $error[] = 'Ocurrió un error actualizando el usuario.';
         }
 
         // flash notification messages
-        \Session::flash('success', $success);
-        \Session::flash('error', $error);
+        $request->session()->flash('success', $success);
+        $request->session()->flash('error', $error);
 
         return redirect()->route('users.index');
     }
@@ -206,11 +195,17 @@ class UserController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy($id, Request $request)
     {
-        $id = \Request::has('id') ? \Request::only('id')['id'] : $id;
+        $id = $request->get('id', $id);
         
-        ($this->user->destroy($id)) ? \Session::flash('success', [is_array($id) && count($id) > 1 ? 'Los usuarios han sido movidos a la papelera correctamente.' : 'El usuario ha sido movido a la papelera.']) : \Session::flash('error', [is_array($id) ? 'Ocurrió un error moviendo los usuarios a la papelera.' : 'Ocurrió un problema moviendo el usuario a la papelera.']) ;
+        $this->user->destroy($id)
+            ? $request->session()->flash('success', is_array($id) && count($id) > 1
+                ? 'Los usuarios han sido movidos a la papelera correctamente.'
+                : 'El usuario ha sido movido a la papelera.')
+            : $request->session()->flash('error', is_array($id)
+                ? 'Ocurrió un error moviendo los usuarios a la papelera.'
+                : 'Ocurrió un problema moviendo el usuario a la papelera.') ;
 
         return redirect()->route('users.index');
     }

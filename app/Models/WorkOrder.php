@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class WorkOrder extends Model
 {
-
     use SoftDeletes;
 
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
@@ -92,8 +91,10 @@ class WorkOrder extends Model
     }
     
     /**
-     * La relación entre ordenes de trabajo y acopañantes internos (tabla empleados),
-     * muchos a muchos
+     * Obtiene el nombre de quien hace el reporte interno del trabajador
+     * 
+     * @param int $id
+     * @return string
      */
     public function getInternalAccompanistsReportedBy($id)
     {
@@ -109,13 +110,6 @@ class WorkOrder extends Model
      */
     public function hasVehicleMovement($action)
     {
-        if ($this->vehicleMovements) {
-            foreach ($this->vehicleMovements as $key => $movement) {
-                if ($movement->action == $action) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return in_array($action, $this->vehicleMovements->lists('action'));
     }
 }

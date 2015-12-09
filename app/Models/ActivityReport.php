@@ -1,12 +1,10 @@
 <?php
 namespace sanoha\Models;
 
+use Spatie\Activitylog\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 use Spatie\Activitylog\LogsActivityInterface;
-use Spatie\Activitylog\LogsActivity;
-
 
 class ActivityReport extends Model implements LogsActivityInterface
 {
@@ -17,7 +15,7 @@ class ActivityReport extends Model implements LogsActivityInterface
      * The timestamps.
      * 
      * @var array
-     */ 
+     */
     protected $dates = ['reported_at', 'reported_at', 'updated_at', 'deleted_at'];
 
     /**
@@ -61,8 +59,7 @@ class ActivityReport extends Model implements LogsActivityInterface
             'id_quien_reporta'      =>  $this->reported_by,
         ];
         
-        if ($eventName == 'created')
-        {
+        if ($eventName == 'created') {
             return '<strong>@user</strong> reportó una actividad minera, código "<strong>'.$this->id.'</strong>"' // lo que se hizo
                     .'|ActivityReport' // de qué modulo
                     .'|create' // la acción
@@ -73,8 +70,7 @@ class ActivityReport extends Model implements LogsActivityInterface
                     ;
         }
     
-        if ($eventName == 'updated')
-        {
+        if ($eventName == 'updated') {
             return '<strong>@user</strong> actualizó el reporte una actividad minera, código "<strong>'.$this->id.'</strong>"' // lo que se hizo
                     .'|ActivityReport' // de qué modulo
                     .'|update' // la acción
@@ -85,8 +81,7 @@ class ActivityReport extends Model implements LogsActivityInterface
                     ;
         }
     
-        if ($eventName == 'deleted')
-        {
+        if ($eventName == 'deleted') {
             return '<strong>@user</strong> eliminó el reporte una actividad minera, código "<strong>'.$this->id.'</strong>"' // lo que se hizo
                     .'|ActivityReport' // de qué modulo
                     .'|delete' // la acción
@@ -147,12 +142,13 @@ class ActivityReport extends Model implements LogsActivityInterface
      */
     public static function addSearchByEmployee($query, $employee)
     {
-        if(!empty( trim($employee) ))
-           return $query->where(function($query) use ($employee){
+        if (!empty(trim($employee))) {
+            return $query->where(function ($query) use ($employee) {
                 $query->orWhere('employees.identification_number', 'LIKE', '%'.$employee.'%') // puede ser por número de identificación
                     ->orWhere('employees.name', 'LIKE', '%'.$employee.'%') // puede ser por nombre
                     ->orWhere('employees.lastname', 'LIKE', '%'.$employee.'%'); // puede ser por apellido
             });
+        }
     }
     
     /**
@@ -162,7 +158,7 @@ class ActivityReport extends Model implements LogsActivityInterface
      */
     public static function addSearchByEmployeeId($query, $employee_id)
     {
-        if(!empty( trim($employee_id) )){
+        if (!empty(trim($employee_id))) {
             return $query->where('employees.id', '=', $employee_id);
         }
     }
@@ -186,7 +182,7 @@ class ActivityReport extends Model implements LogsActivityInterface
             // info de centro de costo
             ->join('cost_centers', 'sub_cost_centers.cost_center_id', '=', 'cost_centers.id')
             // info de usuarios
-            ->join('users', 'activity_reports.reported_by', '=', 'users.id' )
+            ->join('users', 'activity_reports.reported_by', '=', 'users.id')
             
             ->select(
                 'employees.id as employee_id',
@@ -206,11 +202,13 @@ class ActivityReport extends Model implements LogsActivityInterface
             // solo los empleados de cierto centro de costo deben aparecer
             ->where('cost_centers.id', '=', $parameters['cost_center_id']);
         
-        if(isset($parameters['employee']) && !empty($parameters['employee']))
+        if (isset($parameters['employee']) && !empty($parameters['employee'])) {
             $data = self::addSearchByEmployee($data, $parameters['employee']);
+        }
         
-        if(isset($parameters['employee_id']) && !empty($parameters['employee_id']))
+        if (isset($parameters['employee_id']) && !empty($parameters['employee_id'])) {
             $data = self::addSearchByEmployeeId($data, $parameters['employee_id']);
+        }
             
         $data = $data
             ->whereBetween('activity_reports.reported_at', [$parameters['from'], $parameters['to']])
@@ -223,7 +221,7 @@ class ActivityReport extends Model implements LogsActivityInterface
     
     /**
      * Obtiene datos para la vista calendario
-     */ 
+     */
     public static function getCalendarActivities($parameters)
     {
         $data = \DB::table('activity_reports')
@@ -237,7 +235,7 @@ class ActivityReport extends Model implements LogsActivityInterface
             // info de centro de costo
             ->join('cost_centers', 'sub_cost_centers.cost_center_id', '=', 'cost_centers.id')
             // info de usuarios
-            ->join('users', 'activity_reports.reported_by', '=', 'users.id' )
+            ->join('users', 'activity_reports.reported_by', '=', 'users.id')
             
             ->select(
                 array(
@@ -253,11 +251,13 @@ class ActivityReport extends Model implements LogsActivityInterface
             // solo los empleados de cierto centro de costo deben aparecer
             ->where('cost_centers.id', '=', $parameters['cost_center_id']);
         
-        if(isset($parameters['employee']) && !empty($parameters['employee']))
+        if (isset($parameters['employee']) && !empty($parameters['employee'])) {
             $data = self::addSearchByEmployee($data, $parameters['employee']);
+        }
         
-        if(isset($parameters['employee_id']) && !empty($parameters['employee_id']))
+        if (isset($parameters['employee_id']) && !empty($parameters['employee_id'])) {
             $data = self::addSearchByEmployeeId($data, $parameters['employee_id']);
+        }
             
         $data = $data
             ->whereBetween('activity_reports.reported_at', [$parameters['from'], $parameters['to']])
@@ -287,7 +287,7 @@ class ActivityReport extends Model implements LogsActivityInterface
         $employees_totals['employees_totals']['employee'] = '';
 
         // create array indexes (columns) with miningActivities table values
-        foreach($activities as $key => $value){
+        foreach ($activities as $key => $value) {
             
             // creating indexes (columns)
             foreach ($miningActivities as $keyMiningActivity => $valueMiningActivity) {
@@ -298,7 +298,6 @@ class ActivityReport extends Model implements LogsActivityInterface
                 $totals['totals']['totals'] = 'Total';
                 $totals['totals'][$valueMiningActivity['short_name']]['quantity'] = 0;
                 $totals['totals'][$valueMiningActivity['short_name']]['price'] = 0;
-                
             }
             
             $ordered_activities[$value->employee_id]['employee_total']['quantity'] = 0;
@@ -307,10 +306,8 @@ class ActivityReport extends Model implements LogsActivityInterface
         
         // asign values to above columns
         foreach ($miningActivities as $key => $value) {
-            
             foreach ($activities as $key2 => $value2) {
-                
-                if($value['short_name'] === $value2->activity_shortname){
+                if ($value['short_name'] === $value2->activity_shortname) {
                     $ordered_activities[$value2->employee_id][$value2->activity_shortname]['quantity'] += floatval($value2->activity_quantity);
                     $ordered_activities[$value2->employee_id][$value2->activity_shortname]['price'] += floatval($value2->activity_quantity) * floatval($value2->activity_price);
                     
@@ -327,25 +324,26 @@ class ActivityReport extends Model implements LogsActivityInterface
                     
                     $totals['reported_by'][$value2->activity_reportedById] = $value2->activity_reportedByName . ' ' .$value2->activity_reportedByLastname;
                 }
-                
             }
-            
         }
         
-        if(isset($totals['totals']))
+        if (isset($totals['totals'])) {
             array_push($totals['totals'], $employees_totals['employees_totals']);
+        }
 
         return array_merge($ordered_activities, $totals);
     }
     
     /**
+     * Obtiene los nombres completos de quien reporta
      * 
-     */ 
+     * @return string
+     */
     public function getReportersFullname()
     {
         $reporters = [];
         
-        foreach ($this->user() as $user) {
+        foreach ($this->user as $user) {
             $reporters[] .= $user->name . ' ' . $user->lastname;
         }
         
@@ -357,7 +355,6 @@ class ActivityReport extends Model implements LogsActivityInterface
      * 
      * @param   int     $mining_activity_id
      * @param   int     $sub_cost_center_id
-     * 
      * @return  int
      */
     public static function getHistoricalActivityPrice($mining_activity_id, $sub_cost_center_id, $employee_id)
@@ -369,9 +366,9 @@ class ActivityReport extends Model implements LogsActivityInterface
             ->orderBy('reported_at', 'desc')
             ->first();
 
-        if($historical_activity)
+        if ($historical_activity) {
             $price = $historical_activity->price;
-        else {
+        } else {
             $price = 0;
         }
         
@@ -384,22 +381,21 @@ class ActivityReport extends Model implements LogsActivityInterface
      * 
      * @param   array   $parameters
      * @return  Collection
-     */ 
+     */
     public static function individualSearch($parameters)
     {
         return \sanoha\Models\ActivityReport::with('employee', 'miningActivity')
             ->where('reported_at', '>=', $parameters['from'])
             ->where('reported_at', '<=', $parameters['to'])
             ->orderBy('updated_at', 'desc')
-            ->whereHas('employee', function($q) use ($parameters)
-                {
-                    $q->where(function($q) use ($parameters){
+            ->whereHas('employee', function ($q) use ($parameters) {
+                    $q->where(function ($q) use ($parameters) {
                         $q->where('name', 'like', '%'.$parameters["employee"].'%')
                             ->orWhere('lastname', 'like', '%'.$parameters["employee"].'%')
                             ->orWhere('identification_number', 'like', '%'.$parameters["employee"].'%');
                     });
                 })
-            ->whereHas('subCostCenter', function($q) use ($parameters){
+            ->whereHas('subCostCenter', function ($q) use ($parameters) {
                 $q->where('cost_center_id', $parameters['cost_center_id']);
             })
             ->paginate(15);
@@ -414,7 +410,7 @@ class ActivityReport extends Model implements LogsActivityInterface
      */
     public static function alreadyMiningActivityReported($data)
     {
-        return \sanoha\Models\ActivityReport::where(function($q) use ($data){
+        return \sanoha\Models\ActivityReport::where(function ($q) use ($data) {
             $q->where('employee_id', $data['employee_id'])
                 ->where('mining_activity_id', $data['mining_activity_id'])
                 ->whereBetween(
@@ -434,7 +430,7 @@ class ActivityReport extends Model implements LogsActivityInterface
      * 
      * @param   sanoha\Http\RequestsActivityReportFormRequest	$requests
      * @param   string  $cost_center_id
-     * @para    array   $options
+     * @param   array   $options
      * @return  array
      */
     public static function configureParameters($request, $cost_center_id, $options = array())
@@ -449,13 +445,13 @@ class ActivityReport extends Model implements LogsActivityInterface
             ? \Carbon\Carbon::createFromFormat('Y-m-d', $request->get('to'))->endOfDay()
             : \Carbon\Carbon::now()->endOfMonth()->endOfDay();
         
-        $parameters['employee'] 		= !empty($request->get('find')) ? $request->get('find') : null;
-        $parameters['employee_id'] 		= $request->get('employee_id', null);
+        $parameters['employee']        = !empty($request->get('find')) ? $request->get('find') : null;
+        $parameters['employee_id']     = $request->get('employee_id', null);
         // en caso de que se quiera fechas diferentes a la predeterminadas
-        $parameters['from'] 			= isset($options['start']) && empty($request->get('from')) ? $options['start'] : $start;
-        $parameters['to'] 				= isset($options['end']) && empty($request->get('to')) ? $options['end'] : $end;
-        $parameters['cost_center_id'] 	= $cost_center_id;
-        $parameters['cost_center_name'] = \Session::get('current_cost_center_name');
+        $parameters['from']            = isset($options['start']) && empty($request->get('from')) ? $options['start'] : $start;
+        $parameters['to']              = isset($options['end']) && empty($request->get('to')) ? $options['end'] : $end;
+        $parameters['cost_center_id']  = $cost_center_id;
+        $parameters['cost_center_name']= \Session::get('current_cost_center_name');
 
         return $parameters;
     }
@@ -465,10 +461,10 @@ class ActivityReport extends Model implements LogsActivityInterface
      * como el reporte de novedades del personal minero, asì se puede definir cuales trabajadores deben
      * aparecer, como sòlo mineros y supervisores de proyectos mineros.
      * 
-     * return array
+     * @return array
      */
     public static function getPositionsToInclude()
-    {   
+    {
         // de momento se deja ésta configuración estática, a futuro tiene
         // que ser dinámica
         return [1, 2]; // Minero y Supervisor

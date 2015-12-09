@@ -10,6 +10,19 @@ use sanoha\Http\Requests\EmployeeFormRequest;
 class EmployeeController extends Controller
 {
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        // el usuario debe haber iniciado sesión
+        $this->middleware('auth');
+        // control de acceso a los métodos de esta clase
+        $this->middleware('checkPermmisions', ['except' => ['store', 'update']]);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return Response
@@ -24,7 +37,8 @@ class EmployeeController extends Controller
                     ->orWhere('lastname', 'like', '%'.$request->get('find').'%')
                     ->orWhere('identification_number', 'like', '%'.$request->get('find').'%');
             })
-            ->orderBy('updated_at', 'desc')->paginate(15);
+            ->orderBy('updated_at', 'desc')
+            ->paginate(15);
 
         return view('employees.index', compact('employees', 'input'));
     }
@@ -50,7 +64,7 @@ class EmployeeController extends Controller
      */
     public function store(EmployeeFormRequest $request)
     {
-        $employee                               =   new \sanoha\Models\Employee;
+        $employee                               =   new Employee;
         $employee->sub_cost_center_id           =   $request->get('sub_cost_center_id');
         $employee->position_id                  =   $request->get('position_id');
         $employee->name                         =   $request->get('name');
@@ -168,15 +182,15 @@ class EmployeeController extends Controller
      */
     public function destroy($id, Request $request)
     {
-        $id = $request->has('id') ? $request->get('id') : $id;
+        $id = $request->get('id', $id);
         
-        (Employee::destroy($id))
-            ? $request->session()->flash('success', [is_array($id) && count($id) > 1
+        Employee::destroy($id)
+            ? $request->session()->flash('success', is_array($id) && count($id) > 1
                 ? 'Los empleados han sido movidos a la papelera correctamente.'
-                : 'El empleado ha sido movido a la papelera correctamente.'])
-            : $request->session()->flash('error', [is_array($id)
+                : 'El empleado ha sido movido a la papelera correctamente.')
+            : $request->session()->flash('error', is_array($id)
                 ? 'Ocurrió un error moviendo los empleados a la papelera.'
-                : 'Ocurrió un problema moviendo el empleado a la papelera.']) ;
+                : 'Ocurrió un problema moviendo el empleado a la papelera.') ;
 
         return redirect()->route('employee.index');
     }

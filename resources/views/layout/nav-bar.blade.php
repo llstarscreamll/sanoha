@@ -66,7 +66,7 @@
 										*******************************************
 									--}}
 									
-									@if(count($user_cost_centers = Auth::getUser()->getCostCenters()) > 0)
+									@if(count($user_cost_centers = Auth::getUser()->getCostCentersArray()) > 0)
 										
 										@foreach($user_cost_centers as $center)
 											<li><a href="{{ url(route('activityReport.setCostCenter', [ $center['id'] ])) }}">{{ $center['name'] }}</a></li>
@@ -95,7 +95,7 @@
 										*******************************************
 									--}}
 									
-									@if(count($user_cost_centers = Auth::getUser()->getCostCenters()) > 0)
+									@if(count($user_cost_centers = Auth::getUser()->getCostCentersArray()) > 0)
 										
 										@foreach($user_cost_centers as $center)
 											<li><a href="{{ url(route('noveltyReport.setCostCenter', [ $center['id'] ])) }}">{{ $center['name'] }}</a></li>

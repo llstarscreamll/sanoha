@@ -45,6 +45,7 @@ class CreateUserCest
             'role_id'           => [],
             'activated'         => true,
             'employee_id'       => [21252, 5654],
+            'sub_cost_center_id'=>  1,
             'password'          => '',
             'password_confirmation'   => ''
         ], 'Crear');
@@ -57,12 +58,14 @@ class CreateUserCest
         $I->seeFormErrorMessage('email', 'La dirección de correo electrónico es oblogatoria.');
         $I->seeFormErrorMessage('password', 'Por favor digita una contraseña.');
         $I->seeFormErrorMessage('employee_id', 'No se encontró información del empleado.');
+        $I->seeFormErrorMessage('sub_cost_center_id', 'El subcentro de costo debe ser un conjunto.');
 
         $I->submitForm('form', [
             'name'              => 'Ed',
             'lastname'          => 'Ra',
             'email'             => 'edy.ramon',
-            'role_id'           => 'root',
+            'role_id'           => ['root'],
+            'employee_id'       =>  1,
             'activated'         => true,
             'password'          => 'edy',
             'password_confirmation'   => 'Edy'
@@ -76,13 +79,14 @@ class CreateUserCest
         $I->seeFormErrorMessage('email', 'La dirección de correo electrónico no es válida.');
         $I->seeFormErrorMessage('role_id', 'Tipo de usuario inválido.');
         $I->seeFormErrorMessage('password', 'Las contraseñas no coinciden.');
+        $I->seeFormErrorMessage('employee_id', 'El empleado debe ser un conjunto.');
 
 
         $I->submitForm('form', [
             'name'              => 'Eeeeeeeeeeeeeeeeeeddddddddddddddddddddddddddddddddddyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy',
             'lastname'          => 'Raaaaaaaaaaaaaaaaammmmmmmmmmmmmmmmmmmooooooooooooooooooooooonnnnnnnnnnnnnnnnnnnn',
             'email'             => 'travis.orbin@example.com', // the same as admin, for unique validation
-            'role_id'           => 1,
+            'role_id'           => [1],
             'activated'         => false,
             'password'          => 'edy',
             'password_confirmation'   => 'edy'
@@ -111,6 +115,7 @@ class CreateUserCest
             'name'      =>  'El nombre sólo puede contener letras y/o espacios.',
             'lastname'  =>  'El apellido sólo puede contener letras y/o espacios.',
             'email'     =>  'La dirección de correo ya ha sido registrada.',
+            'role_id'   =>  'El tipo de usuario debe ser un conjunto.'
         ]);
     }
 
@@ -133,9 +138,9 @@ class CreateUserCest
             'name'                  => 'Eddy',
             'lastname'              => 'Ramon',
             'email'                 => 'edy.ramon@example.com',
-            'role_id'               => 1,
+            'role_id'               => [1],
             'activated'             => 1,
-            'sub_cost_center_id'      => [1,2],
+            'sub_cost_center_id'    => [1,2],
             'employee_id'           => [1,2],
             'area_id'               => 1,
             'area_chief'            => true,
@@ -167,12 +172,12 @@ class CreateUserCest
         // veo los subcentros de costo asociados
         $I->seeRecord('sub_cost_center_owner', [
             'user_id'           =>  $userRecord->id,
-            'sub_cost_center_id'    =>  1
+            'sub_cost_center_id'=>  1
         ]);
         
         $I->seeRecord('sub_cost_center_owner', [
             'user_id'           =>  $userRecord->id,
-            'sub_cost_center_id'    =>  2
+            'sub_cost_center_id'=>  2
         ]);
         
         // veo los empleados asociados

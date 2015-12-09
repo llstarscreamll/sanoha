@@ -8,12 +8,12 @@ use Spatie\Activitylog\LogsActivityInterface;
 
 class Employee extends Model implements LogsActivityInterface
 {
-	use SoftDeletes;
-	use LogsActivity;
+    use SoftDeletes;
+    use LogsActivity;
 
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
-	
-	/**
+    
+    /**
      * The database table used by the model.
      *
      * @var string
@@ -57,8 +57,7 @@ class Employee extends Model implements LogsActivityInterface
             'id_cargo'              =>  $this->position_id,
         ];
         
-        if ($eventName == 'created')
-        {
+        if ($eventName == 'created') {
             return '<strong>@user</strong> creó un empleado, código "<strong>'.$this->id.'</strong>"' // lo que se hizo
                     .'|Employee' // de qué modulo
                     .'|create' // la acción
@@ -69,8 +68,7 @@ class Employee extends Model implements LogsActivityInterface
                     ;
         }
     
-        if ($eventName == 'updated')
-        {
+        if ($eventName == 'updated') {
             return '<strong>@user</strong> actualizó la información de un empleado, código "<strong>'.$this->id.'</strong>"' // lo que se hizo
                     .'|Employee' // de qué modulo
                     .'|update' // la acción
@@ -81,8 +79,7 @@ class Employee extends Model implements LogsActivityInterface
                     ;
         }
     
-        if ($eventName == 'deleted')
-        {
+        if ($eventName == 'deleted') {
             return '<strong>@user</strong> eliminó la información de un empleado, código "<strong>'.$this->id.'</strong>"' // lo que se hizo
                     .'|Employee' // de qué modulo
                     .'|delete' // la acción
@@ -114,7 +111,7 @@ class Employee extends Model implements LogsActivityInterface
     }
     
     /**
-     * 
+     * La relación entre el empleado y el subcentro de costo, uno a muchos
      */
     public function subCostCenter()
     {
@@ -122,15 +119,15 @@ class Employee extends Model implements LogsActivityInterface
     }
     
     /**
-     * 
-     */ 
+     * La relación entre empleado y el cargo, uno a muchos
+     */
     public function position()
     {
         return $this->belongsTo('sanoha\Models\Position');
     }
     
     /**
-     * 
+     * La relación entre empleado y novedades, uno a muchos
      */
     public function noveltyReport()
     {
@@ -138,7 +135,7 @@ class Employee extends Model implements LogsActivityInterface
     }
     
     /**
-     * 
+     * La relación entre empleado y reportes de actividades mineras, uno a muchos
      */
     public function activityReport()
     {
@@ -146,7 +143,9 @@ class Employee extends Model implements LogsActivityInterface
     }
     
     /**
+     * Obtiene el nombre completo del empleado, primero el apellido, seguido el nombre
      * 
+     * @return string
      */
     public function getFullnameAttribute()
     {
@@ -156,11 +155,13 @@ class Employee extends Model implements LogsActivityInterface
     /**
      * Obtengo el estado del empleado formateado, es decir con letras de cierto
      * color dependiendo del estado.
+     * 
+     * @return string
      */
     public function getStatusHtml()
     {
         // el valor a mostrar en la ui
-        switch($this->status){
+        switch ($this->status) {
             case 'enabled':
                 $txt = 'Activado';
                 $style_class = 'text-success';

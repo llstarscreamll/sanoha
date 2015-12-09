@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CostCenter extends Model
 {
-	use SoftDeletes;
+    use SoftDeletes;
 
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
-	
-	/**
+    
+    /**
      * The database table used by the model.
      *
      * @var string
@@ -25,7 +25,7 @@ class CostCenter extends Model
     protected $fillable = ['name', 'short_name'];
     
     /**
-     * 
+     * La relación entre centros de costo y subcentros de costo, uno a muchos
      */
     public function subCostCenter()
     {
@@ -33,7 +33,7 @@ class CostCenter extends Model
     }
     
     /**
-     * 
+     * La relación entre centros de costo y empleados, uno a muchos
      */
     public function employees()
     {
@@ -52,13 +52,9 @@ class CostCenter extends Model
         $data = [];
         
         foreach ($cost_centers as $key => $cost_center) {
-            
             foreach ($cost_center->subCostCenter as $sub_cost_center) {
-                
                 $data[$cost_center->name.' - '.$cost_center->short_name][$sub_cost_center->id] = $sub_cost_center->name.' - '.$sub_cost_center->short_name;
-                
             }
-            
         }
         
         return $data;

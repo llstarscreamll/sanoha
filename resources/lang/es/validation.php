@@ -79,7 +79,7 @@ return [
     "alpha_numeric_spaces"  =>  ":attribute tiene un formato inválido, sólo se permiten letras, espacios y/o números.",
     "alpha_spaces"          =>  ":attribute tiene un formato inválido, sólo se permiten letras y/o espacios.",
     "alpha_dots"            =>  ":attribute tiene un formato inválido, sólo se permiten letras y/o puntos.",
-    "text"                  =>  ":attribute tiene un formato inválido, sólo se permiten letras, números, espacios, puntos, slash (/), guiones y/o arroba.",
+    "text"                  =>  ":attribute tiene un formato inválido, sólo se permiten letras, números, espacios, puntos, comas, slash (/), guiones y/o arroba.",
 
     /*
     |--------------------------------------------------------------------------
@@ -110,7 +110,12 @@ return [
     */
 
     'attributes' => [
-        
+        /**
+         * Atributos de usuario
+         */
+        'role_id'                       =>  'El tipo de usuario',
+        'sub_cost_center_id'            =>  'El subcentro de costo',
+        'employee_id'                   =>  'El empleado',
         /**
          * Atributos de ordenes de trabajo
          */ 

@@ -3,14 +3,13 @@ namespace sanoha\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 use Spatie\Activitylog\LogsActivityInterface;
 use Spatie\Activitylog\LogsActivity;
 
 class NoveltyReport extends Model implements LogsActivityInterface
 {
-	use SoftDeletes;
-	use LogsActivity;
+    use SoftDeletes;
+    use LogsActivity;
 
     protected $dates = ['reported_at', 'created_at', 'updated_at', 'deleted_at'];
 
@@ -51,8 +50,7 @@ class NoveltyReport extends Model implements LogsActivityInterface
             'id_novedad'                =>  $this->novelty_id,
         ];
         
-        if ($eventName == 'created')
-        {
+        if ($eventName == 'created') {
             return '<strong>@user</strong> reportó una actividad minera, código "<strong>'.$this->id.'</strong>"' // lo que se hizo
                     .'|NoveltyReport' // de qué modulo
                     .'|create' // la acción
@@ -63,8 +61,7 @@ class NoveltyReport extends Model implements LogsActivityInterface
                     ;
         }
     
-        if ($eventName == 'updated')
-        {
+        if ($eventName == 'updated') {
             return '<strong>@user</strong> actualizó una novedad, código "<strong>'.$this->id.'</strong>"' // lo que se hizo
                     .'|NoveltyReport' // de qué modulo
                     .'|update' // la acción
@@ -75,8 +72,7 @@ class NoveltyReport extends Model implements LogsActivityInterface
                     ;
         }
     
-        if ($eventName == 'deleted')
-        {
+        if ($eventName == 'deleted') {
             return '<strong>@user</strong> eliminó una novedad, código "<strong>'.$this->id.'</strong>"' // lo que se hizo
                     .'|NoveltyReport' // de qué modulo
                     .'|delete' // la acción
@@ -91,23 +87,23 @@ class NoveltyReport extends Model implements LogsActivityInterface
     }
     
     /**
-     * 
-     */ 
+     * La relación entre reporte de novedades y subcentros de costo, uno a muchos
+     */
     public function subCostCenter()
     {
         return $this->belongsTo('\sanoha\Models\SubCostCenter')->withTrashed();
     }
     
     /**
-     * 
-     */ 
+     * La relación entre reporte de novedades y tipos de novedades, uno a muchos
+     */
     public function novelty()
     {
         return $this->belongsTo('\sanoha\Models\Novelty')->withTrashed();
     }
     
     /**
-     * 
+     * La relación entre reporte de novedades y empleados, uno a muchos
      */
     public function employee()
     {
@@ -115,7 +111,10 @@ class NoveltyReport extends Model implements LogsActivityInterface
     }
     
     /**
-     * Obtengo las novedades reportadas en cierto periodo de tiempo con formato json
+     * Obtiene las novedades reportadas en cierto periodo de tiempo en formato json
+     * 
+     * @param   array   $parameters
+     * @return  json
      */
     public static function getCalendarNovelties($parameters)
     {
@@ -123,20 +122,19 @@ class NoveltyReport extends Model implements LogsActivityInterface
         $data = [];
         $i = 0;
         
-        $novelties = \sanoha\Models\NoveltyReport::where(function ($q) use ($parameters){
+        $novelties = \sanoha\Models\NoveltyReport::where(function ($q) use ($parameters) {
                 $q  ->where('reported_at', '>', $parameters['from'])
                     ->where('reported_at', '<', $parameters['to']);
             })
-            ->whereHas('employee', function($q) use ($parameters)
-				{
-				    $q->where(function($q) use ($parameters){
-				    	$q->where('name', 'like', '%'.$parameters["employee"].'%')
-				    		->orWhere('lastname', 'like', '%'.$parameters["employee"].'%')
-				    		->orWhere('identification_number', 'like', '%'.$parameters["employee"].'%');
-				    });
-				
-				})
-            ->whereHas('subCostCenter', function($q) use ($parameters){
+            ->whereHas('employee', function ($q) use ($parameters) {
+                    $q->where(function ($q) use ($parameters) {
+                        $q->where('name', 'like', '%'.$parameters["employee"].'%')
+                            ->orWhere('lastname', 'like', '%'.$parameters["employee"].'%')
+                            ->orWhere('identification_number', 'like', '%'.$parameters["employee"].'%');
+                    });
+                
+                })
+            ->whereHas('subCostCenter', function ($q) use ($parameters) {
                 $q  ->where('cost_center_id', $parameters['cost_center_id']);
             })
             ->with('employee', 'novelty')
@@ -144,7 +142,6 @@ class NoveltyReport extends Model implements LogsActivityInterface
             ->get();
             
         foreach ($novelties as $key => $novelty) {
-            
             $data[$i] = [
                 'id'            =>  $novelty->id,
                 'employee_id'   =>  $novelty->employee_id,
@@ -172,21 +169,20 @@ class NoveltyReport extends Model implements LogsActivityInterface
     {
         return \sanoha\Models\NoveltyReport::with('employee', 'novelty')
             ->where('reported_at', '>=', $parameters['from'])
-			->where('reported_at', '<=', $parameters['to'])
-			->orderBy('updated_at', 'desc')
-			->whereHas('employee', function($q) use ($parameters)
-				{
-				    $q->where(function($q) use ($parameters){
-				    	$q->where('name', 'like', '%'.$parameters["employee"].'%')
-				    		->orWhere('lastname', 'like', '%'.$parameters["employee"].'%')
-				    		->orWhere('identification_number', 'like', '%'.$parameters["employee"].'%');
-				    });
-				
-				})
-			->whereHas('subCostCenter', function($q) use ($parameters){
-				$q->where('cost_center_id', $parameters['cost_center_id']);
-			})
-			->paginate(15);
+            ->where('reported_at', '<=', $parameters['to'])
+            ->orderBy('updated_at', 'desc')
+            ->whereHas('employee', function ($q) use ($parameters) {
+                    $q->where(function ($q) use ($parameters) {
+                        $q->where('name', 'like', '%'.$parameters["employee"].'%')
+                            ->orWhere('lastname', 'like', '%'.$parameters["employee"].'%')
+                            ->orWhere('identification_number', 'like', '%'.$parameters["employee"].'%');
+                    });
+                
+                })
+            ->whereHas('subCostCenter', function ($q) use ($parameters) {
+                $q->where('cost_center_id', $parameters['cost_center_id']);
+            })
+            ->paginate(15);
     }
     
     /**
@@ -194,7 +190,7 @@ class NoveltyReport extends Model implements LogsActivityInterface
      * 
      * @param   sanoha\Http\RequestsActivityReportFormRequest	$requests
      * @param   string  $cost_center_id
-     * @para    array   $options
+     * @param   array   $options
      * @return  array
      */
     public static function configureParameters($request, $cost_center_id, $options = array())
@@ -209,14 +205,14 @@ class NoveltyReport extends Model implements LogsActivityInterface
             ? \Carbon\Carbon::createFromFormat('Y-m-d', $request->get('to'))->endOfDay()
             : \Carbon\Carbon::now()->endOfDay();
         
-        $parameters['employee'] 		= !empty($request->get('find')) ? $request->get('find') : null;
+        $parameters['employee']        = !empty($request->get('find')) ? $request->get('find') : null;
         // en caso de que se quiera fechas diferentes a las predeterminadas
-		$parameters['from'] 			= isset($options['start']) && empty($request->get('to')) ? $options['start'] : $start;
-		$parameters['to'] 				= isset($options['end']) && empty($request->get('to')) ? $options['end'] : $end;
-		$parameters['cost_center_id'] 	= $cost_center_id;
-		$parameters['cost_center_name'] = \Session::get('current_cost_center_name');
-		
-		return $parameters;
+        $parameters['from']            = isset($options['start']) && empty($request->get('to')) ? $options['start'] : $start;
+        $parameters['to']                = isset($options['end']) && empty($request->get('to')) ? $options['end'] : $end;
+        $parameters['cost_center_id']    = $cost_center_id;
+        $parameters['cost_center_name'] = \Session::get('current_cost_center_name');
+        
+        return $parameters;
     }
 
     /**
@@ -224,10 +220,10 @@ class NoveltyReport extends Model implements LogsActivityInterface
      * como el reporte de novedades del personal minero, asì se puede definir cuales trabajadores deben
      * aparecer, como sòlo mineros y supervisores de proyectos mineros.
      * 
-     * return array
+     * @return array
      */
     public static function getPositionsToInclude()
-    {   
+    {
         // de momento se deja ésta configuración estática, a futuro tiene
         // que ser dinámica
         return [1, 2]; // Minero y Supervisor

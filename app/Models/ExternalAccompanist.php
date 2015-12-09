@@ -3,11 +3,11 @@ namespace sanoha\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ExternalAccompanist extends Model {
-
-	protected $dates = ['created_at', 'updated_at'];
-	
-	/**
+class ExternalAccompanist extends Model
+{
+    protected $dates = ['created_at', 'updated_at'];
+    
+    /**
      * The database table used by the model.
      *
      * @var string

@@ -17,7 +17,9 @@ class WorkOrderController extends Controller
      */
     public function __construct()
     {
+        // el usuario debe haber iniciado sesión
         $this->middleware('auth');
+        // control de acceso a los métodos de esta clase
         $this->middleware('checkPermmisions', ['except' => [
             'store',
             'update',
@@ -35,7 +37,9 @@ class WorkOrderController extends Controller
      */
     public function index()
     {
-        $workOrders = WorkOrder::orderBy('created_at')->paginate(15);
+        $workOrders = WorkOrder::with('vehicle', 'vehicleMovements', 'employee', 'user')
+            ->orderBy('updated_at', 'desc')
+            ->paginate(15);
 
         return view('workOrders.index', compact('workOrders'));
     }
@@ -62,12 +66,8 @@ class WorkOrderController extends Controller
     public function store(WorkOrderFormRequest $request)
     {
         // creo la orden de trabajo
-        $workOrder                          =   new WorkOrder;
-        $workOrder->authorized_by           =   \Auth::getUser()->id;
-        $workOrder->vehicle_id              =   $request->get('vehicle_id');
-        $workOrder->vehicle_responsable     =   $request->get('vehicle_responsable');
-        $workOrder->destination             =   $request->get('destination');
-        $workOrder->work_description        =   $request->get('work_description');
+        $workOrder =   new WorkOrder($request->all());
+        $workOrder->authorized_by =   \Auth::getUser()->id;
         
         // donde guardo los mensaje de la operación para el usuario
         $msg_error = [];
@@ -80,10 +80,8 @@ class WorkOrderController extends Controller
             
             // una vez creada la orden de trabajo, asocio los acompañantes (empleados) a la orden,
             // si es que se especificaron
-            if (!empty($request->get('internal_accompanists'))) {
-                $workOrder->internalAccompanists()->sync($request->get('internal_accompanists'));
-                $msg_success[] = 'Acompañantes internos asociados correctamente.';
-            }
+            $workOrder->internalAccompanists()->sync($request->get('internal_accompanists'));
+            $msg_success[] = 'Acompañantes internos asociados correctamente.';
             
             // asocio los los acompañantes externos a la orden de trabajo, si es que se ha especificado alguno
             if (!empty($request->get('external_accompanists'))) {
@@ -99,8 +97,8 @@ class WorkOrderController extends Controller
             $msg_error[] = 'Error creaendo la orden de trabajo.';
         }
         
-        \Session::flash('success', $msg_success);
-        \Session::flash('error', $msg_error);
+        $request->session()->flash('success', $msg_success);
+        $request->session()->flash('error', $msg_error);
         
         return redirect()->route('workOrder.index');
     }
@@ -151,12 +149,9 @@ class WorkOrderController extends Controller
      */
     public function update($id, WorkOrderFormRequest $request)
     {
-        $workOrder                          =   WorkOrder::findOrFail($id);
-        $workOrder->authorized_by           =   \Auth::getUser()->id;
-        $workOrder->vehicle_id              =   $request->get('vehicle_id');
-        $workOrder->vehicle_responsable     =   $request->get('vehicle_responsable');
-        $workOrder->destination             =   $request->get('destination');
-        $workOrder->work_description        =   $request->get('work_description');
+        $workOrder = WorkOrder::findOrFail($id);
+        $workOrder->fill($request->all());
+        $workOrder->authorized_by = \Auth::getUser()->id;
         
         // donde guardo los mensaje de la operación para el usuario
         $msg_error = [];
@@ -169,10 +164,8 @@ class WorkOrderController extends Controller
             
             // una vez creada la orden de trabajo, asocio los acompañantes (empleados) a la orden,
             // si es que se especificaron
-            if (!empty($request->get('internal_accompanists'))) {
-                $workOrder->internalAccompanists()->sync($request->get('internal_accompanists'), false);
-                $msg_success[] = 'Acompañantes internos actualizados correctamente.';
-            }
+            $workOrder->internalAccompanists()->sync($request->get('internal_accompanists'), false);
+            $msg_success[] = 'Acompañantes internos actualizados correctamente.';
             
             // asocio los los acompañantes externos a la orden de trabajo, si es que se ha especificado alguno
             if (!empty($request->get('external_accompanists'))) {
@@ -188,8 +181,8 @@ class WorkOrderController extends Controller
             $msg_error[] = 'Error creaendo la orden de trabajo.';
         }
         
-        \Session::flash('success', $msg_success);
-        \Session::flash('error', $msg_error);
+        $request->session()->flash('success', $msg_success);
+        $request->session()->flash('error', $msg_error);
         
         return redirect()->route('workOrder.show', $workOrder->id);
     }
@@ -206,7 +199,7 @@ class WorkOrderController extends Controller
     /**
      * Guardo el reporte de la orden de trabajo
      */
-    public function mainReportStore($id, Request $request)
+    public function mainReportStore($id, WorkOrderFormRequest $request)
     {
         $workOrder = WorkOrder::findOrFail($id);
 
@@ -216,7 +209,7 @@ class WorkOrderController extends Controller
             ]);
             
         if ($workOrder->workOrderReports()->save($workOrderReport)) {
-            \Session::flash('success', 'Reporte guardado con éxito');
+            $request->session()->flash('success', 'Reporte guardado con éxito');
 
             // obtengo los emails de los jefes de área para envíar la información
             $emails = \sanoha\Models\User::where('area_chief', true)->lists('email');
@@ -235,7 +228,7 @@ class WorkOrderController extends Controller
                 $m->to($emails)->subject($subject);
             });
         } else {
-            \Session::flash('error', 'Ocurrió un problema guardando el reporte');
+            $request->session()->flash('error', 'Ocurrió un problema guardando el reporte');
         }
         
         return redirect()->route('workOrder.show', $workOrder->id);
@@ -249,7 +242,7 @@ class WorkOrderController extends Controller
      */
     public function mainReportEdit($work_order_id, $main_report_id)
     {
-        $workOrder = \sanoha\Models\WorkOrder::findOrFail($work_order_id);
+        $workOrder = WorkOrder::findOrFail($work_order_id);
         $mainReport = \sanoha\Models\WorkOrderReport::findOrFail($main_report_id);
         
         return view('workOrders.editMainReport', compact('workOrder', 'mainReport'));
@@ -263,15 +256,15 @@ class WorkOrderController extends Controller
      */
     public function mainReportUpdate($work_order_id, $main_report_id, WorkOrderFormRequest $request)
     {
-        $workOrder = \sanoha\Models\WorkOrder::findOrFail($work_order_id);
+        $workOrder = WorkOrder::findOrFail($work_order_id);
         $mainReport = \sanoha\Models\WorkOrderReport::findOrFail($main_report_id);
 
-        $mainReport->work_order_report = $request->get('work_order_report');
+        $mainReport->work_order_report = \Purifier::clean($request->get('work_order_report'));
         $mainReport->reported_by = \Auth::getUser()->id;
         
         $mainReport->save()
-            ? \Session::flash('success', 'Reporte principal actualizado correctamente.')
-            : \Session::flash('error', 'Ocurrió un problema actualizado el reporte');
+            ? $request->session()->flash('success', 'Reporte principal actualizado correctamente.')
+            : $request->session()->flash('error', 'Ocurrió un problema actualizado el reporte');
             
         return redirect()->route('workOrder.show', $workOrder->id);
     }
@@ -284,8 +277,8 @@ class WorkOrderController extends Controller
     public function mainReportDestroy($report_id)
     {
         \sanoha\Models\WorkOrderReport::destroy($report_id)
-            ? \Session::flash('success', 'El reporte principal ha sido movido a la papelera correctamente.')
-            : \Session::flash('error', 'Ocurrió un problema moviendo a la papelera el reporte principal.');
+            ? $request->session()->flash('success', 'El reporte principal ha sido movido a la papelera correctamente.')
+            : $request->session()->flash('error', 'Ocurrió un problema moviendo a la papelera el reporte principal.');
         
         return redirect()->back();
     }
@@ -299,7 +292,7 @@ class WorkOrderController extends Controller
      */
     public function internalAccompanistReportForm($work_order_id, $employee_id)
     {
-        $workOrder = \sanoha\Models\WorkOrder::findOrFail($work_order_id);
+        $workOrder = WorkOrder::findOrFail($work_order_id);
         $employee = \sanoha\Models\Employee::findOrFail($employee_id);
         
         return view('workOrders.internalAccompanistReportForm', compact('workOrder', 'employee'));
@@ -314,7 +307,7 @@ class WorkOrderController extends Controller
      */
     public function internalAccompanistReportEditForm($work_order_id, $employee_id)
     {
-        $workOrder = \sanoha\Models\WorkOrder::with(['internalAccompanists' => function ($q) use ($employee_id) {
+        $workOrder = WorkOrder::with(['internalAccompanists' => function ($q) use ($employee_id) {
                 $q->where('employee_id', $employee_id);
             }])
             ->findOrFail($work_order_id);
@@ -332,12 +325,12 @@ class WorkOrderController extends Controller
      */
     public function internalAccompanistReportStore($work_order_id, $employee_id, WorkOrderFormRequest $request)
     {
-        $workOrder = \sanoha\Models\WorkOrder::findOrFail($work_order_id);
+        $workOrder = WorkOrder::findOrFail($work_order_id);
         $employee = \sanoha\Models\Employee::findOrFail($employee_id);
         $date = date('Y-m-d H:i:s');
 
         $workOrder->internalAccompanists()->sync([$employee->id => [
-            'work_report' => $request->get('work_order_report'),
+            'work_report' => \Purifier::clean($request->get('work_order_report')),
             'reported_by' => \Auth::getUser()->id,
             'reported_at' => $date
         ]], false);
@@ -366,7 +359,7 @@ class WorkOrderController extends Controller
             });
         }
         
-        \Session::flash('success', 'Se ha guardado el reporte del acompañante interno.');
+        $request->session()->flash('success', 'Se ha guardado el reporte del acompañante interno.');
         
         return redirect()->route('workOrder.show', $workOrder->id);
     }
@@ -377,9 +370,9 @@ class WorkOrderController extends Controller
      * @param int $work_order_id
      * @param int $main_report_id
      */
-    public function internalAccompanistReportDelete($work_order_id, $employee_id)
+    public function internalAccompanistReportDelete($work_order_id, $employee_id, Request $request)
     {
-        $workOrder = \sanoha\Models\WorkOrder::findOrFail($work_order_id);
+        $workOrder = WorkOrder::findOrFail($work_order_id);
         $employee = \sanoha\Models\Employee::findOrFail($employee_id);
 
         $workOrder->internalAccompanists()->sync([$employee->id => [
@@ -388,7 +381,7 @@ class WorkOrderController extends Controller
             'reported_at' => null
         ]], false);
         
-        \Session::flash('success', 'El reporte del acompañante interno ha sido borrado correctamente.');
+        $request->session()->flash('success', 'El reporte del acompañante interno ha sido borrado correctamente.');
         
         return redirect()->route('workOrder.show', $workOrder->id);
     }
@@ -399,7 +392,6 @@ class WorkOrderController extends Controller
     public function vehicleMovementForm($work_order_id, $action)
     {
         $workOrder = WorkOrder::findOrFail($work_order_id);
-
         return view('workOrders.vehicleMovementForm', compact('workOrder', 'action'));
     }
 
@@ -412,24 +404,13 @@ class WorkOrderController extends Controller
         $msgAction = ($action == 'exit') ? 'Salida' : 'Entrada';
 
         $workOrder = WorkOrder::findOrFail($work_order_id);
-        $vehicleMovement = new \sanoha\Models\VehicleMovement;
-        $vehicleMovement->action                        =  $action;
-        $vehicleMovement->registered_by                 =  \Auth::getUser()->id;
-        $vehicleMovement->mileage                       =  $request->get('mileage');
-        $vehicleMovement->fuel_level                    =  $request->get('fuel_level');
-        $vehicleMovement->internal_cleanliness          =  $request->get('internal_cleanliness');
-        $vehicleMovement->external_cleanliness          =  $request->get('external_cleanliness');
-        $vehicleMovement->paint_condition               =  $request->get('paint_condition');
-        $vehicleMovement->bodywork_condition            =  $request->get('bodywork_condition');
-        $vehicleMovement->right_front_wheel_condition   =  $request->get('right_front_wheel_condition');
-        $vehicleMovement->left_front_wheel_condition    =  $request->get('left_front_wheel_condition');
-        $vehicleMovement->rear_right_wheel_condition    =  $request->get('rear_right_wheel_condition');
-        $vehicleMovement->rear_left_wheel_condition     =  $request->get('rear_left_wheel_condition');
-        $vehicleMovement->comment                       =  $request->get('comment');
+        $vehicleMovement = new \sanoha\Models\VehicleMovement($request->all());
+        $vehicleMovement->action        =  $action;
+        $vehicleMovement->registered_by =  \Auth::getUser()->id;
 
         $workOrder->vehicleMovements()->save($vehicleMovement)
-            ? \Session::flash('success', $msgAction.' registrada correctamente.')
-            : \Session::flash('error', 'Ocurró un problema registrando la '.$msgAction.'.');
+            ? $request->session()->flash('success', $msgAction.' registrada correctamente.')
+            : $request->session()->flash('error', 'Ocurró un problema registrando la '.$msgAction.'.');
 
         return redirect()->route('workOrder.index');
     }
@@ -440,17 +421,17 @@ class WorkOrderController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy($id, Request $request)
     {
-        $id = \Request::has('id') ? \Request::only('id')['id'] : $id;
+        $id = $request->get('id', $id);
         
-        (\sanoha\Models\WorkOrder::destroy($id))
-            ? \Session::flash('success', [is_array($id) && count($id) > 1
+        (WorkOrder::destroy($id))
+            ? $request->session()->flash('success', is_array($id) && count($id) > 1
                 ? 'Las ordenes de trabajo han sido movidas a la papelera correctamente.'
-                : 'La orden de trabajo ha sido movida a la papelera correctamente.'])
-            : \Session::flash('error', [is_array($id)
+                : 'La orden de trabajo ha sido movida a la papelera correctamente.')
+            : $request->session()->flash('error', is_array($id)
                 ? 'Ocurrió un error moviendo las ordenes de trabajo a la papelera.'
-                : 'Ocurrió un problema moviendo las ordenes de trabajo a la papelera.']) ;
+                : 'Ocurrió un problema moviendo las ordenes de trabajo a la papelera.') ;
 
         return redirect()->route('workOrder.index');
     }
