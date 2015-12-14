@@ -75,11 +75,13 @@
     
         <script type="text/javascript">
         $(function() {
-        
+        {{-- Configura daterangepicker --}}
+        var fromField = $('#from').val();
+        var toField = $('#to').val();
         $('#reportrange').daterangepicker({
             format: 'MM/DD/YYYY',
-            startDate: moment('{{$parameters["from"]}}', 'YYYY-MM-DD'),
-            endDate: moment('{{ $parameters["to"] }}', 'YYYY-MM-DD'),
+            startDate: moment(fromField != '' ? fromField : moment().format('YYYY-MM-DD'), 'YYYY-MM-DD'),
+            endDate: moment(toField != '' ? toField : moment().format('YYYY-MM-DD'), 'YYYY-MM-DD'),
             //minDate: '01/01/2012',
             maxDate: moment().format('L'),
             //dateLimit: { days: 60 },
