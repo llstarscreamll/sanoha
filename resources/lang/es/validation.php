@@ -27,7 +27,7 @@ return [
         "string"  => ":attribute tiene que tener entre :min - :max caracteres.",
         "array"   => ":attribute tiene que tener entre :min - :max ítems.",
     ],
-    "boolean"          => "El campo :attribute debe tener un valor verdadero o falso.",
+    "boolean"          => ":attribute debe tener un valor verdadero o falso.",
     "confirmed"        => "La confirmación de :attribute no coincide.",
     "date"             => ":attribute no es una fecha válida.",
     "date_format"      => ":attribute no corresponde al formato :format.",
@@ -36,7 +36,7 @@ return [
     "digits_between"   => ":attribute debe tener entre :min y :max dígitos.",
     "email"            => ":attribute no es un correo válido",
     "exists"           => ":attribute es inválido.",
-    "filled"           => "El campo :attribute es obligatorio.",
+    "filled"           => ":attribute es obligatorio.",
     "image"            => ":attribute debe ser una imagen.",
     "in"               => ":attribute es inválido.",
     "integer"          => ":attribute debe ser un número entero.",
@@ -57,12 +57,12 @@ return [
     "not_in"           => ":attribute es inválido.",
     "numeric"          => ":attribute debe ser numérico.",
     "regex"            => "El formato de :attribute es inválido.",
-    "required"         => "El campo :attribute es obligatorio.",
-    "required_if"      => "El campo :attribute es obligatorio cuando :other es :value.",
-    "required_with"    => "El campo :attribute es obligatorio cuando :values está presente.",
-    "required_with_all" => "El campo :attribute es obligatorio cuando :values está presente.",
-    "required_without" => "El campo :attribute es obligatorio cuando :values no está presente.",
-    "required_without_all" => "El campo :attribute es obligatorio cuando ninguno de :values estén presentes.",
+    "required"         => ":attribute es obligatorio.",
+    "required_if"      => ":attribute es obligatorio cuando :other es :value.",
+    "required_with"    => ":attribute es obligatorio cuando :values está presente.",
+    "required_with_all" => ":attribute es obligatorio cuando :values está presente.",
+    "required_without" => ":attribute es obligatorio cuando :values no está presente.",
+    "required_without_all" => ":attribute es obligatorio cuando ninguno de :values estén presentes.",
     "same"             => ":attribute y :other deben coincidir.",
     "size"             => [
         "numeric" => "El tamaño de :attribute debe ser :size.",
@@ -70,9 +70,9 @@ return [
         "string"  => ":attribute debe contener :size caracteres.",
         "array"   => ":attribute debe contener :size elementos.",
     ],
-    "string"           => "El campo :attribute debe ser de tipo texto.",
+    "string"           => ":attribute debe ser de tipo texto.",
     "timezone"         => "El :attribute debe ser una zona válida.",
-    "unique"           => "El valor del campo :attribute ya ha sido registrado.",
+    "unique"           => ":attribute ya ha sido registrado.",
     "url"              => "El formato :attribute es inválido.",
     
     // custom rules messages
@@ -110,6 +110,13 @@ return [
     */
 
     'attributes' => [
+        /**
+         * Atributos de búsqueda
+         */
+        'find'                          =>  'El texto',
+        'from'                          =>  'La fecha inicial',
+        'to'                            =>  'La fecha final',
+
         /**
          * Atributos de usuario
          */

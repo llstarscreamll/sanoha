@@ -7,8 +7,10 @@ class WorkOrderFormRequest extends Request
 {
     /**
      * Reglas de validación para la creaciòn de la orden de trabajo
+     * 
+     * @var array
      */
-    protected $workOrderRules = [
+    protected $createStoreRules = [
         'vehicle_responsable'   =>  'required|numeric|exists:employees,id,authorized_to_drive_vehicles,1',
         'vehicle_id'            =>  'required|numeric|exists:vehicles,id',
         'destination'           =>  'required|text',
@@ -20,6 +22,8 @@ class WorkOrderFormRequest extends Request
     /**
      * La reglas de validación para la creación y edición del reporte principal y
      * reporte de acompañante interno de la orden de trabajo
+     * 
+     * @var array
      */
     protected $workOrderReportRules = [
         'work_order_report'        =>    'required'
@@ -27,6 +31,8 @@ class WorkOrderFormRequest extends Request
 
     /**
      * Las reglas de validacón para el registro de entrada/salida de vehículos
+     * 
+     * @var array
      */
     protected $vehicleMovementRules = [
         'mileage'                       =>  'required|numeric',
@@ -40,7 +46,18 @@ class WorkOrderFormRequest extends Request
         'rear_right_wheel_condition'    =>  'required|alpha',
         'rear_left_wheel_condition'     =>  'required|alpha',
         'comment'                       =>  'text'
-        ];
+    ];
+
+    /**
+     * La reglas para los campos de búsqueda en el index
+     * 
+     * @var array
+     */
+    protected $indexRules = [
+        'find'      =>  'alpha_numeric_spaces',
+        'from'      =>  'date',
+        'to'        =>  'date|required_with:from'
+    ];
 
     /**
      * Determine if the user is authorized to make this request.
@@ -84,11 +101,15 @@ class WorkOrderFormRequest extends Request
         }
 
         if ($this->route()->getName() == 'workOrder.update' || $this->route()->getName() == 'workOrder.store') {
-            return $this->workOrderRules;
+            return $this->createStoreRules;
         }
 
         if ($this->route()->getName() == 'workOrder.mainReportUpdate' || $this->route()->getName() == 'workOrder.main_report_store' || $this->route()->getName() == 'workOrder.internal_accompanist_report_store' || $this->route()->getName() == 'workOrder.mainReportUpdate') {
             return $this->workOrderReportRules;
+        }
+
+        if ($this->route()->getName() == 'workOrder.index') {
+            return $this->indexRules;
         }
     }
     
@@ -96,20 +117,20 @@ class WorkOrderFormRequest extends Request
     {
         return [
             'vehicle_responsable.exists'        =>  'No se encontró la información del responsable del vehículo.',
-            'vehicle_responsable.required'      =>    'Debes elegir al empleado responsable del vehículo.',
+            'vehicle_responsable.required'      =>  'Debes elegir al empleado responsable del vehículo.',
             
             'vehicle_id.exists'                 =>  'El vehículo no existe en la base de datos.',
-            'vehicle_id.required'               =>    'El vehículo es un campo obligatorio, elige uno.',
+            'vehicle_id.required'               =>  'El vehículo es un campo obligatorio, elige uno.',
             
             'destination.text'                  =>  'El destino tiene un formato inválido, sólo se permiten letras y/o números.',
-            'destination.required'              =>    'Digita donde se realizarán las actividades de la orden de trabajo.',
+            'destination.required'              =>  'Digita donde se realizarán las actividades de la orden de trabajo.',
             
             'internal_accompanists.exists'      =>  'No se encontraró el empleado en la base de datos.',
 
-            'external_accompanists.array_data'  =>    'El acompañante externo tiene un formato inválido, sólo se permiten letras, espacios y/o números.',
+            'external_accompanists.array_data'  =>  'El acompañante externo tiene un formato inválido, sólo se permiten letras, espacios y/o números.',
             
             'work_description.text'             =>  'Sólo se permiten letras, números, espacios, puntos, guiones y/o arroba.',
-            'work_description.required'         =>    'Debes digitar una descripción para la orden de trabajo.'
+            'work_description.required'         =>  'Debes digitar una descripción para la orden de trabajo.'
         ];
     }
 }

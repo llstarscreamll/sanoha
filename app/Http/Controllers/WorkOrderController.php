@@ -35,13 +35,39 @@ class WorkOrderController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(WorkOrderFormRequest $request)
     {
-        $workOrders = WorkOrder::with('vehicle', 'vehicleMovements', 'employee', 'user')
+        $search_input = $request->all();
+        $workOrders = new WorkOrder;
+
+        // si se especificarion fechas, añado las clausulas de fecha
+        if(!empty($request->get('from')) && !empty($request->get('to'))){
+            $workOrders = $workOrders->where(function($q) use($request){
+                $q->where('work_orders.created_at', '>=', $request->get('from'))
+                    ->where('work_orders.created_at', '<=', $request->get('to'));
+            });
+        }
+        
+        // si se epecificó texto de búsqieda, añado las clausulas
+        if(!empty($request->get('find'))){
+            $workOrders = $workOrders->whereHas('vehicle', function($q) use($request){
+                    $q->where('vehicles.plate', 'like', '%'.$request->get('find').'%');
+                })
+                ->orWhereHas('employee', function($q) use($request){
+                    $q->where(function($q) use($request){
+                        $q->where('name', 'like', '%'.$request->get('find').'%')
+                            ->orWhere('lastname', 'like', '%'.$request->get('find').'%');
+                    });
+                })
+                ->orWhere('work_orders.destination', 'like', '%'.$request->get('find').'%');
+        }
+
+        // cargamos las relaciones de las ordenes de trabajo, ordenamos y paginamos
+        $workOrders = $workOrders->with('vehicle', 'vehicleMovements', 'employee', 'user')
             ->orderBy('updated_at', 'desc')
             ->paginate(15);
 
-        return view('workOrders.index', compact('workOrders'));
+        return view('workOrders.index', compact('workOrders', 'search_input'));
     }
 
     /**

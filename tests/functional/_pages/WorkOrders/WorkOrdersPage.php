@@ -223,6 +223,11 @@ class WorkOrdersPage
             ]
         ]
     ];
+
+    /**
+     * Un por de ordenes de trabajo mas para crear cuando se requiera, por ejemplo búsqueda
+     */
+    public static $extraData = array();
     
     /**
      * Basic route example for your current URL
@@ -322,6 +327,38 @@ class WorkOrdersPage
         // Reportado por el {{$report->created_at}}
 
         return $data;
+    }
+
+    /**
+     *  Crea algunas ordenes de trabajo extra para los test
+     */
+    public static function createExtraWorkOrdersData()
+    {
+        self::$extraData = array();
+        
+        self::$extraData[] = [
+            'authorized_by'             =>  1,
+            'vehicle_id'                =>  2,
+            'vehicle_responsable'       =>  2,
+            'destination'               =>  'Pinos',
+            'work_description'          =>  'Mantenimiento de maquinaria pesada',
+            'created_at'                =>  '2015-09-09 15:30:00',
+            'updated_at'                =>  '2015-09-09 15:30:00',
+            'deleted_at'                =>  null,
+        ];
+
+        self::$extraData[] = [
+            'authorized_by'             =>  1,
+            'vehicle_id'                =>  1,
+            'vehicle_responsable'       =>  3,
+            'destination'               =>  'La Escalera',
+            'work_description'          =>  'Revisión de herramienta',
+            'created_at'                =>  '2015-11-09 15:30:00',
+            'updated_at'                =>  '2015-11-09 15:30:00',
+            'deleted_at'                =>  null,
+        ];
+
+        \DB::table('work_orders')->insert(self::$extraData);
     }
     
     /**
