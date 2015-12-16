@@ -80,4 +80,33 @@ class CreateCest
             }
         }
     }
+
+    /**
+     * Prueba que no haya errores al crear una orden cuando no se especifican datos de los modelos
+     * con que tiene relación, los cuales son los acompañantes internos y extrernos.
+     */
+    public function withEmptyRelations(FunctionalTester $I)
+    {
+        $I->am(WorkOrdersPage::$mainActor);
+        $I->wantTo('ver que no hay errores si dejo vacios algunos campos no requeridos');
+        
+        $I->amOnPage(WorkOrdersPage::route('/create'));
+
+        // envío el formulario
+        $I->submitForm(WorkOrdersPage::$createForm, [
+            'vehicle_responsable'       =>  1,
+            'vehicle_responsable_name'  =>  'B1 Trabajador 1',
+            'vehicle_id'                =>  1,
+            'vehicle_plate'             =>  'AAA111',
+            'destination'               =>  'Beteitiva',
+            'work_description'          =>  'Mantenimiento de motor malacate',
+            'internal_accompanists'     =>  null,
+            'external_accompanists'     =>  null
+        ]);
+
+        // soy redirigido al index del módulo
+        $I->seeCurrentUrlEquals(WorkOrdersPage::$URL);
+        // veo mensaje de éxito en la operación
+        $I->see(WorkOrdersPage::$msgWorkOrderCreation['success'], WorkOrdersPage::$msgClass['success']);
+    }
 }

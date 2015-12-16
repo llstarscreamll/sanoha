@@ -106,8 +106,10 @@ class WorkOrderController extends Controller
             
             // una vez creada la orden de trabajo, asocio los acompañantes (empleados) a la orden,
             // si es que se especificaron
-            $workOrder->internalAccompanists()->sync($request->get('internal_accompanists'));
-            $msg_success[] = 'Acompañantes internos asociados correctamente.';
+            if (!empty($request->get('internal_accompanists'))){
+                $workOrder->internalAccompanists()->sync($request->get('internal_accompanists'));
+                $msg_success[] = 'Acompañantes internos asociados correctamente.';
+            }
             
             // asocio los los acompañantes externos a la orden de trabajo, si es que se ha especificado alguno
             if (!empty($request->get('external_accompanists'))) {
@@ -190,8 +192,10 @@ class WorkOrderController extends Controller
             
             // una vez creada la orden de trabajo, asocio los acompañantes (empleados) a la orden,
             // si es que se especificaron
-            $workOrder->internalAccompanists()->sync($request->get('internal_accompanists'), false);
-            $msg_success[] = 'Acompañantes internos actualizados correctamente.';
+            if (! empty($request->get('internal_accompanists'))) {
+                $workOrder->internalAccompanists()->sync($request->get('internal_accompanists'), false);
+                $msg_success[] = 'Acompañantes internos actualizados correctamente.';
+            }
             
             // asocio los los acompañantes externos a la orden de trabajo, si es que se ha especificado alguno
             if (!empty($request->get('external_accompanists'))) {
