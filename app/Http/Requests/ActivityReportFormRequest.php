@@ -73,6 +73,18 @@ class ActivityReportFormRequest extends Request
                 'find'  =>  'alpha_numeric_spaces'
             ];
         }
+
+        // las reglas para el nuevo formulario
+        if ($current_route == 'activityReport.newStore'){
+            $rules = [
+                'employee_id'           =>  'required|numeric|exists:employees,id',
+                'mining_activity'       =>  'array',
+                'mining_activity_price' =>  'array',
+                'reported_at'           =>  'required|date|after:'.$date_after.'|before:'.$date_before,
+                'worked_hours'          =>  'numeric|between:0,13',
+                'comment'               =>  'alpha_spaces'
+            ];
+        }
         
         return $rules;
     }

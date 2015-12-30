@@ -55,7 +55,7 @@ class UserController extends Controller
         $roles = Role::lists('display_name', 'id');
         $costCenters = CostCenter::with('subCostCenter')->get();
         $employees = \sanoha\Models\SubCostCenter::getRelatedEmployees();
-        $areas = \sanoha\Models\Areas::orderBy('name')->lists('name', 'id');
+        $areas = \sanoha\Models\Areas::orderBy('name')->lists('name', 'id')->all();
         
         return view('users.create', compact('roles', 'costCenters', 'employees', 'areas'));
     }
@@ -71,7 +71,7 @@ class UserController extends Controller
         $user->password = bcrypt($request->get('password'));
         
         // get the roles names
-        $role_names = Role::find($request->get('role_id'))->lists('name');
+        $role_names = Role::find($request->get('role_id'))->lists('name')->all();
 
         // to flash messages
         $success = array();
@@ -129,11 +129,11 @@ class UserController extends Controller
     {
         $user = $this->user->findOrFail($id);
 
-        $roles = Role::lists('display_name', 'id');
+        $roles = Role::lists('display_name', 'id')->all();
         $costCenters = CostCenter::with('subCostCenter')->get();
         $userSubCostCenters = $user->getSubCostCentersId();
         $employees = \sanoha\Models\SubCostCenter::getRelatedEmployees();
-        $areas = \sanoha\Models\Areas::orderBy('name')->lists('name', 'id');
+        $areas = \sanoha\Models\Areas::orderBy('name')->lists('name', 'id')->all();
 
         return view('users.edit', compact('user', 'roles', 'costCenters', 'userSubCostCenters', 'employees', 'areas'));
     }

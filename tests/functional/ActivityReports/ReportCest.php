@@ -216,7 +216,7 @@ class ReportCest
         $project_id = 1; // Beteitiva
 
         // quito el permiso de asignar costos, pues el supervisor no debe hacerlo
-        $permissions = \sanoha\Models\Permission::where('name', '!=', 'activityReport.assignCosts')->get()->lists('id'); // obtengo el permiso que quiero quitar
+        $permissions = \sanoha\Models\Permission::where('name', '!=', 'activityReport.assignCosts')->get()->lists('id')->all(); // obtengo el permiso que quiero quitar
         $admin_role = \sanoha\Models\Role::where('name', '=', 'admin')->first();
         $admin_role->perms()->sync($permissions);
         
@@ -451,7 +451,7 @@ class ReportCest
         // ------------------------------
 
         // quito el permiso de asignar costos, pues el supervisor no debe hacerlo
-        $permissions = \sanoha\Models\Permission::where('name', '!=', 'activityReport.assignCosts')->get()->lists('id'); // obtengo el permiso que quiero quitar
+        $permissions = \sanoha\Models\Permission::where('name', '!=', 'activityReport.assignCosts')->get()->lists('id')->all(); // obtengo el permiso que quiero quitar
         $admin_role = \sanoha\Models\Role::where('name', '=', 'admin')->first();
         $admin_role->perms()->sync($permissions);
         
@@ -515,7 +515,7 @@ class ReportCest
     public function forceAssignCost(FunctionalTester $I)
     {
         // quito los permisos para asignar costos
-        $permissions = \sanoha\Models\Permission::where('name', '!=', 'activityReport.assignCosts')->get()->lists('id'); // obtengo el permiso que quiero quitar
+        $permissions = \sanoha\Models\Permission::where('name', '!=', 'activityReport.assignCosts')->get()->lists('id')->all(); // obtengo el permiso que quiero quitar
         $admin_role = \sanoha\Models\Role::where('name', '=', 'admin')->first();
         $admin_role->perms()->sync($permissions);
         

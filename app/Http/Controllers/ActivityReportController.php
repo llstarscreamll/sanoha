@@ -36,7 +36,7 @@ class ActivityReportController extends Controller
         // comprueba que el usuario tenga permisos sobre el centro de costo seleccionado
         $this->middleware('checkCostCenter', ['except' => ['selectCostCenterView', 'setCostCenter']]);
         // control de acceso a los métodos de esta clase
-        $this->middleware('checkPermmisions', ['except' => ['store', 'update', 'selectCostCenterView', 'setCostCenter']]);
+        $this->middleware('checkPermmisions', ['except' => ['store', 'newStore', 'update', 'selectCostCenterView', 'setCostCenter']]);
         // el id del centro de costo elegido
         $this->cost_center_id = \Session::get('current_cost_center_id');
     }
@@ -136,6 +136,88 @@ class ActivityReportController extends Controller
         $orderedActivities = ActivityReport::sortedActivities($parameters = ActivityReport::configureParameters($request, $this->cost_center_id));
 
         return view('activityReports.create', compact('employees', 'miningActivities', 'orderedActivities', 'parameters', 'input'));
+    }
+
+    /**
+     * Muestra el nuevo formulario de reporte de actividades mineras, con posibilidad
+     * de reportar varias actividades a la vez en el mismo request.
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function newCreateForm(Request $request)
+    {
+        // el modelo de actividades mineras
+        $miningActivityModel = new ActivityReport;
+        // las actividades mineras a registrar
+        $miningActivities = MiningActivity::all();
+        // lista de empleados del centro de costo
+        $employees = \sanoha\Models\SubCostCenter::getRelatedEmployees($this->cost_center_id, null, null, [
+            'employees' => [
+                'position_id' => ActivityReport::getPositionsToInclude()
+            ]
+        ]);
+
+        return view('activityReports.newCreateForm', compact('miningActivityModel', 'request', 'employees', 'miningActivities'));
+    }
+
+    /**
+     * Procesa el nuevo formulario de reporte de actividades guardando varias actividades en
+     * un sólo request
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function newStore(ActivityReportFormRequest $request)
+    {
+        $data = $request->all();
+        // contador de registros creados
+        $count = 0;
+        $data['reported_at'] = Carbon::createFromFormat('Y-m-d', $data['reported_at']);
+
+        // obtengo las actividades mineras
+        $miningActivities = MiningActivity::all();
+
+        foreach ($miningActivities as $key => $activity) {
+
+            if(!array_key_exists('mining_activity['.$activity->id.']', $data) || empty($data['mining_activity['.$activity->id.']'])){
+                continue;
+            }
+
+            $data['mining_activity_id'] = $activity->id;
+
+            // debo saber si se ha reportado ya la actividad en el mismo día
+            if ($reported_activity = ActivityReport::alreadyMiningActivityReported($data)) {
+                return redirect()
+                    ->back()
+                    ->with('error', 'El trabajador ya reportó '.$reported_activity->miningActivity->name.' el día '.$reported_activity->reported_at->toDateString().'.');
+            }
+
+            // todo bien, ya puedo registrar la actividad, primero obtengo la info del empleado
+            $employee = \sanoha\Models\Employee::findOrFail($data['employee_id']);
+            
+            // el precio automático a asignar a la actividad en caso de que el usuario
+            // no haya especificado uno
+            $historical_price = ActivityReport::getHistoricalActivityPrice($data['mining_activity_id'], $employee->sub_cost_center_id, $employee->id);
+            
+            $activityReport                       =    new ActivityReport;
+            $activityReport->sub_cost_center_id   =    $employee->sub_cost_center_id;
+            $activityReport->employee_id          =    $employee->id;
+            $activityReport->mining_activity_id   =    $activity->id;
+            $activityReport->quantity             =    $data['mining_activity['.$activity->id.']'];
+            $activityReport->price                =    !empty($data['mining_activity_price['.$activity->id.']']) && \Auth::getUser()->can('activityReport.assignCosts') ? $data['mining_activity_price['.$activity->id.']'] : $historical_price;
+            $activityReport->worked_hours         =    0;
+            $activityReport->comment              =    $data['comment'];
+            $activityReport->reported_by          =    \Auth::getUser()->id;
+            $activityReport->reported_at          =    $data['reported_at']->toDateTimeString();
+
+            $activityReport->save() ? $count++ : '';
+
+        }
+
+        $count > 0
+            ? $request->session()->flash('success', 'Actividades reportadas correctamente.')
+            : $request->session()->flash('warning', 'No se reportaron actividades.');
+
+        return redirect()->route('activityReport.newCreateForm');
     }
 
     /**

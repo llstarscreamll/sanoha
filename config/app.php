@@ -136,6 +136,11 @@ return [
         'Illuminate\Validation\ValidationServiceProvider',
         'Illuminate\View\ViewServiceProvider',
 
+        /**
+         * Laravel 5.1 Upgrade
+         */
+        Illuminate\Broadcasting\BroadcastServiceProvider::class,
+
         /*
          * Application Service Providers...
          */
@@ -153,6 +158,7 @@ return [
         'Barryvdh\Debugbar\ServiceProvider',
         'Spatie\Activitylog\ActivitylogServiceProvider',
         Mews\Purifier\PurifierServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ],
 
     /*
@@ -210,6 +216,7 @@ return [
         'Debugbar'  => 'Barryvdh\Debugbar\Facade',
         'Purifier'  => Mews\Purifier\Facades\Purifier::class,
         'Activity'  => 'Spatie\Activitylog\ActivitylogFacade',
+        'Excel'     => 'Maatwebsite\Excel\Facades\Excel',
     ],
 
 ];

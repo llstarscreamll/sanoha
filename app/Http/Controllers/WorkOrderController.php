@@ -78,8 +78,8 @@ class WorkOrderController extends Controller
     public function create()
     {
         $employees = \sanoha\Models\SubCostCenter::getRelatedEmployees();
-        $vehicle_responsibles = \sanoha\Models\Employee::where('authorized_to_drive_vehicles', true)->get()->lists('fullname', 'id');
-        $vehicles = \sanoha\Models\Vehicle::all()->lists('plate', 'id');
+        $vehicle_responsibles = \sanoha\Models\Employee::where('authorized_to_drive_vehicles', true)->get()->lists('fullname', 'id')->all();
+        $vehicles = \sanoha\Models\Vehicle::lists('plate', 'id')->all();
         
         return view('workOrders.create', compact('employees', 'vehicles', 'vehicle_responsibles'));
     }
@@ -163,8 +163,8 @@ class WorkOrderController extends Controller
     {
         $workOrder = WorkOrder::findOrFail($id);
         $employees = \sanoha\Models\SubCostCenter::getRelatedEmployees();
-        $vehicle_responsibles = \sanoha\Models\Employee::where('authorized_to_drive_vehicles', true)->get()->lists('fullname', 'id');
-        $vehicles = \sanoha\Models\Vehicle::all()->lists('plate', 'id');
+        $vehicle_responsibles = \sanoha\Models\Employee::where('authorized_to_drive_vehicles', true)->get()->lists('fullname', 'id')->all();
+        $vehicles = \sanoha\Models\Vehicle::lists('plate', 'id')->all();
         
         return view('workOrders.edit', compact('workOrder', 'employees', 'vehicles', 'vehicle_responsibles'));
     }
@@ -242,7 +242,7 @@ class WorkOrderController extends Controller
             $request->session()->flash('success', 'Reporte guardado con éxito');
 
             // obtengo los emails de los jefes de área para envíar la información
-            $emails = \sanoha\Models\User::where('area_chief', true)->lists('email');
+            $emails = \sanoha\Models\User::where('area_chief', true)->lists('email')->all();
 
             // obtengo el asunto del mensaje
             $subject = 'Reporte de Actividades '.$workOrder->employee->fullname.' de Orden de Trabajo a '.$workOrder->destination;
@@ -366,7 +366,7 @@ class WorkOrderController extends Controller
         ]], false);
 
         // obtengo los emails de los jefes de área para envíar la información
-        $emails = \sanoha\Models\User::where('area_chief', true)->lists('email');
+        $emails = \sanoha\Models\User::where('area_chief', true)->lists('email')->all();
 
         // si se encontrarón jefes de área, envío el email
         if (count($emails) > 0) {

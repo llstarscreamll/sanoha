@@ -51,7 +51,7 @@ class EmployeeController extends Controller
     public function create()
     {
         $cost_centers = \sanoha\Models\CostCenter::getOrderListWithSubCostCenters();
-        $positions = \sanoha\Models\Position::orderBy('name')->lists('name', 'id');
+        $positions = \sanoha\Models\Position::orderBy('name')->lists('name', 'id')->all();
         
         return view('employees.create', compact('cost_centers', 'positions'));
     }
@@ -105,7 +105,7 @@ class EmployeeController extends Controller
         $employee = Employee::findOrFail($id);
         
         $cost_centers = \sanoha\Models\CostCenter::getOrderListWithSubCostCenters();
-        $positions = \sanoha\Models\Position::orderBy('name')->lists('name', 'id');
+        $positions = \sanoha\Models\Position::orderBy('name')->lists('name', 'id')->all();
         
         return view('employees.edit', compact('employee', 'cost_centers', 'positions'));
     }

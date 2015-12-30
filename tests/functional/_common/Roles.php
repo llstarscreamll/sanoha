@@ -47,7 +47,7 @@ class Roles
         \DB::table('roles')->insert($this->data);
         
         // attach all permissios to admin role
-        $permissions = PermissionModel::lists('id');
+        $permissions = PermissionModel::lists('id')->all();
         $admin = \sanoha\Models\Role::where('name', 'admin')->first();
         $admin->perms()->sync($permissions);
     }

@@ -80,7 +80,7 @@
 		@if(count($workOrder->vehicleMovements) == 1)
 			<div class="col-md-6 margin-top-10">
 				<div class="alert alert-warning">
-					No se ha registrado {{in_array('exit', $workOrder->vehicleMovements->lists('action', 'id')) ? 'entrada' : 'salida'}} del vehículo
+					No se ha registrado {{in_array('exit', $workOrder->vehicleMovements->lists('action', 'id')->all()) ? 'entrada' : 'salida'}} del vehículo
 				</div>
 			</div>
 		@endif

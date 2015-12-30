@@ -367,6 +367,14 @@ class PermissionTableSeeder extends Seeder
             'updated_at'    =>  $this->date->toDateTimeString()
         ];
 
+        $this->data[] = [
+            'name'           => 'activityReport.newCreateForm',
+            'display_name'   => 'Cargador Alternativo de Labores Mineras',
+            'description'    => 'Le permite registrar actividades o labores mineras usando el formulario alternativo, el cual es más rápido, pues se pueden reportar varias actividades a la vez.',
+            'created_at'     =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'     =>  $this->date->toDateTimeString()
+        ];
+
     }
     
     /**

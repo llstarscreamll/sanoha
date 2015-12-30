@@ -134,8 +134,8 @@ class FormErrorsCest
         $I->submitForm('form', [
             'employee_id'    => 1,
             'novelty_id'     => 2,
-            'reported_at'    => $date->endOfYear()->toDateString(),
-            'comment'        => ''
+            'reported_at'    => \Carbon\Carbon::now()->addDays(25)->toDateString(),
+            'comment'        => 'anohter test'
         ]);
         
         $I->seeCurrentUrlEquals('/noveltyReport/create');

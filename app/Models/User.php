@@ -97,7 +97,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     public function hasSubCostCenter($subCostCenterId)
     {
-        return in_array($subCostCenter, $this->subCostCenters->lists('id'));
+        return in_array($subCostCenter, $this->subCostCenters->lists('id')->toArray());
     }
 
     /**
@@ -193,7 +193,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     public function hasEmployee($employee_id)
     {
-        return in_array($employee_id, $this->employees->lists('id'));
+        return in_array($employee_id, $this->employees->lists('id')->toArray());
     }
     
     /**

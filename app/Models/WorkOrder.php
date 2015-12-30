@@ -110,6 +110,6 @@ class WorkOrder extends Model
      */
     public function hasVehicleMovement($action)
     {
-        return in_array($action, $this->vehicleMovements->lists('action'));
+        return in_array($action, $this->vehicleMovements->lists('action')->all());
     }
 }

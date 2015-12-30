@@ -36,6 +36,8 @@ Route::group(['middleware' => 'auth'], function () {
     
     Route::resource('users', 'UserController');
     Route::resource('roles', 'RoleController');
+    // para cosas de siigo
+    Route::resource('siigo', 'SiigoController');
     
     /**
      * Empleados
@@ -120,6 +122,16 @@ Route::group(['middleware' => 'auth'], function () {
     /**
      * Reporte de Actividades Mineras
      */
+    // nuevo formulario de reporte de actividades mineras
+    Route::get('activityReport/new_activity_report_form', [
+        'as'    =>  'activityReport.newCreateForm',
+        'uses'  =>  'ActivityReportController@newCreateForm'
+    ]);
+    // nuevo post del nuevo formulario de reporte de actividades mineras
+    Route::post('activityReport/new_post_activity_report', [
+        'as'    =>  'activityReport.newStore',
+        'uses'  =>  'ActivityReportController@newStore'
+    ]);
     // para setear el costo de centro de trabajo
     Route::get('activityReport/project/{short_name?}', [
         'as'    =>  'activityReport.setCostCenter',

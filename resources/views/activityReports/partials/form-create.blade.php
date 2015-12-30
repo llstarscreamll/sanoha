@@ -15,7 +15,7 @@
                     
                         @if(\Route::currentRouteName() == 'activityReport.create')
                         
-                            {{-- Campo informativo --}}
+                            {{-- Campo informativo, redirege al reporte de novedad en caso de que se marque como No, o no se marque --}}
                             <div class="form-group col-md-6 col-md-offset-3">
                                 {!! Form::label('attended', 'Asistió?') !!}
                                 <div>

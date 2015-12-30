@@ -18,22 +18,34 @@
 			<div class="panel-body">
 				
 				@include ('layout.notifications')
+
+                {{-- Capa donde sugiero el uso del nuevo formulario de reporte actividades --}}
+                <div class="row">
+                    <div class="well col-md-8 col-md-offset-2">
+                        <p><strong>Buen día {{Auth::user()->fullname}}</strong>, te invitamos a probar el nuevo formulario para reportar las actividaes mineras, podrás reportar varias actividades a la vez ahorrándote un poco mas de tiempo... Dale clic al siguiente enlace:</p>
+                        <a href="{{route('activityReport.newCreateForm')}}">Usar Nuevo Formulario de Reporte de Actividades</a>
+                    </div>
+                </div>
 				
                 {!! Form::open(['route' => (is_null($parameters['employee_id']) ? 'activityReport.create' : 'activityReport.store'), 'method' => is_null($parameters['employee_id']) ? 'GET' : 'POST']) !!}
                     
-                    <fieldset>
-                        <legend class="form-group col-md-6 col-md-offset-3">
-                            Reportar Labor Minera
-                            <span data-toggle="tooltip" data-placement="top" title="Fecha de Reporte" class="small-date">
-                                {{ isset($activity) ? $activity->reported_at->format('l j \\of F Y') : \Carbon\Carbon::now()->format('l j \\of F Y') }}
-                            </span>
-                        </legend>
-                        
-                        @include('activityReports.partials.form-create', ['btn_options' => ['class' => 'btn btn-primary', 'caption' => 'Registrar', 'icon' => 'glyphicon glyphicon-floppy-disk']])
-                        
-                    </fieldset>
-                    
-                    @include('activityReports.partials.form-create-preview')
+                    <div class="row">
+                        <fieldset>
+                            <legend class="form-group col-md-6 col-md-offset-3">
+                                Reportar Labor Minera
+                                <span data-toggle="tooltip" data-placement="top" title="Fecha de Reporte" class="small-date">
+                                    {{ isset($activity) ? $activity->reported_at->format('l j \\of F Y') : \Carbon\Carbon::now()->format('l j \\of F Y') }}
+                                </span>
+                            </legend>
+                            
+                            @include('activityReports.partials.form-create', ['btn_options' => ['class' => 'btn btn-primary', 'caption' => 'Registrar', 'icon' => 'glyphicon glyphicon-floppy-disk']])
+                            
+                        </fieldset>
+                    </div>
+
+                    <div class="row">
+                        @include('activityReports.partials.form-create-preview')
+                    </div>
                 
                 {!! Form::close() !!}
                     
@@ -68,12 +80,10 @@
         $('#mining_activity_id').change(function(){
             var option = $('option:selected', this).attr('data-maximum');
             $('#quantity').attr('max', option).val('1');
-            console.log('El máximo del campo cantidad es = ' + $('#quantity').attr('max'));
         });
         
         {{-- Initialize all tooltips --}}
         $('[data-toggle="tooltip"]').tooltip();
-        
     
          $(".bootstrap_switch").bootstrapSwitch();
     
@@ -86,8 +96,6 @@ $(function() {
             "singleDatePicker": true,
             "timePickerIncrement": 1,
             "autoApply": true,
-
-
             separator: ' hasta ',
             locale: {
                 daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi','Sa'],

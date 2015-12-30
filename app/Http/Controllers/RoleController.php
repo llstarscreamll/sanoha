@@ -121,7 +121,7 @@ class RoleController extends Controller
     {
         $role = $this->role->findOrFail($id);
         $permissions = $this->permission->getOrderedPermissions();
-        $rolePermissions = $role->find($id)->perms()->orderBy('name', 'asc')->lists('name');
+        $rolePermissions = $role->find($id)->perms()->orderBy('name', 'asc')->lists('name')->all();
 
         $categories = $this->permission->categories;
         

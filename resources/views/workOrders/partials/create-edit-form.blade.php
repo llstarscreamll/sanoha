@@ -48,7 +48,7 @@
 
 <div class="col-md-8 col-md-offset-2 form-group">
     {!! Form::label('internal_accompanists', 'Acompañantes Internos') !!}
-    {!! Form::select('internal_accompanists[]', $employees, isset($workOrder) ? $workOrder->internalAccompanists()->lists('id', 'id') : null, ['style' => 'width: 100%', 'class' => 'form-control', 'id' => 'internal_accompanists', 'multiple' => 'multiple']) !!}
+    {!! Form::select('internal_accompanists[]', $employees, isset($workOrder) ? $workOrder->internalAccompanists()->lists('id', 'id')->all() : null, ['style' => 'width: 100%', 'class' => 'form-control', 'id' => 'internal_accompanists', 'multiple' => 'multiple']) !!}
     
     @if ($errors->has('internal_accompanists'))
         <div class="text-danger">
@@ -62,8 +62,8 @@
 <div class="col-md-8 col-md-offset-2 form-group">
     {!! Form::label('external_accompanists', 'Acompañantes Externos') !!}
     {!! Form::select('external_accompanists[]',
-        isset($workOrder) ? $workOrder->externalAccompanists()->lists('fullname', 'fullname') : [],
-        isset($workOrder) ? $workOrder->externalAccompanists()->lists('fullname', 'fullname') : null,
+        isset($workOrder) ? $workOrder->externalAccompanists()->lists('fullname', 'fullname')->all() : [],
+        isset($workOrder) ? $workOrder->externalAccompanists()->lists('fullname', 'fullname')->all() : null,
         ['style' => 'width: 100%', 'class' => 'form-control', 'id' => 'external_accompanists', 'multiple'])
     !!}
     

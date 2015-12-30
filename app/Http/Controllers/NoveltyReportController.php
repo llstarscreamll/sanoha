@@ -96,7 +96,7 @@ class NoveltyReportController extends Controller
      */
     public function create()
     {
-        $novelties = Novelty::all()->lists('name', 'id');
+        $novelties = Novelty::all()->lists('name', 'id')->all();
         $subCostCenterEmployees = \sanoha\Models\SubCostCenter::where('cost_center_id', $this->cost_center_id)->with('employees')->get();
         // obtengo la lista de empleados relacinados al centro de costo y doy la opción de incluir
         // al empleado que hizo la labor minera si es que no se encuentra dentro de los empleados del
@@ -157,7 +157,7 @@ class NoveltyReportController extends Controller
     {
         $novelty = NoveltyReport::findOrFail($id);
         
-        $novelties = Novelty::all()->lists('name', 'id');
+        $novelties = Novelty::all()->lists('name', 'id')->all();
         $subCostCenterEmployees = \sanoha\Models\SubCostCenter::where('cost_center_id', $this->cost_center_id)->with('employees')->get();
         // obtengo la lista de empleados relacinados al centro de costo y doy la opción de incluir
         // al empleado que hizo la labor minera si es que no se encuentra dentro de los empleados del
