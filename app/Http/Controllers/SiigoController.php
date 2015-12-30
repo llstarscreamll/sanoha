@@ -41,7 +41,7 @@ class SiigoController extends Controller {
 		// limpio la base de datos
 		\DB::table('siigo')->truncate();
 
-		$file = $request->file('file')->move(storage_path('imports/'), $name = date('Y-m-d_H-i-s').'_siigo_file.csv');
+		$file = $request->file('file')->move(storage_path('/app/imports/'), $name = date('Y-m-d_H-i-s').'_siigo_file.csv');
 		$file_path = storage_path('imports/').$name;
 
         $this->dispatch(new ImportSiigoFile($file_path));
