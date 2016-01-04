@@ -121,7 +121,7 @@ class FormErrorsCest
         $I->submitForm('form', [
             'employee_id'    => 1,
             'novelty_id'     => 2,
-            'reported_at'    => $date->startOfYear()->toDateString(),
+            'reported_at'    => $date->subDays(65)->toDateString(),
             'comment'        => ''
         ]);
         

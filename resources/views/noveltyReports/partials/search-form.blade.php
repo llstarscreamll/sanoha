@@ -47,13 +47,13 @@
 
         {!! Form::hidden(
             'from',
-            is_null($parameters['from']) ? '' : $parameters['from']->toDateString(),
+            null,
             ['id' => 'from']
         ) !!}
         
         {!! Form::hidden(
             'to',
-           is_null($parameters['to']) ? '' : $parameters['to']->toDateString(),
+            null,
             ['id' => 'to']
         ) !!}
         

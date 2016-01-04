@@ -113,6 +113,10 @@ class ActivityReportController extends Controller
         $search_input = $request->all();
         
         $parameters = ActivityReport::configureParameters($request, $this->cost_center_id, ['start' => Carbon::now()->startOfYear()]);
+        
+        if(!$request->has('from') && !$request->has('to'))
+            unset($parameters['from'], $parameters['to']);
+        
         $activities = ActivityReport::individualSearch($parameters);
 
         return view('activityReports.individual', compact('activities', 'search_input', 'parameters'));

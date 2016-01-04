@@ -125,8 +125,8 @@
         
         $('#reportrange').daterangepicker({
             format: 'MM/DD/YYYY',
-            startDate: moment('{{$parameters["from"]}}', 'YYYY-MM-DD'),
-            endDate: moment('{{ $parameters["to"] }}', 'YYYY-MM-DD'),
+            //startDate: moment('', 'YYYY-MM-DD'),
+            //endDate: moment('', 'YYYY-MM-DD'),
             //minDate: '01/01/2012',
             //maxDate: moment().format('L'),
             //dateLimit: { days: 60 },

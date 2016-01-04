@@ -109,7 +109,7 @@ class FlatReportCest
     }
     
     /**
-     * Pruebo la función de buscar en el reporte individual re labores mineras reportadas
+     * Pruebo la función de buscar en el reporte individual de labores mineras reportadas
      */
     public function searchOnFlatReport(FunctionalTester $I)
     {

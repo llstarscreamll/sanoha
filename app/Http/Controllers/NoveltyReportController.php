@@ -73,7 +73,13 @@ class NoveltyReportController extends Controller
     public function index(NovletyReportFormRequest $request)
     {
         $search_input = $request->all();
-        $novelties = NoveltyReport::individualNovelties($parameters = NoveltyReport::configureParameters($request, $this->cost_center_id));
+        $parameters = NoveltyReport::configureParameters($request, $this->cost_center_id);
+        
+        // si no se realiza una búsqueda por fechas, quito los parámetros de fecha
+        if (! $request->has('from') && ! $request->has('to'))
+            unset($parameters['from'], $parameters['to']);
+
+        $novelties = NoveltyReport::individualNovelties($parameters);
         
         return view('noveltyReports.index', compact('novelties', 'search_input', 'parameters'));
     }

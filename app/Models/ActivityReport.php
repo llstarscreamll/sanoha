@@ -384,10 +384,7 @@ class ActivityReport extends Model implements LogsActivityInterface
      */
     public static function individualSearch($parameters)
     {
-        return \sanoha\Models\ActivityReport::with('employee', 'miningActivity')
-            ->where('reported_at', '>=', $parameters['from'])
-            ->where('reported_at', '<=', $parameters['to'])
-            ->orderBy('updated_at', 'desc')
+        $data = ActivityReport::with('employee', 'miningActivity')
             ->whereHas('employee', function ($q) use ($parameters) {
                     $q->where(function ($q) use ($parameters) {
                         $q->where('name', 'like', '%'.$parameters["employee"].'%')
@@ -397,8 +394,16 @@ class ActivityReport extends Model implements LogsActivityInterface
                 })
             ->whereHas('subCostCenter', function ($q) use ($parameters) {
                 $q->where('cost_center_id', $parameters['cost_center_id']);
-            })
+            });
+
+        if( isset($parameters['from']) && isset($parameters['to']) )
+            $data = $data->where('reported_at', '>=', $parameters['from'])
+                ->where('reported_at', '<=', $parameters['to']);
+        
+        $data = $data->orderBy('updated_at', 'desc')
             ->paginate(15);
+
+        return $data;
     }
     
     /**
