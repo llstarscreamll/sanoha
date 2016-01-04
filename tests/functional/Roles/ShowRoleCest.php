@@ -74,7 +74,7 @@ class ShowRoleCest
         
         // I see the role permissions checked and them have disabled attribute
         foreach ($rolePermissions as $rolePermission) {
-            $I->seeElement('input:disabled[type=checkbox]:checked', ['value' => $rolePermission->name]);
+            $I->seeElement('input:disabled[type=checkbox]:checked', ['value' => $rolePermission->id]);
         }
     }
 }

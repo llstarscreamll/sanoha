@@ -54,22 +54,22 @@
                                 
                                 @if(!empty($permissions))
                                 
-                                @foreach($categories as $key => $value)
+                                @foreach($categories as $categoryKey => $category)
                               
-                                    @if(array_key_exists($key, $permissions))
+                                    @if(array_key_exists($categoryKey, $permissions))
                                         <div class="panel panel-default">
                                             
-                                            <div class="panel-heading cursor-pointer" role="tab" id="heading_{{ $key }}" data-toggle="collapse" data-parent="#accordion" href="#collapse{{$key}}" aria-expanded="true" aria-controls="collapse{{$key}}">
+                                            <div class="panel-heading cursor-pointer" role="tab" id="heading_{{ $categoryKey }}" data-toggle="collapse" data-parent="#accordion" href="#collapse{{$categoryKey}}" aria-expanded="true" aria-controls="collapse{{$categoryKey}}">
                                                 <h4 class="panel-title">
-                                                    {{ $value }}
+                                                    {{ $category }}
                                                 </h4>
                                             </div>
                                             
-                                            <div id="collapse{{$key}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading_{{ $key }}">
+                                            <div id="collapse{{$categoryKey}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading_{{ $categoryKey }}">
                                                 <div class="panel-body">
                                                   
-                                                    @foreach($permissions[$key] as $permission)
-                                                        
+                                                    @foreach($permissions[$categoryKey] as $permission)
+
                                                         <div class="">
                                                             <div class="">
                                                                 <div class="col-xs-8 col-sm-5 margin-top-5">
@@ -78,15 +78,18 @@
                                                                 <div class="col-xs-4 col-sm-7 margin-bottom-10">
                                                                     {!! Form::checkbox(
                                                                         'permissions[]',
-                                                                        $permission['name'],
-                                                                        isset($show) || in_array($permission['name'], isset($rolePermissions) ? $rolePermissions : []) ? true : false,
+                                                                        $permission['id'],
+                                                                        isset($show) || in_array($permission['name'], isset($rolePermissions)
+                                                                            ? $rolePermissions
+                                                                            : [])
+                                                                        ? true : false,
                                                                         [
                                                                             'id' => $permission['name'], 
                                                                             'class' => 'bootstrap_switch',
                                                                             'data-size' => 'small',
                                                                             'data-on-text' => 'SI',
                                                                             'data-off-text' => 'NO',
-                                                                            isset($show) ? 'disabled' : false
+                                                                            isset($show) ? 'disabled' : ''
                                                                         ])
                                                                     !!}
                                                                 </div>

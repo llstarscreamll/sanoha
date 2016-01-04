@@ -42,7 +42,7 @@ class Permission extends EntrustPermission
     public function getOrderedPermissions(array $permissions = [])
     {
         if (empty($permissions)) {
-            $permissions = $this->orderBy('name')->get()->toArray();
+            $permissions = Permission::orderBy('display_name')->get()->toArray();
         }
         
         $orderedPermissions = array();
@@ -54,7 +54,7 @@ class Permission extends EntrustPermission
                 }
             }
         }
-        
+
         return $orderedPermissions;
     }
 }

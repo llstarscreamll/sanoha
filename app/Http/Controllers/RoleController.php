@@ -104,7 +104,7 @@ class RoleController extends Controller
     {
         $role = $this->role->findOrFail($id);
 
-        $permissions = $role->find($id)->perms()->orderBy('name', 'asc')->get(['name', 'display_name'])->toArray();
+        $permissions = $role->find($id)->perms()->orderBy('name', 'asc')->get()->toArray();
         $permissions = !empty($permissions) ?  $this->permission->getOrderedPermissions($permissions) : [];
         $categories = $this->permission->categories;
 
@@ -121,10 +121,9 @@ class RoleController extends Controller
     {
         $role = $this->role->findOrFail($id);
         $permissions = $this->permission->getOrderedPermissions();
-        $rolePermissions = $role->find($id)->perms()->orderBy('name', 'asc')->lists('name')->all();
-
+        $rolePermissions = $role->find($id)->perms()->orderBy('name', 'asc')->lists('name', 'id')->all();
         $categories = $this->permission->categories;
-        
+
         return view('roles.edit', compact('role', 'permissions', 'categories', 'rolePermissions'));
     }
 

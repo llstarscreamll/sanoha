@@ -62,16 +62,19 @@ class UpdateRoleCest
         // attach some permissions to role
         $role->perms()->sync([1, 2, 3]); // have 6 permissions, only attach 3
         // get all permissions
-        $permissions = \sanoha\Models\Permission::select('name')->get();
+        $permissions = \sanoha\Models\Permission::all();
         // get the role permissions
         $rolePermissions = \sanoha\Models\Role::find($role->id)->perms()->orderBy('name', 'asc')->get();
 
         $I->amOnPage('/roles');
         $I->click($role->display_name, 'a');
         $I->seeCurrentUrlEquals('/roles/' . $role->id);
+
+        // la página de detalles del rol
         $I->see('Detalles del Rol', 'h1');
         $I->click('Editar', 'a');
         
+        // página de edición de info de rol
         $I->seeCurrentUrlEquals('/roles/' . $role->id . '/edit');
         $I->see('Editar Rol', 'h1');
         
@@ -84,15 +87,16 @@ class UpdateRoleCest
             
         // I see all the permissions listed
         foreach ($permissions as $permission) {
-            $I->seeElement('input', ['value' => $permission->name]);
+            $I->seeElement('input', ['value' => $permission->id]);
+            $I->dontSeeElement('input', ['value' => $permission->id, 'disabled']);
         }
             
         // I see the role permissions checked
         foreach ($rolePermissions as $rolePermission) {
-            $I->seeElement('input[type=checkbox]:checked', ['value' => $rolePermission->name]);
+            $I->seeElement('input[type=checkbox]:checked', ['value' => $rolePermission->id]);
         }
         
-        // check the unattached roles that aren´t checked
+        // los siguientes elementos no están asociados al rol
         $I->dontSeeElement('input[type=checkbox]:checked', ['value' => 'user.list']); // role 4 unattached
         $I->dontSeeElement('input[type=checkbox]:checked', ['value' => 'user.create']); // role 5 unattached
         $I->dontSeeElement('input[type=checkbox]:checked', ['value' => 'user.edit']); // role 6 unattached
@@ -110,12 +114,12 @@ class UpdateRoleCest
             'display_name'  =>  $role->display_name,
             'description'   =>  $role->description,
             'permissions'   =>  [
-                'role.list',
-                'role.create',
-                'role.update',
-                'user.list',
-                'user.create',
-                'user.edit',
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
                 ]
             ], 'Actualizar');
         
@@ -147,7 +151,33 @@ class UpdateRoleCest
         
         // I see the updated role permissions checked
         foreach ($rolePermissions as $rolePermission) {
-            $I->seeElement('input[type=checkbox]:checked', ['value' => $rolePermission->name]);
+            $I->seeElement('input[type=checkbox]:checked', ['value' => $rolePermission->id]);
         }
+
+        // veo los cambios en la base de datos
+        $I->seeRecord('permission_role', [
+            'permission_id' =>  1,
+            'role_id'       =>  $role->id
+        ]);
+
+        $I->seeRecord('permission_role', [
+            'permission_id' =>  2,
+            'role_id'       =>  $role->id
+        ]);
+
+        $I->seeRecord('permission_role', [
+            'permission_id' =>  3,
+            'role_id'       =>  $role->id
+        ]);
+
+        $I->seeRecord('permission_role', [
+            'permission_id' =>  4,
+            'role_id'       =>  $role->id
+        ]);
+
+        $I->seeRecord('permission_role', [
+            'permission_id' =>  5,
+            'role_id'       =>  $role->id
+        ]);
     }
 }

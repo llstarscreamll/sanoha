@@ -50,11 +50,9 @@ class CreateRoleCest
             'display_name'  =>  'Auxiliar Técnica',
             'description'   =>  'Auxiliar del área técnica',
             'permissions'   =>  [
-                true,
-                false,
-                true,
-                false,
-                true
+                'roles.create',
+                'roles.edit',
+                'roles.show'
                 ]
             ];
         
@@ -66,6 +64,27 @@ class CreateRoleCest
         $I->see('Permisos añadidos al rol correctamente.', '.alert-success div');
         $I->see($role['display_name'], 'tbody tr:first-child td:nth-child(2)');
         $I->see($role['description'], 'tbody tr:first-child td:nth-child(3)');
+
+        // veo los cambios en la base de datos
+        $I->seeRecord('permission_role', [
+            'permission_id' =>  2,
+            'role_id'       =>  3
+        ]);
+
+        $I->seeRecord('permission_role', [
+            'permission_id' =>  3,
+            'role_id'       =>  3
+        ]);
+
+        $I->seeRecord('permission_role', [
+            'permission_id' =>  4,
+            'role_id'       =>  3
+        ]);
+        
+        $I->dontSeeRecord('permission_role', [
+            'permission_id' =>  1,
+            'role_id'       =>  3
+        ]);
     }
     
     /**
