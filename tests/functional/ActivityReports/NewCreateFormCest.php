@@ -19,6 +19,94 @@ class NewCreateFormCest
     }
 
     /**
+     * Prueba que no se pueda asignar "de forma brusca" el precio de una actividad minera
+     */
+    public function forcePriceAssign(FunctionalTester $I)
+    {
+        $I->am('soy un supervisor del Proyecto Beteitiva');
+        $I->wantTo('probar que no puedo forzar la asignacion de precios de labores...');
+
+        // quito el permiso de asignar costos, pues el supervisor no debe hacerlo
+        $permissions = \sanoha\Models\Permission::where('name', '!=', 'activityReport.assignCosts')->get()->lists('id')->all(); // obtengo el permiso que quiero quitar
+        $admin_role = \sanoha\Models\Role::where('name', '=', 'admin')->first();
+        $admin_role->perms()->sync($permissions);
+
+        // estoy en el home del sistema
+        $I->amOnPage('/home');
+        
+        // hago clic en el proyecto que quiero trabajar
+        $I->click('Proyecto Beteitiva', 'a');
+
+        // la página de creación reporte de actividades mineras con el Trabajador 1 seleccionado
+        $I->amOnPage('/activityReport/new_activity_report_form?employee_id=1');
+
+        // envío el formulario
+        $I->submitForm('form', [
+            'employee_id'               =>  2,
+            'mining_activity[1]'        =>  2,
+            'mining_activity_price[1]'  =>  12000,
+            'reported_at'               =>  '2015-12-14',
+            'comment'                   =>  'Tratando de asignar un precio sin tener permisos'
+        ]);
+
+        // soy redirigido a la página del nuevo cargador de actividades mineras
+        $I->seeCurrentUrlEquals('/activityReport/new_activity_report_form');
+        // veo mensage de exito en la operación
+        $I->see('Actividades reportadas correctamente.', '.alert-success');
+        
+        // veo los registros en la base de datos
+        $I->seeRecord('activity_reports', [
+            'sub_cost_center_id'=>  2,
+            'employee_id'       =>  2,
+            'mining_activity_id'=>  1,
+            'quantity'          =>  2,
+            // el precio debe quedar en 0 aún si se modificó el DOM y se digitó un precio (12000),
+            // porque se verifíca si tiene o no permiso, no si hay un valor o no...
+            'price'             =>  0,
+            'worked_hours'      =>  0,
+            'comment'           =>  'Tratando de asignar un precio sin tener permisos',
+            'reported_by'       =>  1
+        ]);
+    }
+
+    /**
+     * Prueba que si no se tienen permisos para asignar precios, las cajas de precio de
+     * actividades están deshabilidatas, o de sólo lectura
+     */
+    public function pricePermissions(FunctionalTester $I)
+    {
+        $I->am('soy un supervisor del Proyecto Beteitiva');
+        $I->wantTo('probar que no puedo asignar precios de labores');
+
+        // quito el permiso de asignar costos, pues el supervisor no debe hacerlo
+        $permissions = \sanoha\Models\Permission::where('name', '!=', 'activityReport.assignCosts')->get()->lists('id')->all(); // obtengo el permiso que quiero quitar
+        $admin_role = \sanoha\Models\Role::where('name', '=', 'admin')->first();
+        $admin_role->perms()->sync($permissions);
+
+        // estoy en el home del sistema
+        $I->amOnPage('/home');
+        
+        // hago clic en el proyecto que quiero trabajar
+        $I->click('Proyecto Beteitiva', 'a');
+
+        // la página de creación reporte de actividades mineras con el Trabajador 1 seleccionado
+        $I->amOnPage('/activityReport/new_activity_report_form?employee_id=1');
+
+        // veo los campor de precio en modo sólo lectura
+        foreach (\sanoha\Models\MiningActivity::all() as $activity) {
+
+            $I->seeElement('input', [
+                'type'  =>  'number',
+                'name'  =>  'mining_activity_price['.$activity->id.']',
+                'value' =>  '',
+                'step'  => '50',
+                'readonly'  =>  'readonly',
+                'placeholder' => 'Precio'
+            ]);
+        }
+    }
+
+    /**
      * Prueba la funcionalidad del nuevo cargador de actividades mineras
      */
     public function newReportForm(FunctionalTester $I)

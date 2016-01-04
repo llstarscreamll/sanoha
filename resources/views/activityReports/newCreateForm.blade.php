@@ -128,7 +128,6 @@
                     		</div>
 
                     		{{-- El precio --}}
-                    		@if(Auth::getUser()->can('activityReport.assignCosts'))
                     		<div>
                     			{!! Form::number(
                     				'mining_activity_price['.$activity->id.']',
@@ -139,11 +138,11 @@
                     				[
                     					'class' => 'form-control',
                     					'step' => '50',
-                    					'placeholder' => 'Precio'
+                    					'placeholder' => 'Precio',
+                                        Auth::user()->can('activityReport.assignCosts') ? '' : 'readonly' => 'readonly'
                     				]
                     			) !!}
                     		</div>
-                    		@endif
                     	</div>
                     @endforeach
                     </div>
