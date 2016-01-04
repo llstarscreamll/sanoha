@@ -82,19 +82,25 @@ class UserController extends Controller
             $success[] = 'Usuario creado correctamente.';
             
             // attach roles to user
-            $user->roles()->sync($request->get('role_id'))
-                ? $success[] = 'Se ha añadido el rol al usuario correctamente.'
-                : $error[] = 'Ocurrió un error añadiendo el rol al usuario.';
+            if (count($request->get('role_id')) > 0){
+                $user->roles()->sync($request->get('role_id'))
+                    ? $success[] = 'Se ha añadido el rol al usuario correctamente.'
+                    : $error[] = 'Ocurrió un error añadiendo el rol al usuario.';
+            }
     
             // attach cost centers
-            $user->subCostCenters()->sync($request->get('sub_cost_center_id'))
-                ? $success[] = 'Asignación de centro de costos exitosa.'
-                : $error[] = 'Error asignando centro de costos.' ;
+            if (count($request->get('sub_cost_center_id')) > 0){
+                $user->subCostCenters()->sync($request->get('sub_cost_center_id'))
+                    ? $success[] = 'Asignación de centro de costos exitosa.'
+                    : $error[] = 'Error asignando centro de costos.';
+            }
             
             // attach employees
-            $user->employees()->sync($request->get('employee_id'))
-                ? $success[] = 'Asignación de empleado(s) exitosa.'
-                : $error[] = 'Falló la asignación de empleado(s).' ;
+            if (count($request->get('employee_id')) > 0){
+                $user->employees()->sync($request->get('employee_id'))
+                    ? $success[] = 'Asignación de empleado(s) exitosa.'
+                    : $error[] = 'Falló la asignación de empleado(s).';
+            }
         } else {
             $error[] = 'Ocurrió un error creando el usuario.';
         }
@@ -165,17 +171,17 @@ class UserController extends Controller
             $success[] = 'Usuario actualizado correctamente.';
 
             // attach cost centers
-            $user->subCostCenters()->sync($request->get('sub_cost_center_id'))
+            $user->subCostCenters()->sync($request->get('sub_cost_center_id', []))
                 ? $success[] = 'Actualización de centro de costos exitosa.'
                 : $error[] = 'Error actualizando centro de costos.' ;
 
             // update user roles
-            $user->roles()->sync($request->get('role_id'))
+            $user->roles()->sync($request->get('role_id', []))
                 ? $success[] = 'Se ha actualizado el rol del usuario correctamente.'
                 : $error[] = 'Ocurrió un error actualizando el rol al usuario.';
 
             // attach employees
-            $user->employees()->sync($request->get('employee_id'))
+            $user->employees()->sync($request->get('employee_id', []))
                 ? $success[] = 'Asignación de empleado(s) exitosa.'
                 : $error[] = 'Falló la asignación de empleado(s).' ;
         } else {

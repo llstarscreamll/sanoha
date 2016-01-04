@@ -26,6 +26,41 @@ class CreateUserCest
     }
 
     /**
+     * Prueba la creación de un usuario sin especificar centro de costo, o cargo, o rol, etc...
+     * es decir con las relacines vacías...
+     */
+    public function createWithEmptyRelations(FunctionalTester $I)
+    {
+        $I->am('un administrador del sistema');
+        $I->wantTo('comprobar que no hay errores si omito algunos campos en creacion');
+
+        // estoy en la página de edición de usuario, modifico mi propio usuario
+        $I->amOnPage('/users/create');
+
+        // envío el formulario con el campo de contraseña vacío, no se debe actualizar la contraseña
+        $I->submitForm('form', [
+            'role_id'               =>  [],
+            'sub_cost_center_id'    =>  [],
+            'area_id'               =>  null,
+            'employee_id'           =>  [],
+            'name'                  =>  'Andrew Lorens',
+            'lastname'              =>  'Mars Coleman',
+            'activated'             =>  1,
+            'email'                 =>  'andrew.mc@example.com',
+            'password'              =>  '123456789',
+            'password_confirmation' =>  '123456789'
+        ]);
+
+        // soy redirigido a la página de
+        $I->seeCurrentUrlEquals('/users');
+        // veo mensaje de exito en la operación
+        $I->see('Usuario creado correctamente.', '.alert-success div');
+        $I->dontSee('Asignación de centro de costos exitosa.', '.alert-success div');
+        $I->dontSee('Se ha añadido el rol al usuario correctamente.', '.alert-success div');
+        $I->dontSee('Asignación de empleado(s) exitosa.', '.alert-success div');
+    }
+
+    /**
      * Pruebo los mensajes de error al crea un nuevo usuario
      */
     public function TestFormErrors(FunctionalTester $I)

@@ -35,6 +35,38 @@ class UpdateUserCest
     }
 
     /**
+     * Prueba la actualización de un usuario sin especificar centro de costo, o cargo,
+     * o rol, etc... es decir con las relacines vacías...
+     */
+    public function updateWithEmptyRelations(FunctionalTester $I)
+    {
+        $I->am('un administrador del sistema');
+        $I->wantTo('comprobar que no hay errores si omito algunos campos en actualizacion');
+
+        // estoy en la página de edición de usuario, modifico mi propio usuario
+        $I->amOnPage('/users/1/edit');
+
+        // envío el formulario con el campo de contraseña vacío, no se debe actualizar la contraseña
+        $I->submitForm('form', [
+            'role_id'               =>  [],
+            'sub_cost_center_id'    =>  [],
+            'area_id'               =>  null,
+            'employee_id'           =>  [],
+            'name'                  =>  'Andrew Lorens',
+            'lastname'              =>  'Mars Coleman',
+            'activated'             =>  1,
+            'email'                 =>  'travis.orbin@example.com',
+            'password'              =>  '',
+            'password_confirmation' =>  ''
+        ]);
+
+        // soy redirigido a la página de
+        $I->seeCurrentUrlEquals('/users');
+        // veo mensaje de exito en la operación
+        $I->see('Usuario actualizado correctamente.', '.alert-success');
+    }
+
+    /**
      * Prueba que no se cambie la contraseña en la actualización
      * del usuario al dejar la contraseña vacía...
      */
