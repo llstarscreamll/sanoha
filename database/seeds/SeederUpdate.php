@@ -20,14 +20,15 @@ class SeederUpdate extends Seeder
     
     public function run()
     {
-        $this->data[] = [
-            'name'           => 'activityReport.newCreateForm',
-            'display_name'   => 'Cargador Alternativo de Labores Mineras',
-            'description'    => 'Le permite registrar actividades o labores mineras usando el formulario alternativo, el cual es más rápido, pues se pueden reportar varias actividades a la vez.',
-            'created_at'     =>  $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
-            'updated_at'     =>  $this->date->toDateTimeString()
+        $data[] = [
+            'name'                  =>      'Horas Laboradas',
+            'short_name'            =>      'HORAS',
+            'maximum'               =>      '15',
+            'created_at'            =>      $this->date->addMinutes($this->faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'            =>      $this->date->toDateTimeString(),
+            'deleted_at'            =>      null
         ];
 
-        DB::table('permissions')->insert($this->data);
+        DB::table('mining_activities')->insert($data); 
     }
 }

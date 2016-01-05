@@ -68,7 +68,8 @@ class MiningActivity extends Model
             17      =>  'MTDPT',
             18      =>  'MAP',
             19      =>  'MAD',
-            20      =>  'OTROS'
+            20      =>  'HORAS',
+            21      =>  'OTROS'
         ];
         $data = array();
         

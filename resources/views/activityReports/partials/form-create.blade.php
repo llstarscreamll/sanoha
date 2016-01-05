@@ -1,6 +1,6 @@
                     <div class="form-group col-md-6 col-md-offset-3">
                         {!! Form::label('employee_id', 'Trabajador') !!}
-                        {!! Form::select('employee_id', ['' => 'Selecciona al trabajador']+$employees, $parameters['employee_id'], ['class' => 'form-control selectpicker show-tick']) !!}
+                        {!! Form::select('employee_id', ['' => 'Selecciona al trabajador']+$employees, $parameters['employee_id'], ['class' => 'form-control selectpicker show-tick', 'data-live-search' => 'true']) !!}
                         
                         @if ($errors->has('employee_id'))
                         <div class="text-danger">

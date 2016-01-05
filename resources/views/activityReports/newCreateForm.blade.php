@@ -34,7 +34,8 @@
 	                        	['' => 'Selecciona al trabajador']+$employees,
 	                        	$request->has('employee_id') ? $request->get('employee_id') : null,
 	                        	[
-	                        		'class' => 'form-control selectpicker show-tick'
+	                        		'class' => 'form-control selectpicker show-tick',
+                                    'data-live-search' => 'true'
 	                        	]
 	                        ) !!}
 	                        
@@ -110,16 +111,16 @@
                     @foreach($miningActivities as $activity)
                     	<div class="col-xs-6 col-sm-2 margin-top-15">
                     		{{-- El label de la actividad --}}
-                    		<div><strong>{{$activity->short_name}}</strong></div>
+                    		<div><strong>{{$activity['short_name']}}</strong></div>
                     		
                     		{{-- La cantidad --}}
                     		<div>
                     			{!! Form::number(
-                    				'mining_activity['.$activity->id.']',
+                    				'mining_activity['.$activity['id'].']',
                     				null,
                     				[
                     					'class' => 'form-control',
-                    					'max' => $activity->maximum,
+                    					'max' => $activity['maximum'],
                     					'min' => '0',
                     					'step' => '0.1',
                     					'placeholder' => 'Cantidad'
@@ -130,9 +131,9 @@
                     		{{-- El precio --}}
                     		<div>
                     			{!! Form::number(
-                    				'mining_activity_price['.$activity->id.']',
+                    				'mining_activity_price['.$activity['id'].']',
                     				($price = $miningActivityModel->getHistoricalActivityPrice(
-                    					$activity->id,
+                    					$activity['id'],
                     					\Session::get('current_cost_center_id'),
                     					$request->get('employee_id'))) != 0 ? $price : null,
                     				[

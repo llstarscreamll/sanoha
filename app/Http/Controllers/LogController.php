@@ -29,7 +29,7 @@ class LogController extends Controller
      * @return Response
      */
     public function index()
-    {
+    {   
         $latestActivities = Activity::with('user')->latest()->paginate(25);
         
         return view('logs.index', compact('latestActivities'));

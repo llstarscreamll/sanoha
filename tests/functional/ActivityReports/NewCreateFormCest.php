@@ -38,13 +38,13 @@ class NewCreateFormCest
         $I->click('Proyecto Beteitiva', 'a');
 
         // la página de creación reporte de actividades mineras con el Trabajador 1 seleccionado
-        $I->amOnPage('/activityReport/new_activity_report_form?employee_id=1');
+        $I->amOnPage('/activityReport/new_activity_report_form?employee_id=2');
 
         // envío el formulario
         $I->submitForm('form', [
             'employee_id'               =>  2,
-            'mining_activity[1]'        =>  2,
-            'mining_activity_price[1]'  =>  12000,
+            'mining_activity'           =>  [1 => 2],
+            'mining_activity_price'     =>  [1 => 1200],
             'reported_at'               =>  '2015-12-14',
             'comment'                   =>  'Tratando de asignar un precio sin tener permisos'
         ]);
@@ -152,14 +152,18 @@ class NewCreateFormCest
         $I->seeCurrentUrlEquals('/activityReport/create');
 
         // doy clic al respectivo link para acceder al nuevo cargador
-        $I->click('Usar Nuevo Formulario de Reporte de Actividades', '.well a');
+        //$I->click('Usar Nuevo Formulario de Reporte de Actividades', '.well a');
+
+        // la página de creación reporte de actividades mineras con el Trabajador 1 seleccionado
+        $I->amOnPage('/activityReport/new_activity_report_form');
+
         // veo que estoy en la página del nuevo cargador
         $I->seeCurrentUrlEquals('/activityReport/new_activity_report_form');
         // titulo de la página
         $I->see('Reporte de Labores Mineras');
         // no veo los campos para diligenciar las actividades
-        $I->dontSeeElement('input', ['name' => 'mining_activity[]']);
-        $I->dontSeeElement('input', ['name' => 'mining_activity_price[]']);
+        $I->dontSeeElement('input', ['name' => 'mining_activity[1]']);
+        $I->dontSeeElement('input', ['name' => 'mining_activity_price[1]']);
         // veo un mensaje diciendo que debo seleccionar un empleado
         $I->see('Selecciona un trabajador...', '.alert-warning');
 
@@ -212,11 +216,8 @@ class NewCreateFormCest
         // envío el formulario
         $I->submitForm('form', [
             'employee_id'               =>  2,
-            'mining_activity[1]'        =>  2,
-            'mining_activity[2]'        =>  3,
-            'mining_activity[3]'        =>  0,
-            'mining_activity_price[1]'  =>  12000,
-            'mining_activity_price[2]'  =>  6000,
+            'mining_activity'           =>  [1 => 2, 2 => 3],
+            'mining_activity_price'     =>  [1 => 12000, 2 => 6000],
             'reported_at'               =>  '2015-12-14',
             'comment'                   =>  'Prueba de comentario'
         ]);

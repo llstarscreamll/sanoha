@@ -153,7 +153,8 @@ class ActivityReportController extends Controller
         // el modelo de actividades mineras
         $miningActivityModel = new ActivityReport;
         // las actividades mineras a registrar
-        $miningActivities = MiningActivity::all();
+        $miningActivities = MiningActivity::customOrder();
+
         // lista de empleados del centro de costo
         $employees = \sanoha\Models\SubCostCenter::getRelatedEmployees($this->cost_center_id, null, null, [
             'employees' => [
@@ -181,8 +182,9 @@ class ActivityReportController extends Controller
         $miningActivities = MiningActivity::all();
 
         foreach ($miningActivities as $key => $activity) {
+        //dd(array_key_exists('mining_activity['.$activity->id.']', $data), $request->get('mining_activity'));
 
-            if(!array_key_exists('mining_activity['.$activity->id.']', $data) || empty($data['mining_activity['.$activity->id.']'])){
+            if (!array_key_exists($activity->id, $data['mining_activity']) || empty($data['mining_activity'][$activity->id])){
                 continue;
             }
 
@@ -206,8 +208,8 @@ class ActivityReportController extends Controller
             $activityReport->sub_cost_center_id   =    $employee->sub_cost_center_id;
             $activityReport->employee_id          =    $employee->id;
             $activityReport->mining_activity_id   =    $activity->id;
-            $activityReport->quantity             =    $data['mining_activity['.$activity->id.']'];
-            $activityReport->price                =    !empty($data['mining_activity_price['.$activity->id.']']) && \Auth::getUser()->can('activityReport.assignCosts') ? $data['mining_activity_price['.$activity->id.']'] : $historical_price;
+            $activityReport->quantity             =    $data['mining_activity'][$activity->id];
+            $activityReport->price                =    !empty($data['mining_activity_price'][$activity->id]) && \Auth::getUser()->can('activityReport.assignCosts') ? $data['mining_activity_price'][$activity->id] : $historical_price;
             $activityReport->worked_hours         =    0;
             $activityReport->comment              =    $data['comment'];
             $activityReport->reported_by          =    \Auth::getUser()->id;

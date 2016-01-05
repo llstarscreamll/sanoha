@@ -184,6 +184,15 @@ class MiningActivitiesTableSeeder extends Seeder
             'updated_at'            =>      $date->toDateTimeString(),
             'deleted_at'            =>      null
         ];
+
+        $data[] = [
+            'name'                  =>      'Horas Laboradas',
+            'short_name'            =>      'HORAS',
+            'maximum'               =>      '15',
+            'created_at'            =>      $date->addMinutes($faker->numberBetween(1,10))->toDateTimeString(),
+            'updated_at'            =>      $date->toDateTimeString(),
+            'deleted_at'            =>      null
+        ];
         
         $data[] = [
             'name'          =>    'Otros',
