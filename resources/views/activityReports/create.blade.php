@@ -19,15 +19,13 @@
 				
 				@include ('layout.notifications')
 
-                {{-- Capa donde sugiero el uso del nuevo formulario de reporte actividades
+                {{-- Capa donde sugiero el uso del nuevo formulario de reporte actividades --}}
                 <div class="row">
                     <div class="well col-md-8 col-md-offset-2">
                         <p><strong>Buen día {{Auth::user()->fullname}}</strong>, te invitamos a probar el nuevo formulario para reportar las actividaes mineras, podrás reportar varias actividades a la vez ahorrándote un poco mas de tiempo... Dale clic al siguiente enlace:</p>
                         <a href="{{route('activityReport.newCreateForm')}}">Usar Nuevo Formulario de Reporte de Actividades</a>
                     </div>
                 </div>
-
-                --}}
 				
                 {!! Form::open(['route' => (is_null($parameters['employee_id']) ? 'activityReport.create' : 'activityReport.store'), 'method' => is_null($parameters['employee_id']) ? 'GET' : 'POST']) !!}
                     
