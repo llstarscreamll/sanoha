@@ -20,45 +20,45 @@ class MiningActivities
             'name'          =>      'Vagoneta de Carbón',
             'short_name'    =>      'VC',
             'maximum'       =>      '100',
-            'created_at'            =>      $date->addMinutes($faker->numberBetween(1, 10))->toDateTimeString(),
-            'updated_at'            =>      $date->toDateTimeString(),
-            'deleted_at'            =>      null
+            'created_at'    =>      $date->addMinutes($faker->numberBetween(1, 10))->toDateTimeString(),
+            'updated_at'    =>      $date->toDateTimeString(),
+            'deleted_at'    =>      null
         ];
         
         $data[] = [
             'name'          =>    'Vagoneta de Roca',
             'short_name'    =>    'VR',
             'maximum'       =>      '15',
-            'created_at'            =>      $date->addMinutes($faker->numberBetween(1, 10))->toDateTimeString(),
-            'updated_at'            =>      $date->toDateTimeString(),
-            'deleted_at'            =>      null
+            'created_at'    =>      $date->addMinutes($faker->numberBetween(1, 10))->toDateTimeString(),
+            'updated_at'    =>      $date->toDateTimeString(),
+            'deleted_at'    =>      null
         ];
         
         $data[] = [
             'name'          =>    'Puerta de Avance',
             'short_name'    =>    'PA',
             'maximum'       =>      '5',
-            'created_at'            =>      $date->addMinutes($faker->numberBetween(1, 10))->toDateTimeString(),
-            'updated_at'            =>      $date->toDateTimeString(),
-            'deleted_at'            =>      null
+            'created_at'    =>      $date->addMinutes($faker->numberBetween(1, 10))->toDateTimeString(),
+            'updated_at'    =>      $date->toDateTimeString(),
+            'deleted_at'    =>      null
         ];
         
         $data[] = [
             'name'          =>    'Puerta de Refuerzo Guía',
             'short_name'    =>    'PRG',
             'maximum'       =>      '10',
-            'created_at'            =>      $date->addMinutes($faker->numberBetween(1, 10))->toDateTimeString(),
-            'updated_at'            =>      $date->toDateTimeString(),
-            'deleted_at'            =>      null
+            'created_at'    =>      $date->addMinutes($faker->numberBetween(1, 10))->toDateTimeString(),
+            'updated_at'    =>      $date->toDateTimeString(),
+            'deleted_at'    =>      null
         ];
         
         $data[] = [
             'name'          =>    'Puerta de Refuerzo Inclinado',
             'short_name'    =>    'PRI',
             'maximum'       =>      '5',
-            'created_at'            =>      $date->addMinutes($faker->numberBetween(1, 10))->toDateTimeString(),
-            'updated_at'            =>      $date->toDateTimeString(),
-            'deleted_at'            =>      null
+            'created_at'    =>      $date->addMinutes($faker->numberBetween(1, 10))->toDateTimeString(),
+            'updated_at'    =>      $date->toDateTimeString(),
+            'deleted_at'    =>      null
         ];
         
         $data[] = [

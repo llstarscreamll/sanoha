@@ -174,15 +174,14 @@ class ActivityReportController extends Controller
     public function newStore(ActivityReportFormRequest $request)
     {
         $data = $request->all();
-        // contador de registros creados
-        $count = 0;
+        $msg_warning = []; // notificaciones de alerta para el usuario
+        $count = 0; // contador de registros creados
         $data['reported_at'] = Carbon::createFromFormat('Y-m-d', $data['reported_at']);
 
         // obtengo las actividades mineras
         $miningActivities = MiningActivity::all();
 
         foreach ($miningActivities as $key => $activity) {
-        //dd(array_key_exists('mining_activity['.$activity->id.']', $data), $request->get('mining_activity'));
 
             if (!array_key_exists($activity->id, $data['mining_activity']) || empty($data['mining_activity'][$activity->id])){
                 continue;
@@ -192,9 +191,8 @@ class ActivityReportController extends Controller
 
             // debo saber si se ha reportado ya la actividad en el mismo día
             if ($reported_activity = ActivityReport::alreadyMiningActivityReported($data)) {
-                return redirect()
-                    ->back()
-                    ->with('error', 'El trabajador ya reportó '.$reported_activity->miningActivity->name.' el día '.$reported_activity->reported_at->toDateString().'.');
+                $msg_warning[] = 'El trabajador ya reportó '.$reported_activity->miningActivity->name.' el día '.$reported_activity->reported_at->toDateString().'.';
+                continue;
             }
 
             // todo bien, ya puedo registrar la actividad, primero obtengo la info del empleado
@@ -220,8 +218,11 @@ class ActivityReportController extends Controller
         }
 
         $count > 0
-            ? $request->session()->flash('success', 'Actividades reportadas correctamente.')
+            ? $request->session()->flash('success', $count.' actividades reportadas correctamente.')
             : $request->session()->flash('warning', 'No se reportaron actividades.');
+
+        if(count($msg_warning) > 0)
+            $request->session()->flash('warning', $msg_warning);
 
         return redirect()->route('activityReport.newCreateForm');
     }
