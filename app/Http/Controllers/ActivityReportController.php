@@ -210,7 +210,7 @@ class ActivityReportController extends Controller
             $activityReport->mining_activity_id   =    $activity->id;
             $activityReport->quantity             =    $data['mining_activity'][$activity->id];
             $activityReport->price                =    !empty($data['mining_activity_price'][$activity->id]) && \Auth::getUser()->can('activityReport.assignCosts') ? $data['mining_activity_price'][$activity->id] : $historical_price;
-            $activityReport->worked_hours         =    0;
+            //$activityReport->worked_hours         =    0;
             $activityReport->comment              =    $data['comment'];
             $activityReport->reported_by          =    \Auth::getUser()->id;
             $activityReport->reported_at          =    $data['reported_at']->toDateTimeString();
@@ -257,7 +257,7 @@ class ActivityReportController extends Controller
         $activity->mining_activity_id   =    $data['mining_activity_id'];
         $activity->quantity             =    $data['quantity'];
         $activity->price                =    !empty($data['price']) && \Auth::getUser()->can('activityReport.assignCosts') ? $data['price'] : $historical_price;
-        $activity->worked_hours         =    $data['worked_hours'];
+        //$activity->worked_hours         =    $data['worked_hours'];
         $activity->comment              =    $data['comment'];
         $activity->reported_by          =    \Auth::getUser()->id;
         $activity->reported_at          =    $data['reported_at']->toDateTimeString();
@@ -337,7 +337,7 @@ class ActivityReportController extends Controller
         $activity->mining_activity_id   = $request->get('mining_activity_id');
         $activity->quantity             = $request->get('quantity');
         $activity->price                = $request->get('price', 0);
-        $activity->worked_hours         = $request->get('worked_hours');
+        //$activity->worked_hours         = $request->get('worked_hours');
         $activity->reported_at          = $request->get('reported_at');
         $activity->comment              = $request->get('comment');
 

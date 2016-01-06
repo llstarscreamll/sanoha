@@ -51,7 +51,6 @@ class ActivityReportFormRequest extends Request
                 'mining_activity_id'=>  'required|numeric|exists:mining_activities,id',
                 'quantity'          =>  'numeric',
                 'reported_at'       =>  'required|date|after:'.$date_after.'|before:'.$date_before,
-                'worked_hours'      =>  'required|numeric|between:0,13',
                 'comment'           =>  'alpha_spaces'
             ];
 
@@ -81,7 +80,6 @@ class ActivityReportFormRequest extends Request
                 'mining_activity'       =>  'array',
                 'mining_activity_price' =>  'array',
                 'reported_at'           =>  'required|date|after:'.$date_after.'|before:'.$date_before,
-                'worked_hours'          =>  'numeric|between:0,13',
                 'comment'               =>  'alpha_spaces'
             ];
         }
@@ -113,10 +111,6 @@ class ActivityReportFormRequest extends Request
             'reported_at.date'              =>        'La fecha tiene un formato inválido.',
             'reported_at.before'            =>        'La fecha debe ser antes del :date.',
             'reported_at.after'             =>        'La fecha debe ser depúes del :date.',
-            
-            'worked_hours.required'         =>        'Digita la cantidad de horas trabajadas.',
-            'worked_hours.between'          =>        'El tiempo trabajado debe ser entre 1 y 12 horas.',
-            'worked_hours.numeric'          =>        'Las horas de trabajo deben ser dadas en formato numérico.',
             
             'comment.alpha_spaces'          =>        'El comentario sólo debe contener letras y/o espacios.',
             

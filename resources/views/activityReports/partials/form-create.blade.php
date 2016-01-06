@@ -97,18 +97,7 @@
                             
                             <div class="clearfix"></div>
                             
-                            <div class="col-md-3 col-md-offset-3 form-group">
-                                {!! Form::label('worked_hours', 'Horas Trabajadas') !!}
-                                {!! Form::number('worked_hours', null, ['class' => 'form-control', 'step' => '1', 'max' => '12', 'min' => '1']) !!}
-                                    
-                                @if ($errors->has('worked_hours'))
-                                <div class="text-danger">
-                                    {!! $errors->first('worked_hours') !!}
-                                </div>
-                                @endif
-                            </div>
-                            
-                            <div class="col-md-3">
+                            <div class="col-md-3 col-md-offset-3">
                                 <div class="form-group">
                                 <label for="reported_at">Fecha de Actividad</label>
                                 <div class="input-group">

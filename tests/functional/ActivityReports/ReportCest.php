@@ -59,7 +59,7 @@ class ReportCest
             'employee_id'           =>  876, // envío el formulario con la info de un empleado que no existe
             'mining_activity_id'    =>  2649, // esta actividad tampoco existe
             'quantity'              =>  600, // la cantidad sobrepasa lo permitido por la actividad minera seleccionada
-            'worked_hours'          =>  58, // horas trabajadas
+            //'worked_hours'          =>  58, // horas trabajadas
             'reported_at'           =>  '2015-5595', // horas trabajadas
             'comment'               =>  'Test coment with dots...' // los comentarios no deben tener puntos
         ];
@@ -80,7 +80,8 @@ class ReportCest
         // estilo de error o alerta
         $I->see('Trabajador inválido.', '.text-danger');
         $I->see('Labor minera inválida.', '.text-danger');
-        $I->see('El tiempo trabajado debe ser entre 1 y 12 horas.', '.text-danger');
+        // no debe haber mas mensajes con relación al campo horas trabajadas
+        $I->dontSee('El tiempo trabajado debe ser entre 1 y 12 horas.', '.text-danger');
         $I->see('El comentario sólo debe contener letras y/o espacios.', '.text-danger');
         $I->see('La fecha tiene un formato inválido.', '.text-danger');
 
@@ -166,7 +167,7 @@ class ReportCest
             'mining_activity_id'    =>  2,
             'quantity'              =>  2,
             'price'                 =>  '5000',
-            'worked_hours'          =>  4,
+            //'worked_hours'          =>  4,
             'comment'               =>  'test comment',
             'reported_by'           =>  1,
             'reported_at'           =>  $date
@@ -195,7 +196,7 @@ class ReportCest
             'mining_activity_id'    =>  2,
             'quantity'              =>  2,
             'price'                 =>  '5000',
-            'worked_hours'          =>  4,
+            //'worked_hours'          =>  4,
             'reported_at'           =>  $date,
             'comment'               =>  'otro comenatrio de prueba'
         ], 'Registrar');
@@ -233,7 +234,7 @@ class ReportCest
             'mining_activity_id'    =>  2,
             'quantity'              =>  2,
             'price'                 =>  '5000',
-            'worked_hours'          =>  4,
+            //'worked_hours'          =>  4,
             'comment'               =>  'test comment',
             'reported_by'           =>  1,
             'reported_at'           =>  '2015-01-01 01:01:01'
@@ -245,7 +246,7 @@ class ReportCest
             'mining_activity_id'    =>  2,
             'quantity'              =>  4,
             'price'                 =>  '7000',
-            'worked_hours'          =>  4,
+            //'worked_hours'          =>  4,
             'comment'               =>  'comentario para actividad',
             'reported_by'           =>  1,
             'reported_at'           =>  '2015-01-02 01:01:01'
@@ -290,7 +291,7 @@ class ReportCest
         $I->dontSeeElement('input', ['name' => 'quantity']);
         $I->dontSeeElement('input', ['name' => 'price']);
         $I->dontSeeElement('input', ['name' => 'reported_at']);
-        $I->dontSeeElement('input', ['name' => 'worked_hours']);
+        $I->dontSeeElement('input', ['name' => 'worked_hours']); // éste elemento ya no se debe ver en ningún escenario
         $I->dontSeeElement('textarea', ['name' => 'comment']);
         $I->dontSeeElement('button', ['type' => 'submit']);
         
@@ -319,7 +320,7 @@ class ReportCest
         $I->seeElement('input', ['type' => 'checkbox', 'name' =>  'attended', 'checked' => 'checked']);
         $I->seeElement('select', ['name' => 'mining_activity_id']); // el select con las labores mineras
         $I->seeElement('input', ['name' =>  'quantity']); // el input para digitar la cantidad
-        $I->seeElement('input', ['name' =>  'worked_hours']); // el input para digitar la cantidad
+        $I->dontSeeElement('input', ['name' =>  'worked_hours']); // el input para digitar la cantidad
         $I->seeElement('input', ['name' =>  'reported_at']); // el input para digitar la fecha en que se hizo la actividad
         // ------------------------------------------------------------------------------------------
         // Nuevo Requerimiento...
@@ -330,7 +331,7 @@ class ReportCest
         // los históricos de x actividad.
         // ------------------------------------------------------------------------------------------
         $I->dontSeeElement('input', ['name' => 'price']); // NO VEO el input para digitar el precio
-        $I->seeElement('input', ['name' => 'worked_hours', 'step' => '1', 'max' => '12']); // campo de horas trabajadas, máximo 12 horas a reportar
+        $I->dontSeeElement('input', ['name' => 'worked_hours', 'step' => '1', 'max' => '12']); // campo de horas trabajadas, máximo 12 horas a reportar
         $I->seeElement('button', ['type' => 'submit']); // el botton para enviar el formulario
 
         // ahora si veo la tabla donde se mostrarán los registros de las actividades del trabajador
@@ -354,7 +355,7 @@ class ReportCest
             'employee_id'           =>  1,
             'mining_activity_id'    =>  2,
             'quantity'              =>  2.5,
-            'worked_hours'          =>  8,
+            //'worked_hours'          =>  8,
             'reported_at'           =>  $date->copy()->addDay()->toDateTimeString(),
             'comment'               =>  'Comentario de prueba'
         ];
@@ -425,7 +426,7 @@ class ReportCest
             'mining_activity_id'    =>      2,
             'price'                 =>      15000,
             'quantity'              =>      4,
-            'worked_hours'          =>      8,
+            //'worked_hours'          =>      8,
             'reported_at'           =>      $date->toDateString(),
             'comment'               =>      'test comment'
         ];
@@ -479,7 +480,7 @@ class ReportCest
             'employee_id'           =>      2,
             'mining_activity_id'    =>      4,
             'quantity'              =>      1,
-            'worked_hours'          =>      5,
+            //'worked_hours'          =>      5,
             'reported_at'           =>      $date->toDateString(),
             //'price'               =>      15000, // no puedo asignar este campo
         ];
@@ -547,7 +548,7 @@ class ReportCest
             'employee_id'           =>      1,
             'mining_activity_id'    =>      4,
             'quantity'              =>      1,
-            'worked_hours'          =>      5,
+            //'worked_hours'          =>      5,
             'reported_at'           =>      $date->toDateString(),
             'price'                 =>      15000, // no veo el input pero de todos modos envío el costo
         ];

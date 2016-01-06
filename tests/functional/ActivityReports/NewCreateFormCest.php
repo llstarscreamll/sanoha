@@ -63,7 +63,6 @@ class NewCreateFormCest
             // el precio debe quedar en 0 aún si se modificó el DOM y se digitó un precio (12000),
             // porque se verifíca si tiene o no permiso, no si hay un valor o no...
             'price'             =>  0,
-            'worked_hours'      =>  0,
             'comment'           =>  'Tratando de asignar un precio sin tener permisos',
             'reported_by'       =>  1
         ]);
@@ -123,7 +122,6 @@ class NewCreateFormCest
             'mining_activity_id'    =>  2,
             'quantity'              =>  2,
             'price'                 =>  '5000',
-            'worked_hours'          =>  4,
             'comment'               =>  'test comment',
             'reported_by'           =>  1,
             'reported_at'           =>  '2015-01-01 01:01:01'
@@ -135,7 +133,6 @@ class NewCreateFormCest
             'mining_activity_id'    =>  2,
             'quantity'              =>  4,
             'price'                 =>  '7000',
-            'worked_hours'          =>  4,
             'comment'               =>  'comentario para actividad',
             'reported_by'           =>  1,
             'reported_at'           =>  '2015-01-02 01:01:01'
@@ -234,7 +231,6 @@ class NewCreateFormCest
             'mining_activity_id'=>  1,
             'quantity'          =>  2,
             'price'             =>  12000,
-            'worked_hours'      =>  0,
             'comment'           =>  'Prueba de comentario',
             'reported_by'       =>  1
         ]);
@@ -245,7 +241,6 @@ class NewCreateFormCest
             'mining_activity_id'=>  2,
             'quantity'          =>  3,
             'price'             =>  6000,
-            'worked_hours'      =>  0,
             'comment'           =>  'Prueba de comentario',
             'reported_by'       =>  1
         ]);

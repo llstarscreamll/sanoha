@@ -33,7 +33,6 @@ class EditActivityCest
             'mining_activity_id'    =>  1,
             'quantity'              =>  2,
             'price'                 =>  '5000',
-            'worked_hours'          =>  4,
             'comment'               =>  'test',
             'reported_by'           =>  1,
             'reported_at'           =>  $date->toDateTimeString(),
@@ -58,7 +57,6 @@ class EditActivityCest
         $I->seeOptionIsSelected('mining_activity_id', 'Vagoneta de Carbón | VC');
         $I->seeElement('input', ['value' => '2']);
         $I->seeElement('input', ['value' => '5000']);
-        $I->seeElement('input', ['value' => '4']);
         $I->seeElement('input', ['value' => $date->toDateString()]);
         $I->see('test', 'textarea');
 
@@ -79,7 +77,6 @@ class EditActivityCest
             'mining_activity_id'    =>  2,
             'quantity'              =>  4,
             'price'                 =>  '10000',
-            'worked_hours'          =>  4,
             'reported_at'           =>  $date->toDateString(),
             'comment'               =>  'test'
         ]);
@@ -94,7 +91,6 @@ class EditActivityCest
         // veo los campos del formulario con los datos del registro
         $I->seeOptionIsSelected('employee_id', 'B2 Trabajador 2');
         $I->seeOptionIsSelected('mining_activity_id', 'Vagoneta de Roca | VR');
-        $I->seeElement('input', ['value' => '4']);
         $I->seeElement('input', ['value' => '10000']);
         $I->seeElement('input', ['value' => $date->toDateString()]);
         $I->see('test', 'textarea');
