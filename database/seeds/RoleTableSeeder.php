@@ -21,7 +21,7 @@ class RoleTableSeeder extends Seeder
         $admin->description  = 'Usuario con permisos sobre la mayoría de las funciones del sistema.';
         $admin->save();
         
-        $permissions = \sanoha\Models\Permission::lists('id');
+        $permissions = \sanoha\Models\Permission::lists('id')->all();
         
         $admin->perms()->sync($permissions);
     }
