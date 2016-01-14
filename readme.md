@@ -3,22 +3,22 @@
 Sanoha Web System es un aplicación construida con el framework [Laravel 5.1], la cual está programada según los requerimientos de los ingenieros y supervisores del área técnica de la empresa [Sanoha LTDA] en los procesos de gestión de reporte de labores mineras, novedades y ordenes de trabajo.
 
 ## Contenido
-- [Instalación](#Instalación)
+- [Instalación](#instalación)
     - [Clonar repositorio](#clonar-repositorio)
     - [Configurar permisos de carpetas](#permisos-de-carpetas)
     - [Instalar dependencias Backend](#instalación-de-dependencias-backend)
     - [Instalar dependencias Frontend](#instalación-de-dependencias-frontend)
     - [Configurar variables de entorno](#variables-de-entorno)
-    - [Configurar base de datos](#Configuración-de-Base-de-Datos)
-        - [Migraciones](#Migraciones)
-        - [Sin backup de datos](#Seeders)
+    - [Configurar base de datos](#configuración-de-base-de-datos)
+        - [Migraciones](#migraciones)
+        - [Sin backup de datos](#seeders)
             - [Seeders](#seeders)
-            - [Creación de usuario admin](#Usuario-Administrador)
-        - [Con backup de datos, restaurando datos](#Restaurar-Base-de-Datos)
-    - [Configuración del Servidor Web](#Configuración-del-Servidor-Web)
-        - [Nginex](#Nginex)
+            - [Creación de usuario admin](#usuario-administrador)
+        - [Con backup de datos, restaurando datos](#restaurar-base-de-datos)
+    - [Configuración del Servidor Web](#configuración-del-servidor-web)
+        - [Nginex](#nginex)
         - [Apache](#apache)
-    - [Programador de tareas](#Programador-de-Tareas)
+    - [Programador de tareas](#programador-de-tareas)
 
 ## Instalación
 Para la instalación se supone un servidor con GNU/Linux [Ubuntu Server] 14.04 x64 bits debidamente configurado con los siguientes paquetes:
