@@ -1,6 +1,11 @@
 {
   "name": "Sanoha Web System",
   "dependencies": {
-    "bootstrap-calendar": "~0.2.4"
+    "bootstrap-calendar": "~0.2.4",
+    "bootstrap": "~3.3.6",
+    "bootstrap-select": "~1.9.3",
+    "bootstrap-daterangepicker": "~2.1.17",
+    "moment": "~2.11.0",
+    "jquery": "~2.1.4"
   }
 }

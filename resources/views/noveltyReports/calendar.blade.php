@@ -77,7 +77,7 @@
 @section('script')
     
     {{-- Dependencia de los dos paquetes siguientes --}}
-	<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/2.9.0/moment.min.js"></script>
+	<script type="text/javascript" src="{{ asset('/resources/moment/min/moment.min.js') }}"></script>
     <script src="{{ asset('/resources/underscore/underscore-min.js') }}"></script>
     
     {{-- Bootstrap Calendar --}}
@@ -85,8 +85,8 @@
     <script src="{{ asset('/resources/bootstrap-calendar/js/calendar.js') }}"></script>
     
 	{{-- Include Date Range Picker --}}
-	<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker.js"></script>
-	<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker-bs3.css" />
+	<script type="text/javascript" src="{{ asset('/resources/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
+	<link rel="stylesheet" type="text/css" href="{{ asset('/resources/bootstrap-daterangepicker/daterangepicker.css') }}" />
 
     <script type="text/javascript">
         

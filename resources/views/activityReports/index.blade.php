@@ -52,9 +52,9 @@
 @section('script')
 
 	{{-- Include Date Range Picker --}}
-	<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/2.9.0/moment.min.js"></script>
-	<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker.js"></script>
-	<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker-bs3.css" />
+	<link rel="stylesheet" type="text/css" href="{{ asset('/resources/bootstrap-daterangepicker/daterangepicker.css') }}" />
+    <script type="text/javascript" src="{{ asset('/resources/moment/min/moment.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('/resources/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
     
     <script type="text/javascript">
         $(function() {
@@ -65,9 +65,6 @@
             format: 'MM/DD/YYYY',
             startDate: moment(fromField != '' ? fromField : moment().format('YYYY-MM-DD'), 'YYYY-MM-DD'),
             endDate: moment(toField != '' ? toField : moment().format('YYYY-MM-DD'), 'YYYY-MM-DD'),
-            //minDate: '01/01/2012',
-            //maxDate: moment().format('L'),
-            //dateLimit: { days: 60 },
             showDropdowns: true,
             showWeekNumbers: true,
             timePicker: false,

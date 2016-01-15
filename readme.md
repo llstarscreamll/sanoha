@@ -1,6 +1,6 @@
 # Sanoha Web System
 
-Sanoha Web System es un aplicación construida con el framework [Laravel 5.1], la cual está programada según los requerimientos de los ingenieros y supervisores del área técnica de la empresa [Sanoha LTDA] en los procesos de gestión de reporte de labores mineras, novedades y ordenes de trabajo.
+Sanoha Web System es un aplicación construida con el framework [Laravel 5.1], la cual está programada según los requerimientos de los ingenieros y supervisores del área técnica de la empresa [Sanoha LTDA] en los procesos de gestión de reporte de labores mineras, novedades y órdenes de trabajo.
 
 ## Contenido
 - [Instalación](#instalación)
@@ -45,7 +45,7 @@ $ git clone https://github.com/llstarscreamll/sanoha.git Test
 Leer más sobre el [uso de Git].
 
 ### Permisos de Carpetas
-Modificamos los permisos de la capeta `storage`:
+Modificamos los permisos de la carpeta `storage`:
 
 
 ```bash
@@ -107,7 +107,7 @@ Leer más sobre [configuración de variables de entorno] en Laravel.
 Luego de ejecutar las [migraciones](#migraciones), se debe elegir uno de dos caminos para terminar de configurar la base de datos:
 
 - [Sin backup](#seeders), creando sólamente los datos base de la aplicación, como los permisos, roles, centros de costo, subcentros de costo, áreas, cargos, tipos de labores mineras y tipos de novedades, como no hay datos de usuarios se debe [crear el usuario administrador](#usuario-administrador) manualmente.
-- [Con backup](#restaurar-base-de-datos), importando datos de una instalación anterior del sistema al motor de base de datos mysql, con los datos que hayan sido creados en ésa instalación como información de empleados, reportes de labores mineras, reportes de novedades, ordenes de trabajo, etc.
+- [Con backup](#restaurar-base-de-datos), importando datos de una instalación anterior del sistema al motor de base de datos mysql, con los datos que hayan sido creados en esa instalación como información de empleados, reportes de labores mineras, reportes de novedades, órdenes de trabajo, etc.
 
 #### Migraciones
 Corremos las [migraciones] de la base de datos:
@@ -160,7 +160,7 @@ Leer más sobre [tinker] en Laravel.
 
 #### Restaurar Base de Datos
 
-Si existe un backup de la base de datos de una previa instalación del sistema, se debe hacer el procedo de [restaurar base de datos en mysql] a una tabla previamente configurada, tener en cuenta que si el archivo fue generado automáticamente por el sistema, se debe descomprimir primero.
+Si existe un backup de la base de datos de una previa instalación del sistema, se debe hacer el proceso de [restaurar base de datos en mysql] a una tabla previamente configurada, tener en cuenta que si el archivo fue generado automáticamente por el sistema, se debe descomprimir primero.
 
 Subimos el backup que tenemos en el disco local, a la carpeta deseada en el disco del servidor remoto mediante el comando [scp]:
 
@@ -183,9 +183,9 @@ Se pedirá digitar la contraseña de dicho usuario, luego vamos a la carpeta don
     $ mysql -u db_user -p Test < backupFile
 ```
 
-Donde `Test` es el nombre de la base de datos, `db_user` es el usuario de la base de datos y `backupFile` es el archivo del backup de la base de datos que copiamos en el servidor remoto. Con esto ya deben estar listos los datos de la aplicación en una instalación anterior.
+Dónde `Test` es el nombre de la base de datos, `db_user` es el usuario de la base de datos y `backupFile` es el archivo del backup de la base de datos que copiamos en el servidor remoto. Con esto ya deben estar listos los datos de la aplicación en una instalación anterior.
 
-Leer mas sobre como [restaurar base de datos en mysql].
+Leer más sobre como [restaurar base de datos en mysql].
 
 ### Configuración del Servidor Web
 
@@ -223,13 +223,13 @@ Debemos dejar el archivo de la siguiente forma:
 }
 ```
 
-Guardamos y cerramos el archivo con `CTRL + x`, y reiniciamos nginex.
+Guardamos y cerramos el archivo con `CTRL + x`, y reiniciar nginex.
 
 ```bash
     $ sudo service nginx restart
 ```
 
-Aprende mas sobre como [configurar host virtual en Nginx].
+Aprende más sobre cómo [configurar host virtual en Nginx].
 
 #### Apache
 Para el caso de servidores [LAMP]:
@@ -238,7 +238,7 @@ Para el caso de servidores [LAMP]:
     $ sudo nano ../etc/apache2/sites-available/000-default
 ```
 
-Añadir las siguientes lineas al archivo:
+Añadir las siguientes líneas al archivo:
 
 ```bash
 DocumentRoot /var/www/Test/public
@@ -250,16 +250,16 @@ DocumentRoot /var/www/Test/public
 </Directory>
 ```
 
-Guardamos y cerramos el archivo con `CTRL + x`, y reiniciamos apache:
+Guardamos y cerramos el archivo con `CTRL + x`, y reiniciar apache:
 
 ```bash
     $ sudo service apache2 reload
 ```
 
-Aprende más sobre como [configurar host virtual en apache].
+Aprende más sobre cómo [configurar host virtual en apache].
 
 ### Programador de Tareas
-Para configurar el programador de tareas digitamos el siguiente comando con permisos de super usuario:
+Para configurar el programador de tareas digitamos el siguiente comando con permisos de superusuario:
 
 ```bash
     $ sudo crontab -e
@@ -277,7 +277,7 @@ Para configurar el programador de tareas digitamos el siguiente comando con perm
     $ sudo cron start
  ```
  
- Aprende mas sobre las [tareas programadas] del framework.
+ Aprende más sobre las [tareas programadas] del framework.
 
 [configuración de variables de entorno]: <https://laravel.com/docs/5.1/installation#environment-configuration>
 [configurar host virtual en Nginx]: <https://www.digitalocean.com/community/tutorials/how-to-set-up-nginx-virtual-hosts-server-blocks-on-ubuntu-12-04-lts--3>

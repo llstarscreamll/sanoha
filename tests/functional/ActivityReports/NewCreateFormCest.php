@@ -102,7 +102,7 @@ class NewCreateFormCest
             'employee_id'               =>  2,
             'mining_activity'           =>  [1 => 2],
             'mining_activity_price'     =>  [1 => 1200],
-            'reported_at'               =>  '2015-12-14',
+            'reported_at'               =>  \Carbon\Carbon::now()->toDateString(),
             'comment'                   =>  'Tratando de asignar un precio sin tener permisos'
         ]);
 
@@ -250,7 +250,7 @@ class NewCreateFormCest
             'employee_id'               =>  2,
             'mining_activity'           =>  [1 => 2, 2 => 3],
             'mining_activity_price'     =>  [1 => 12000, 2 => 6000],
-            'reported_at'               =>  '2015-12-14',
+            'reported_at'               =>  \Carbon\Carbon::now()->toDateString(),
             'comment'                   =>  'Prueba de comentario'
         ]);
 

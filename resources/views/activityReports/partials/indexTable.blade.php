@@ -1,5 +1,5 @@
 <div class="table-responsive margin-top-10">
-	<table class="table table-hover table-bordered table-vertical-align-middle">
+	<table class="table table-hover table-bordered table-condensed table-vertical-align-middle">
 		<thead>
 			<tr>
 				<th class="vertical-align-middle" colspan=8>
