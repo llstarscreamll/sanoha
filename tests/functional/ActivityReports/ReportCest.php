@@ -37,7 +37,7 @@ class ReportCest
         
         // hago clic en el proyecto de trabajo y luego en registar labor mienra
         $I->click('Proyecto Beteitiva', 'a');
-        $I->click('Registrar Labor Minera', 'a');
+        $I->click('Registrar Actividad Minera', 'a');
            
         // estoy en la página de registro de la actividad
         $I->seeCurrentUrlEquals('/activityReport/create');
@@ -186,7 +186,7 @@ class ReportCest
         $I->click('Proyecto Beteitiva', 'a');
         
         // pulso el botón para reportar una nueva actividad
-        $I->click('Registrar Labor Minera', 'a');
+        $I->click('Registrar Actividad Minera', 'a');
         
         // selecciono un trabajador para ver los demás campos
         $I->submitForm('form', ['employee_id' => 1]);
@@ -266,7 +266,7 @@ class ReportCest
         $I->click('Proyecto Beteitiva', 'a');
         
         // doy clic al botón de registrar una actividad minera
-        $I->click('Registrar Labor Minera', 'a');
+        $I->click('Registrar Actividad Minera', 'a');
         
         // veo que estoy en la url indicada
         $I->seeCurrentUrlEquals('/activityReport/create');
@@ -406,7 +406,7 @@ class ReportCest
         $I->click('Proyecto Beteitiva', 'a');
         
         // pulso el botón para reportar una nueva actividad
-        $I->click('Registrar Labor Minera', 'a');
+        $I->click('Registrar Actividad Minera', 'a');
         
         // selecciono un trabajador para ver los demás campos
         $I->submitForm('form', ['employee_id' => 1]);
@@ -466,7 +466,7 @@ class ReportCest
         $I->click('Proyecto Beteitiva', 'a');
         
         // pulso el botón para reportar una nueva actividad
-        $I->click('Registrar Labor Minera', 'a');
+        $I->click('Registrar Actividad Minera', 'a');
         
         // selecciono un trabajador para ver los demás campos
         $I->submitForm('form', ['employee_id' => 1]);
@@ -533,7 +533,7 @@ class ReportCest
         $I->click('Proyecto Beteitiva', 'a');
         
         // pulso el botón para reportar una nueva actividad
-        $I->click('Registrar Labor Minera', 'a');
+        $I->click('Registrar Actividad Minera', 'a');
         
         // selecciono un trabajador para ver los demás campos
         $I->submitForm('form', ['employee_id' => 1]);

@@ -1,5 +1,5 @@
                     <div class="form-group col-md-6 col-md-offset-3">
-                        {!! Form::label('employee_id', 'Trabajador') !!}
+                        {!! Form::label('employee_id', 'Trabajador *') !!}
                         {!! Form::select('employee_id', ['' => 'Selecciona al trabajador']+$employees, $parameters['employee_id'], ['class' => 'form-control selectpicker show-tick', 'data-live-search' => 'true']) !!}
                         
                         @if ($errors->has('employee_id'))
@@ -17,7 +17,7 @@
                         
                             {{-- Campo informativo, redirege al reporte de novedad en caso de que se marque como No, o no se marque --}}
                             <div class="form-group col-md-6 col-md-offset-3">
-                                {!! Form::label('attended', 'Asistió?') !!}
+                                {!! Form::label('attended', 'Asistió? *') !!}
                                 <div>
                                     {!! Form::checkbox(
                                         'attended',
@@ -44,7 +44,7 @@
                             <div class="clearfix"></div>
                             
                             <div class="form-group col-md-6 col-md-offset-3">
-                                {!! Form::label('mining_activity_id', 'Labor Minera') !!}
+                                {!! Form::label('mining_activity_id', 'Labor Minera *') !!}
                                 <select name="mining_activity_id" id="mining_activity_id" class="form-control selectpicker show-tick">
                                     
                                     <option value="" data-maximum="" {{ empty(old('mining_activity_id')) ? '' : 'selected' }}>Selecciona una actividad</option>
@@ -70,7 +70,7 @@
                             
                             <div class="col-md-3 col-md-offset-3">
                                 <div class="form-group">
-                                    {!! Form::label('quantity', 'Cantidad') !!}
+                                    {!! Form::label('quantity', 'Cantidad *') !!}
                                     {!! Form::number('quantity', null, ['class' => 'form-control', 'id' => 'quantity', 'step' => '0.01', 'min' => '0.1']) !!}
                                     @if ($errors->has('quantity'))
                                     <div class="text-danger">
@@ -99,7 +99,7 @@
                             
                             <div class="col-md-3 col-md-offset-3">
                                 <div class="form-group">
-                                <label for="reported_at">Fecha de Actividad</label>
+                                <label for="reported_at">Fecha de Actividad *</label>
                                 <div class="input-group">
                                     {!! Form::text('reported_at', isset($activity->reported_at) ? $activity->reported_at->toDateString() : null, ['class' => 'form-control', 'id' => 'reported_at', 'placeholder' => 'Elegir Fecha', 'readonly']) !!}
                                     <span id="calendar-trigger" class="input-group-btn">
@@ -138,6 +138,7 @@
                                     <span class="{{$btn_options['icon']}}"></span>
                                     {{$btn_options['caption']}}
                                 </button>
+                                <span id="helpBlock" class="help-block">Los campos con * son obligatorios.</span>
                             </div>
                         
                         @endif
