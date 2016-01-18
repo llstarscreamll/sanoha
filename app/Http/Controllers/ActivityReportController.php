@@ -258,7 +258,6 @@ class ActivityReportController extends Controller
         $activity->mining_activity_id   =    $data['mining_activity_id'];
         $activity->quantity             =    $data['quantity'];
         $activity->price                =    !empty($data['price']) && \Auth::getUser()->can('activityReport.assignCosts') ? $data['price'] : $historical_price;
-        //$activity->worked_hours         =    $data['worked_hours'];
         $activity->comment              =    $data['comment'];
         $activity->reported_by          =    \Auth::getUser()->id;
         $activity->reported_at          =    $data['reported_at']->toDateTimeString();

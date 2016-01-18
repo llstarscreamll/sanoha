@@ -41,7 +41,7 @@ class CreateUserCest
         $I->submitForm('form', [
             'role_id'               =>  [],
             'sub_cost_center_id'    =>  [],
-            'area_id'               =>  null,
+            'area_id'               =>  '',
             'employee_id'           =>  [],
             'name'                  =>  'Andrew Lorens',
             'lastname'              =>  'Mars Coleman',

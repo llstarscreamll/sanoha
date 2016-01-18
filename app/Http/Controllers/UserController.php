@@ -67,11 +67,14 @@ class UserController extends Controller
      */
     public function store(UserFormRequest $request)
     {
-        $user = $this->user->newInstance($request->all());
-        $user->password = bcrypt($request->get('password'));
-        
-        // get the roles names
-        $role_names = Role::find($request->get('role_id'))->lists('name')->all();
+        $user               = $this->user->newInstance();
+        $user->area_id      = empty($request->get('area_id')) ? null : $request->get('area_id');
+        $user->name         = $request->get('name');
+        $user->lastname     = $request->get('lastname');
+        $user->email        = $request->get('email');
+        $user->password     = bcrypt($request->get('password'));
+        $user->activated    = $request->get('activated', false);
+        $user->area_chief   = $request->get('area_chief', false);
 
         // to flash messages
         $success = array();
@@ -155,13 +158,13 @@ class UserController extends Controller
         $user = $this->user->findOrFail($id);
 
         // actualizo la info del usuario
-        $user->fill($request->except('password'));
-        // si se dio una contraseña la actualizo
-        if (! empty($request->get('password'))) {
-            $user->password = bcrypt($request->get('password'));
-        }
-        // defino el estado del usuario
-        $user->activated = $request->has('activated');
+        $user->area_id      = empty($request->get('area_id')) ? null : $request->get('area_id');
+        $user->name         = $request->get('name');
+        $user->lastname     = $request->get('lastname');
+        $user->email        = $request->get('email');
+        $user->password     = empty($request->get('password')) ? $user->password : bcrypt($request->get('password'));
+        $user->activated    = $request->get('activated', false);
+        $user->area_chief   = $request->get('area_chief', false);
         
         $success = array();
         $error = array();
