@@ -179,7 +179,7 @@ class NewCreateFormCest
         // hago clic en el proyecto que quiero trabajar
         $I->click('Proyecto Beteitiva', 'a');
         // doy clic al botón de registrar una actividad minera
-        $I->click('Registrar Labor Minera', 'a');
+        $I->click('Registrar Actividad Minera', 'a');
         // veo que estoy en la url indicada
         $I->seeCurrentUrlEquals('/activityReport/create');
 
@@ -220,14 +220,15 @@ class NewCreateFormCest
                 'min'   =>  '0'
             ]);
 
-            // veo un input de tipo numérico donde digito el precio de cada actividad minera, esos
-            // campos aparecen si se tienen los permisos para asignar precios
+            // veo un input de tipo numérico donde digito el precio de cada actividad minera, los campos
+            // aparecen así no se tengan permisos para asignar precios, pero en ése caso sólo están de
+            // forma informativa, pues estarán deshabilitados
             if($activity->id == 2){
                 $I->seeElement('input', [
                     'type'  =>  'number',
                     'name'  =>  'mining_activity_price['.$activity->id.']',
                     'value' =>  '7000',
-                    'step'  => '50',
+                    'step'  =>  '50',
                     'placeholder' => 'Precio'
                 ]);
             }else{
@@ -313,7 +314,7 @@ class NewCreateFormCest
         ]);
         
         \sanoha\Models\ActivityReport::create([
-            'sub_cost_center_id'    =>  1,
+            'sub_cost_center_id'    =>  2,
             'employee_id'           =>  2,
             'mining_activity_id'    =>  2,
             'quantity'              =>  4,

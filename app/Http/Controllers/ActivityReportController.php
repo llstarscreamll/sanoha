@@ -154,6 +154,10 @@ class ActivityReportController extends Controller
         $miningActivityModel = new ActivityReport;
         // las actividades mineras a registrar
         $miningActivities = MiningActivity::customOrder();
+        $employee = null;
+
+        if ($request->has('employee_id'))
+            $employee = \sanoha\Models\Employee::findOrFail($request->get('employee_id'));
 
         // lista de empleados del centro de costo
         $employees = \sanoha\Models\SubCostCenter::getRelatedEmployees($this->cost_center_id, null, null, [
@@ -162,7 +166,7 @@ class ActivityReportController extends Controller
             ]
         ]);
 
-        return view('activityReports.newCreateForm', compact('miningActivityModel', 'request', 'employees', 'miningActivities'));
+        return view('activityReports.newCreateForm', compact('miningActivityModel', 'request', 'employee', 'employees', 'miningActivities'));
     }
 
     /**

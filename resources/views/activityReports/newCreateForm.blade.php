@@ -29,7 +29,7 @@
 
 					<div class="row">
 						<div class="form-group col-md-6">
-	                        {!! Form::label('employee_id', 'Trabajador') !!}
+	                        {!! Form::label('employee_id', 'Trabajador *') !!}
 	                        {!! Form::select('employee_id',
 	                        	['' => 'Selecciona al trabajador']+$employees,
 	                        	$request->has('employee_id') ? $request->get('employee_id') : null,
@@ -49,7 +49,7 @@
 	                    @if($request->has('employee_id'))
 	                    {{-- Campo informativo, redirege al reporte de novedad en caso de que se marque como No, o no se marque --}}
                         <div class="form-group col-sm-4 col-md-2">
-                            {!! Form::label('attended', 'Asistió?') !!}
+                            {!! Form::label('attended', 'Asistió? *') !!}
                             <div>
                                 {!! Form::checkbox(
                                     'attended',
@@ -74,7 +74,7 @@
                         
                         <div class="col-sm-8 col-md-4">
                             <div class="form-group">
-                            <label for="reported_at">Fecha de Actividades</label>
+                            <label for="reported_at">Fecha de Actividades *</label>
                             <div class="input-group">
                                 {!! Form::text(
                                     'reported_at',
@@ -105,13 +105,13 @@
                     <div class="clearfix"></div>
                     
                     @if($request->has('employee_id'))
-                    <div class="row">
+                    <div class="row margin-bottom-10">
 
                     {{-- Recorro todas las actividades mineras y creo inputs de cantidad y precio por cada una que haya --}}
                     @foreach($miningActivities as $activity)
                     	<div class="col-xs-6 col-sm-2 margin-top-15">
                     		{{-- El label de la actividad --}}
-                    		<div><strong>{{$activity['short_name']}}</strong></div>
+                    		<div><strong>{{$activity['short_name']}} {{$activity['short_name'] == 'HORAS' ? '*' : ''}} </strong></div>
                     		
                     		{{-- La cantidad --}}
                     		<div>
@@ -123,7 +123,8 @@
                     					'max' => $activity['maximum'],
                     					'min' => '0',
                     					'step' => '0.1',
-                    					'placeholder' => 'Cantidad'
+                    					'placeholder' => 'Cantidad',
+                                        $activity['short_name'] == 'HORAS' ? 'required' : ''
                     				]
                     			) !!}
                     		</div>
@@ -132,10 +133,7 @@
                     		<div>
                     			{!! Form::number(
                     				'mining_activity_price['.$activity['id'].']',
-                    				($price = $miningActivityModel->getHistoricalActivityPrice(
-                    					$activity['id'],
-                    					\Session::get('current_cost_center_id'),
-                    					$request->get('employee_id'))) != 0 ? $price : null,
+                    				($price = $miningActivityModel->getHistoricalActivityPrice($activity['id'],$employee->sub_cost_center_id,$request->get('employee_id'))) != 0 ? $price : null,
                     				[
                     					'class' => 'form-control',
                     					'step' => '50',
@@ -169,6 +167,7 @@
                             <span class="glyphicon glyphicon-floppy-disk"></span>
                             Guardar
                         </button>
+                        <span id="helpBlock" class="help-block">Los campos con * son obligatorios.</span>
                     </div>
 
                     </div>
