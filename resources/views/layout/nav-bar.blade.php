@@ -57,7 +57,7 @@
 						--}}
 						@if(Auth::getUser()->can('activityReport.index'))
 							<li class="{{ \Request::is('activityReport*') ? 'active' : '' }} dropdown" id="activityReports">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reporte de Actividades <span class="caret"></span></a>
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reporte de Labores Mineras<span class="caret"></span></a>
 								<ul class="dropdown-menu" role="menu">
 									
 									{{--

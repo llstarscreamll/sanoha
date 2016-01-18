@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('title')
-	Nómina de Labores Mineras
+	Reporte de Labores Mineras
 @stop
 
 @section('content')
@@ -11,7 +11,7 @@
 			<div class="panel-heading">
 				<h1>
 					<a href="{{ url(route('activityReport.individual'))}}" class="link-black">
-						Nómina de Labores Mineras
+						Reporte de Labores Mineras
 					</a>					
 					@include ('activityReports.partials.action-buttons')
 					

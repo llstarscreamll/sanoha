@@ -56,7 +56,7 @@
 					            	
 					            	<tr>
 					            		<td>{!! Form::checkbox('id[]', $activity->id, false, ['class' => 'checkbox-table-item', 'id' => 'activity-'.$activity->id]) !!}</td>
-					            		<td><a href="{{route('activityReport.show', $activity->id)}}">{{$activity->id}}</a></td>
+					            		<td><a data-toggle="tooltip" data-placement="top" title="Ver Detalles de Actividad" href="{{route('activityReport.show', $activity->id)}}">{{$activity->id}}</a></td>
 					            		<td>{{ucwords(strtolower($activity->employee->fullname))}}</td>
 					            		<td>{{$activity->miningActivity->name}}</td>
 					            		<td>{{$activity->quantity}}</td>
