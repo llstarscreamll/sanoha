@@ -36,54 +36,42 @@
                             </div>
                         </div>
 
+                        <div class="col-md-6 col-md-offset-3">
+                            <div class="form-group">
+                                {!! Form::label('mining_activity_id', 'Labor Minera') !!}
+                                <select class="form-control selectpicker show-tick" disabled>
+                                    <option selected>{{ $activity->miningActivity->name }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3 col-md-offset-3">
+                            <div class="form-group">
+                                {!! Form::label('', 'Cantidad') !!}
+                                {!! Form::text('', $activity->quantity, ['class' => 'form-control', 'id' => 'quantity', 'disabled', 'readonly']) !!}
+                            </div>
+                        </div>
 
-                            <div class="col-md-6 col-md-offset-3">
-                                <div class="form-group">
-                                    {!! Form::label('mining_activity_id', 'Labor Minera') !!}
-                                    <select class="form-control selectpicker show-tick" disabled>
-                                        <option selected>{{ $activity->miningActivity->name }}</option>
-                                    </select>
-                                </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                {!! Form::label('', 'Precio') !!}
+                                {!! Form::text('', $activity->price, ['class' => 'form-control', 'disabled', 'readonly']) !!}
                             </div>
-                            
-                            <div class="col-md-3 col-md-offset-3">
-                                <div class="form-group">
-                                    {!! Form::label('', 'Cantidad') !!}
-                                    {!! Form::text('', $activity->quantity, ['class' => 'form-control', 'id' => 'quantity', 'disabled', 'readonly']) !!}
-                                </div>
+                        </div>
+                        
+                        <div class="col-md-3 col-md-offset-3">
+                            <div class="form-group">
+                            {!! Form::label('', 'Fecha de Actividad') !!}
+                            {!! Form::text('', $activity->reported_at->toDateString(), ['class' => 'form-control', 'disabled']) !!}
                             </div>
+                        </div>
 
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    {!! Form::label('', 'Precio') !!}
-                                    {!! Form::text('', $activity->price, ['class' => 'form-control', 'disabled', 'readonly']) !!}
-                                </div>
+                        <div class="col-md-6 col-md-offset-3">
+                            <div class="form-group">
+                                {!! Form::label('', 'Comentario') !!}
+                                {!! Form::textarea('', $activity->comment, ['class' => 'form-control', 'rows' => '3', 'disabled', 'readonly']) !!}
                             </div>
-                            
-                            <div class="col-md-3 col-md-offset-3 form-group">
-                                {!! Form::label('', 'Horas Trabajadas') !!}
-                                {!! Form::text('', $activity->worked_hours, ['class' => 'form-control', 'disabled']) !!}
-                                    
-                                @if ($errors->has('worked_hours'))
-                                <div class="text-danger">
-                                    {!! $errors->first('worked_hours') !!}
-                                </div>
-                                @endif
-                            </div>
-                            
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                {!! Form::label('', 'Fecha de Actividad') !!}
-                                {!! Form::text('', $activity->reported_at->toDateString(), ['class' => 'form-control', 'disabled']) !!}
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-md-offset-3">
-                                <div class="form-group">
-                                    {!! Form::label('', 'Comentario') !!}
-                                    {!! Form::textarea('', $activity->comment, ['class' => 'form-control', 'rows' => '3', 'disabled', 'readonly']) !!}
-                                </div>
-                            </div>
+                        </div>
                     
                     </fieldset>
                     
