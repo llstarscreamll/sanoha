@@ -66,6 +66,13 @@
                             </div>
                         </div>
 
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                {!! Form::label('', 'Reportado por') !!}
+                                {!! Form::text('', $activity->user->fullname, ['class' => 'form-control', 'disabled', 'readonly']) !!}
+                            </div>
+                        </div>
+
                         <div class="col-md-6 col-md-offset-3">
                             <div class="form-group">
                                 {!! Form::label('', 'Comentario') !!}
