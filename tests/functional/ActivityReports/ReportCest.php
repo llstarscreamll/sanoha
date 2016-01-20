@@ -30,7 +30,7 @@ class ReportCest
        // soy un supervisor minero y quiero probar los mensajes de error o alerta
        // cuando intente ingresar información inválida en el formuario
        $I->am('supervisor minero');
-        $I->wantTo('probar los mensajes de error del formulario de reporte de actividades mineras');
+        $I->wantTo('probar los mensajes de error del formulario de Reporte de Labores mineras');
        
         // estoy en el home
         $I->amOnPage('/home');

@@ -19,7 +19,7 @@ class FlatReportCest
     }
 
     /**
-     * Pruebo que los datos que se muestran en el reporte de actividades mineras
+     * Pruebo que los datos que se muestran en el Reporte de Labores mineras
      * registradas sean correctos
      */
     public function flatReportView(FunctionalTester $I)
@@ -60,7 +60,7 @@ class FlatReportCest
         \sanoha\Models\Employee::destroy(1);
         
         $I->am('supervisor del Proyecto Beteitiva');
-        $I->wantTo('ver reporte de actividades reportadas individuales');
+        $I->wantTo('ver Reporte de Labores reportadas individuales');
     
         $I->amOnPage('/home');
         $I->see('Proyecto Beteitiva', 'a');
@@ -72,7 +72,7 @@ class FlatReportCest
         $I->seeInSession('current_cost_center_name', 'Proyecto Beteitiva'); // el id del centro de costos ue seleccioné
 
         // titulo de la página
-        $I->see('Reporte de Actividades');
+        $I->see('Reporte de Labores');
         $I->seeElement('a', ['class' => 'btn btn-default', 'title' => 'Reporte de Registros Individuales']);
         $I->click('Reporte de Registros Individuales', 'a');
         
@@ -157,7 +157,7 @@ class FlatReportCest
         \DB::table('activity_reports')->insert($data);
         
         $I->am('supervisor del Projecto Beteitiva');
-        $I->wantTo('hacer busqueda en el reporte de actividades individuales');
+        $I->wantTo('hacer busqueda en el Reporte de Labores individuales');
     
         $I->amOnPage('/home');
         $I->see('Proyecto Beteitiva', 'a');

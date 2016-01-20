@@ -40,7 +40,7 @@ class FilterActivityReportCest
         $I->seeInSession('current_cost_center_id', 1); // el id del centro de costos ue seleccioné
 
         // titulo de la página
-        $I->see('Reporte de Actividades');
+        $I->see('Reporte de Labores');
         $I->amOnPage('/activityReport');
         
         // no veo el mensaje "No se encontraron registros..."

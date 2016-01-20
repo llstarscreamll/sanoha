@@ -21,7 +21,7 @@ class SelectCostCenterCest
     /**
      * Pruebo la funcionalidad de forzar a elejir el centro de costos si es que
      * no se ha seleccionado uno, pues se genera un error si se quiere acceder
-     * a algún reporte de actividades sin haber elegido un centro de costos
+     * a algún Reporte de Labores sin haber elegido un centro de costos
      * anteriormente...
      * 
      * @param FunctionalTester $I
@@ -47,7 +47,7 @@ class SelectCostCenterCest
         // elijo el centro de costos que quiero
         $I->click('Proyecto Beteitiva', '.list-group-item a');
         
-        // y soy redireccionado a la página de reporte de actividades mineras
+        // y soy redireccionado a la página de Reporte de Labores mineras
         $I->seeCurrentUrlEquals('/activityReport/individual');
         
         // veo que se muestra un título con el reporte del centro de costos que elejí
@@ -81,7 +81,7 @@ class SelectCostCenterCest
         // elijo el centro de costos que quiero
         $I->click('Proyecto Sanoha', 'a');
         
-        // y soy redireccionado a la página re reporte de actividades
+        // y soy redireccionado a la página re Reporte de Labores
         $I->seeCurrentUrlEquals('/activityReport/individual');
         
         // y veo que la cabecera del reporte tiene el nombre del proyecto o

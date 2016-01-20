@@ -42,7 +42,7 @@ class NewCreateFormCest
         // hago clic en el proyecto que quiero trabajar
         $I->click('Proyecto Beteitiva', 'a');
 
-        // la página de creación reporte de actividades mineras con el Trabajador 1 seleccionado
+        // la página de creación Reporte de Labores mineras con el Trabajador 1 seleccionado
         $I->amOnPage('/activityReport/new_activity_report_form?employee_id=2');
 
         // envío el formulario
@@ -94,7 +94,7 @@ class NewCreateFormCest
         // hago clic en el proyecto que quiero trabajar
         $I->click('Proyecto Beteitiva', 'a');
 
-        // la página de creación reporte de actividades mineras con el Trabajador 1 seleccionado
+        // la página de creación Reporte de Labores mineras con el Trabajador 1 seleccionado
         $I->amOnPage('/activityReport/new_activity_report_form?employee_id=2');
 
         // envío el formulario
@@ -145,7 +145,7 @@ class NewCreateFormCest
         // hago clic en el proyecto que quiero trabajar
         $I->click('Proyecto Beteitiva', 'a');
 
-        // la página de creación reporte de actividades mineras con el Trabajador 1 seleccionado
+        // la página de creación Reporte de Labores mineras con el Trabajador 1 seleccionado
         $I->amOnPage('/activityReport/new_activity_report_form?employee_id=1');
 
         // veo los campor de precio en modo sólo lectura
@@ -168,7 +168,7 @@ class NewCreateFormCest
     public function newReportForm(FunctionalTester $I)
     {
         $I->am('soy un supervisor del Proyecto Beteitiva');
-        $I->wantTo('probar el nuevo formulario de reporte de actividades');
+        $I->wantTo('probar el nuevo formulario de Reporte de Labores');
 
         // creo algunos datos de prueba
         $this->createTestData();
@@ -184,9 +184,9 @@ class NewCreateFormCest
         $I->seeCurrentUrlEquals('/activityReport/create');
 
         // doy clic al respectivo link para acceder al nuevo cargador
-        //$I->click('Usar Nuevo Formulario de Reporte de Actividades', '.well a');
+        //$I->click('Usar Nuevo Formulario de Reporte de Labores', '.well a');
 
-        // la página de creación reporte de actividades mineras con el Trabajador 1 seleccionado
+        // la página de creación Reporte de Labores mineras con el Trabajador 1 seleccionado
         $I->amOnPage('/activityReport/new_activity_report_form');
 
         // veo que estoy en la página del nuevo cargador

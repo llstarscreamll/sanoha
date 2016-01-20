@@ -30,7 +30,7 @@ class SecurityAccessCest
         // estoy en el home donde debo ver los links de acceso
         $I->amOnPage('/home');
         // veo los links de acceso a mis proyectos
-        $I->see('Reporte de Actividades');
+        $I->see('Reporte de Labores');
         $I->see('Proyecto Beteitiva', 'a');
         $I->see('Proyecto Sanoha', 'a');
         
@@ -137,8 +137,8 @@ class SecurityAccessCest
         // intento acceder bruscamente al proyecto Sanoha manipulando las variables de la url
         $I->amOnPage('/activityReport/project/1');
         
-        // no veo la cabecera normal del módulo de reporte de actividades
-        $I->dontSee('Reporte de Actividades', 'h3');
+        // no veo la cabecera normal del módulo de Reporte de Labores
+        $I->dontSee('Reporte de Labores', 'h3');
         
         // pero veo un mensaje de alerta que me dice que no tengo acceso
         $I->see('No tienes los permisos necesarios para acceder a estos datos.', '.alert-warning');
