@@ -147,10 +147,17 @@
             $('[data-toggle="tooltip"]').tooltip();
 
             {{-- Configura daterangepicker --}}
+            {{--
+	            Aquí dejamos las opciones de inicio y fin del 'daterangepicker' diferentes, porque
+	            en esta vista no dejamos parametros de fecha por defecto, sino que mostramos los
+	            últimos 15 registros creado...
+	        --}}
             var fromField = $('#from').val();
             var toField = $('#to').val();
+            
             $('#reportrange').daterangepicker({
             format: 'MM/DD/YYYY',
+            linkedCalendars: false,
             showDropdowns: true,
             showWeekNumbers: true,
             timePicker: false,

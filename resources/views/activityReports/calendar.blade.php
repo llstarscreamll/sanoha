@@ -200,16 +200,16 @@ $(function() {
 
     $('#reportrange').daterangepicker({
         format: 'MM/DD/YYYY',
+        linkedCalendars: false,
+        {{--
+            Aquí dejamos las opciones diferentes porque aunque no se den parametros de búsqueda, siempre
+            se cargan unos parámetros de fecha por defecto, que son el inicio y fin de mes
+        --}}
         startDate: moment('{{$parameters["from"]}}', 'YYYY-MM-DD'),
         endDate: moment('{{ $parameters["to"] }}', 'YYYY-MM-DD'),
-        //minDate: '01/01/2012',
-        //maxDate: moment().format('L'),
-        //dateLimit: { days: 60 },
+        dateLimit: { months: 24 },
         showDropdowns: true,
         showWeekNumbers: true,
-        timePicker: false,
-        timePickerIncrement: 1,
-        timePicker12Hour: true,
         ranges: {
            'Hoy': [moment(), moment()],
            'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],

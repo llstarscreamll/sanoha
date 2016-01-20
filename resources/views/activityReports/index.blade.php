@@ -57,14 +57,20 @@
     <script type="text/javascript" src="{{ asset('/resources/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
     
     <script type="text/javascript">
+
         $(function() {
         {{-- Configura daterangepicker --}}
         var fromField = $('#from').val();
         var toField = $('#to').val();
         $('#reportrange').daterangepicker({
             format: 'MM/DD/YYYY',
-            startDate: moment(fromField != '' ? fromField : moment().format('YYYY-MM-DD'), 'YYYY-MM-DD'),
-            endDate: moment(toField != '' ? toField : moment().format('YYYY-MM-DD'), 'YYYY-MM-DD'),
+            linkedCalendars: false,
+            {{--
+                Aquí dejamos las opciones diferentes porque aunque no se den parametros de búsqueda, siempre
+                se cargan unos parámetros de fecha por defecto, que son el inicio y fin de mes
+            --}}
+            startDate: moment('{{$parameters["from"]}}', 'YYYY-MM-DD'),
+            endDate: moment('{{ $parameters["to"] }}', 'YYYY-MM-DD'),
             showDropdowns: true,
             showWeekNumbers: true,
             timePicker: false,
