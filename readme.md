@@ -16,7 +16,7 @@ Sanoha Web System es un aplicación construida con el framework [Laravel 5.1], l
             - [Creación de usuario admin](#usuario-administrador)
         - [Con backup de datos, restaurando datos](#restaurar-base-de-datos)
     - [Configuración del Servidor Web](#configuración-del-servidor-web)
-        - [Nginex](#nginex)
+        - [Nginx](#nginx)
         - [Apache](#apache)
     - [Programador de tareas](#programador-de-tareas)
 
@@ -189,7 +189,7 @@ Leer más sobre como [restaurar base de datos en mysql].
 
 ### Configuración del Servidor Web
 
-#### Nginex
+#### Nginx
 Ahora configuramos la carpeta `public`, para el caso de servidores [LEMP]:
 
 ```bash
@@ -223,7 +223,7 @@ Debemos dejar el archivo de la siguiente forma:
 }
 ```
 
-Guardamos y cerramos el archivo con `CTRL + x`, y reiniciar nginex.
+Guardamos y cerramos el archivo con `CTRL + x`, y reiniciar nginx.
 
 ```bash
     $ sudo service nginx restart
